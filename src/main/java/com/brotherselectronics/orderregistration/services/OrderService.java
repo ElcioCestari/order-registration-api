@@ -8,9 +8,11 @@ import com.brotherselectronics.orderregistration.domains.mappers.OrderMapper;
 import com.brotherselectronics.orderregistration.exceptions.NotFoundException;
 import com.brotherselectronics.orderregistration.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class OrderService implements IBaseService<OrderRequestDTO, OrderResponseDTO>{
 
     private final IBaseMapper mapper;
@@ -43,6 +45,8 @@ public class OrderService implements IBaseService<OrderRequestDTO, OrderResponse
     public OrderResponseDTO save(OrderRequestDTO dto) {
 
         Order order =(Order) mapper.toEntity(dto);
+
+        orderRepository.save(order);
 
         OrderResponseDTO dtoResponse = (OrderResponseDTO) mapper.toDtoResponse(order);
 

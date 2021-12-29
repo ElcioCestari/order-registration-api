@@ -4,6 +4,7 @@ import com.brotherselectronics.orderregistration.domains.enums.PaymentType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Document("Orders")
 public class Order extends BaseEntity {
     private LocalDateTime saleDate;
     private List<OrderItem> orderItens;

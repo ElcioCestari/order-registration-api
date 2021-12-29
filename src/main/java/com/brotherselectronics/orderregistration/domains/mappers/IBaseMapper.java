@@ -1,5 +1,7 @@
 package com.brotherselectronics.orderregistration.domains.mappers;
 
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
 /**
@@ -8,6 +10,7 @@ import java.util.List;
  * @param <T> - DTO Request
  * @param <R>- DTO Response
  */
+@Component
 public interface IBaseMapper<E, T, R> {
 
     R toDtoResponse(E entity);
