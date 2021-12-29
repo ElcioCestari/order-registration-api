@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-a@Document("Users")
+@Document("Users")
 public class User extends BaseEntity {
 
     private String login;
