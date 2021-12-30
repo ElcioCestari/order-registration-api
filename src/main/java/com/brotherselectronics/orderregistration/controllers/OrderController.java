@@ -29,4 +29,9 @@ public class OrderController {
         return ResponseEntity.ok(service.save(dto));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@RequestBody OrderRequestDTO dto, @PathVariable String id) {
+        return ResponseEntity.ok(service.update(dto,id));
+    }
+
 }

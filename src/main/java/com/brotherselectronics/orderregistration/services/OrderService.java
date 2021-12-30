@@ -56,14 +56,16 @@ public class OrderService implements IBaseService<OrderRequestDTO, OrderResponse
     @Override
     public OrderResponseDTO update(OrderRequestDTO dto, String id) {
 
-        Order order = (Order) mapper.toEntity(dto);
+        Order orderSaved = orderRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("Order id: ["+id+"] not found"));
 
-        if(order.getId().equals(id)) {
-            Order save = orderRepository.save(order);
-            return (OrderResponseDTO) mapper.toDtoResponse(save);
-        }
+        Order orderToSave = (Order) mapper.toEntity(dto);
 
-        throw new IllegalArgumentException("Order id: ["+id+"] not found");
+        orderToSave.setId(orderSaved.getId());
+
+        orderRepository.save(orderToSave);
+
+        return (OrderResponseDTO) mapper.toDtoResponse(orderToSave);
     }
 
     @Override
