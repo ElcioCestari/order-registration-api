@@ -4,6 +4,7 @@ package com.brotherselectronics.orderregistration.controllers;
 import com.brotherselectronics.orderregistration.domains.dtos.OrderRequestDTO;
 import com.brotherselectronics.orderregistration.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,12 @@ public class OrderController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@RequestBody OrderRequestDTO dto, @PathVariable String id) {
         return ResponseEntity.ok(service.update(dto,id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable String id) {
+        service.delete(id);
+        return ResponseEntity.ok(HttpStatus.ACCEPTED);
     }
 
 }

@@ -70,6 +70,10 @@ public class OrderService implements IBaseService<OrderRequestDTO, OrderResponse
 
     @Override
     public void delete(String id) {
+
+        orderRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Order id: ["+id+"] not found"));
+
         orderRepository.deleteById(id);
     }
 }
