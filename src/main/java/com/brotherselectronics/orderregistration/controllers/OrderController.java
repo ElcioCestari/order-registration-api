@@ -19,6 +19,11 @@ public class OrderController {
         return ResponseEntity.ok(service.findById(id));
     }
 
+    @GetMapping
+    public ResponseEntity<?> findAll(){
+        return ResponseEntity.ok(service.findAll());
+    }
+
     @PostMapping
     public ResponseEntity<?> save(@RequestBody OrderRequestDTO dto) {
         return ResponseEntity.ok(service.save(dto));

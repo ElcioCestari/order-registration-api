@@ -10,7 +10,7 @@ import java.util.List;
  * @param <T> - DTO Request
  * @param <R>- DTO Response
  */
-@Component
+//@Component
 public interface IBaseMapper<E, T, R> {
 
     R toDtoResponse(E entity);
@@ -19,5 +19,5 @@ public interface IBaseMapper<E, T, R> {
 
     E toEntity(T dtoRequest);
 
-    List<R> toDtoResponseList(List<T> entityList);
+    List<R> toDtoResponseList(List<E> entityList);
 }
