@@ -28,10 +28,12 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 class OrderServiceTest {
     private static final String FAKE_ID = "asdfadsfadfdasfadfafa";
+    private static final String FAIL_MSG = "Must to be throw an exception and don't was threw.";
 
     @InjectMocks private OrderService orderService;
     @Mock private OrderRepository orderRepository;
     @Mock private OrderMapper mapper;
+
     private List<Order> orderListNotEmpty;
     private List<OrderResponseDTO> dtoListNotEmpty;
     private OrderResponseDTO orderResponseDTO;
@@ -80,7 +82,7 @@ class OrderServiceTest {
         when(mapper.toDtoResponse(any(Order.class))).thenReturn(orderResponseDTO);
         try {
             OrderResponseDTO responseActual = orderService.findById(FAKE_ID);
-            fail("Must to be throw an exception and don't was threw.");
+            fail(FAIL_MSG);
         } catch (NotFoundException e) {
             assertThat(e.getMessage()).isEqualTo("Order not found with id: " + FAKE_ID);
         }
@@ -96,8 +98,26 @@ class OrderServiceTest {
     }
 
     @Test
-    public void update() {
-        Assertions.assertTrue(true);
+    public void update_whenSuccessfulThenReturnAnOrderResponseDTO() {
+        when(orderRepository.findById(FAKE_ID)).thenReturn(orderOptional);
+        when(mapper.toEntity(any(OrderRequestDTO.class))).thenReturn(order);
+        when(orderRepository.save(any(Order.class))).thenReturn(order);
+        when(mapper.toDtoResponse(any(Order.class))).thenReturn(orderResponseDTO);
+        OrderResponseDTO responseActual = orderService.update(orderRequestDTO, FAKE_ID);
+        assertNotNull(responseActual);
+    }
+
+    @Test
+    public void update_whenFailThenThrowNotFoundException() {
+        when(orderRepository.findById(FAKE_ID)).thenReturn(Optional.ofNullable(null));
+        OrderResponseDTO responseActual = null;
+        try {
+            responseActual = orderService.update(orderRequestDTO, FAKE_ID);
+            fail(FAIL_MSG);
+        } catch (NotFoundException e) {
+            assertThat(e.getMessage()).isEqualTo("Order id: ["+FAKE_ID+"] not found");
+        }
+        assertNull(responseActual);
     }
 
     @Test
