@@ -1,5 +1,6 @@
 package com.brotherselectronics.orderregistration.services;
 
+import com.brotherselectronics.orderregistration.domains.dtos.OrderRequestDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.OrderResponseDTO;
 import com.brotherselectronics.orderregistration.domains.entities.Order;
 import com.brotherselectronics.orderregistration.domains.mappers.OrderMapper;
@@ -34,6 +35,7 @@ class OrderServiceTest {
     private List<Order> orderListNotEmpty;
     private List<OrderResponseDTO> dtoListNotEmpty;
     private OrderResponseDTO orderResponseDTO;
+    private OrderRequestDTO orderRequestDTO;
     private Optional<Order> orderOptional;
     private Order order;
 
@@ -44,6 +46,7 @@ class OrderServiceTest {
         orderListNotEmpty = List.of(order);
         dtoListNotEmpty = List.of(new OrderResponseDTO());
         orderResponseDTO = new OrderResponseDTO();
+        orderRequestDTO = new OrderRequestDTO();
         orderOptional = Optional.ofNullable(order);
     }
 
@@ -84,8 +87,12 @@ class OrderServiceTest {
     }
 
     @Test
-    public void save() {
-        Assertions.assertTrue(true);
+    public void save_whenCallMethodWithAnyOrderRequestDTOThenSaveAndReturnAnOrderResponseDTO() {
+        when(orderRepository.save(any(Order.class))).thenReturn(order);
+        when(mapper.toDtoResponse(any(Order.class))).thenReturn(orderResponseDTO);
+        when(mapper.toEntity(any(OrderRequestDTO.class))).thenReturn(order);
+        OrderResponseDTO responseActual = orderService.save(orderRequestDTO);
+        assertNotNull(responseActual);
     }
 
     @Test
