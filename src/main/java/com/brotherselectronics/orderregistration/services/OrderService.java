@@ -3,7 +3,6 @@ package com.brotherselectronics.orderregistration.services;
 import com.brotherselectronics.orderregistration.domains.dtos.OrderRequestDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.OrderResponseDTO;
 import com.brotherselectronics.orderregistration.domains.entities.Order;
-import com.brotherselectronics.orderregistration.domains.mappers.IBaseMapper;
 import com.brotherselectronics.orderregistration.domains.mappers.OrderMapper;
 import com.brotherselectronics.orderregistration.exceptions.NotFoundException;
 import com.brotherselectronics.orderregistration.repositories.OrderRepository;
@@ -32,9 +31,7 @@ public class OrderService implements IBaseService<OrderRequestDTO, OrderResponse
 
     @Override
     public OrderResponseDTO findById(String id) {
-        Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Order not found with id: " +  id));
-
+        Order order = getOrderFromRepositoryOrThrowNotFoundException(id);
         var dtoResponse = (OrderResponseDTO) mapper.toDtoResponse(order);
         return dtoResponse;
     }
@@ -49,9 +46,7 @@ public class OrderService implements IBaseService<OrderRequestDTO, OrderResponse
 
     @Override
     public OrderResponseDTO update(OrderRequestDTO dto, String id) {
-        Order orderSaved = orderRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Order id: ["+id+"] not found"));
-
+        Order orderSaved = this.getOrderFromRepositoryOrThrowNotFoundException(id);
         Order orderToSave = (Order) mapper.toEntity(dto);
         orderToSave.setId(orderSaved.getId());
         orderRepository.save(orderToSave);
@@ -60,9 +55,12 @@ public class OrderService implements IBaseService<OrderRequestDTO, OrderResponse
 
     @Override
     public void delete(String id) {
-        orderRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Order id: ["+id+"] not found"));
-
+        this.getOrderFromRepositoryOrThrowNotFoundException(id);
         orderRepository.deleteById(id);
+    }
+
+    private Order getOrderFromRepositoryOrThrowNotFoundException(String id) {
+        return orderRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Order not found with id: " + id));
     }
 }

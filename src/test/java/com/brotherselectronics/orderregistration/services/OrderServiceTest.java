@@ -115,7 +115,7 @@ class OrderServiceTest {
             responseActual = orderService.update(orderRequestDTO, FAKE_ID);
             fail(FAIL_MSG);
         } catch (NotFoundException e) {
-            assertThat(e.getMessage()).isEqualTo("Order id: ["+FAKE_ID+"] not found");
+            assertThat(e.getMessage()).isEqualTo("Order not found with id: " + FAKE_ID);
         }
         assertNull(responseActual);
     }
@@ -138,7 +138,7 @@ class OrderServiceTest {
             orderService.delete(FAKE_ID);
             fail(FAIL_MSG);
         } catch (NotFoundException e) {
-            assertThat(e.getMessage()).isEqualTo("Order id: ["+FAKE_ID+"] not found");
+            assertThat(e.getMessage()).isEqualTo("Order not found with id: " + FAKE_ID);
         }
     }
 }
