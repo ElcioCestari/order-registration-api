@@ -15,7 +15,7 @@ import java.util.List;
 @Service
 public class OrderService implements IBaseService<OrderRequestDTO, OrderResponseDTO>{
 
-    private final IBaseMapper mapper;
+    private final OrderMapper mapper;
     private final OrderRepository orderRepository;
 
     @Autowired

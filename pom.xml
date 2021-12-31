@@ -44,6 +44,15 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.junit</groupId>
+			<artifactId>junit-bom</artifactId>
+			<version>5.7.2</version>
+			<scope>test</scope>
+			<type>pom</type>
+		</dependency>
+
 	</dependencies>
 
 	<build>
