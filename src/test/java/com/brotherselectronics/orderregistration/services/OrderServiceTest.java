@@ -121,7 +121,24 @@ class OrderServiceTest {
     }
 
     @Test
-    public void delete() {
-        Assertions.assertTrue(true);
+    public void delete_whenSucessfull() {
+        when(orderRepository.findById(FAKE_ID)).thenReturn(orderOptional);
+        try {
+            orderService.delete(FAKE_ID);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(FAIL_MSG);
+        }
+    }
+
+    @Test
+    public void delete_whenFailThenThrowNotFoundException() {
+        when(orderRepository.findById(anyString())).thenReturn(Optional.ofNullable(null));
+        try {
+            orderService.delete(FAKE_ID);
+            fail(FAIL_MSG);
+        } catch (NotFoundException e) {
+            assertThat(e.getMessage()).isEqualTo("Order id: ["+FAKE_ID+"] not found");
+        }
     }
 }
