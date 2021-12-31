@@ -32,31 +32,37 @@ public class OrderService implements IBaseService<OrderRequestDTO, OrderResponse
     @Override
     public OrderResponseDTO findById(String id) {
         Order order = getOrderFromRepositoryOrThrowNotFoundException(id);
-        var dtoResponse = (OrderResponseDTO) mapper.toDtoResponse(order);
-        return dtoResponse;
+        return mapperToResponseDTO(order);
     }
 
     @Override
     public OrderResponseDTO save(OrderRequestDTO dto) {
-        Order order =(Order) mapper.toEntity(dto);
+        Order order = mapperToOrder(dto);
         orderRepository.save(order);
-        var dtoResponse = (OrderResponseDTO) mapper.toDtoResponse(order);
-        return dtoResponse;
+        return mapperToResponseDTO(order);
     }
 
     @Override
     public OrderResponseDTO update(OrderRequestDTO dto, String id) {
         Order orderSaved = this.getOrderFromRepositoryOrThrowNotFoundException(id);
-        Order orderToSave = (Order) mapper.toEntity(dto);
+        Order orderToSave = mapperToOrder(dto);
         orderToSave.setId(orderSaved.getId());
         orderRepository.save(orderToSave);
-        return (OrderResponseDTO) mapper.toDtoResponse(orderToSave);
+        return mapperToResponseDTO(orderToSave);
     }
 
     @Override
     public void delete(String id) {
         this.getOrderFromRepositoryOrThrowNotFoundException(id);
         orderRepository.deleteById(id);
+    }
+
+    private Order mapperToOrder(OrderRequestDTO dto) {
+        return (Order) mapper.toEntity(dto);
+    }
+
+    private OrderResponseDTO mapperToResponseDTO(Order order) {
+        return (OrderResponseDTO) mapper.toDtoResponse(order);
     }
 
     private Order getOrderFromRepositoryOrThrowNotFoundException(String id) {
