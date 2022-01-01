@@ -22,6 +22,6 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
                 .append("status:" + 404)
                 .append(" message: " +ex.getMessage());
 
-        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 }
