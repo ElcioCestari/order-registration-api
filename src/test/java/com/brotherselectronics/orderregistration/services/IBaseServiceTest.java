@@ -52,16 +52,16 @@ class IBaseServiceTest {
     void merge_whenHasId_assertThatItsNotMerged() {
 
         Order target = Order.builder()
-                .id(null)
                 .payment(false)
                 .build();
+        target.setId("outro id");
 
         Order source = Order.builder()
                 .payment(true)
                 .orderItens(List.of(new OrderItem()))
                 .totalValueOrder(totalValueExpected)
-                .id(idTeste)
                 .build();
+        source.setId(idTeste);
 
         orderService.merge(source, target);
 

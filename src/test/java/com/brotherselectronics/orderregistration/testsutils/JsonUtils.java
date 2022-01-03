@@ -2,10 +2,14 @@ package com.brotherselectronics.orderregistration.testsutils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 
 public class JsonUtils {
 
-    private static final ObjectMapper CONVERTER = new ObjectMapper();
+    private static final ObjectMapper CONVERTER = getJsonMapper();
 
     public static String convertObjectToString(Object obj) {
         try {
@@ -25,4 +29,11 @@ public class JsonUtils {
         }
     }
 
+    private final static JsonMapper getJsonMapper() {
+        return JsonMapper.builder()
+                .addModule(new ParameterNamesModule())
+                .addModule(new Jdk8Module())
+                .addModule(new JavaTimeModule())
+                .build();
+    }
 }

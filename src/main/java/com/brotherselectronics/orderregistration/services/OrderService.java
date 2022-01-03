@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class OrderService implements IBaseService<OrderRequestDTO, OrderResponseDTO>{
+public class OrderService implements IBaseService<OrderRequestDTO, OrderResponseDTO, Order>{
 
     private final OrderMapper mapper;
     private final OrderRepository orderRepository;
@@ -46,7 +46,7 @@ public class OrderService implements IBaseService<OrderRequestDTO, OrderResponse
     public OrderResponseDTO update(OrderRequestDTO dto, String id) {
         Order orderSaved = this.getOrderFromRepositoryOrThrowNotFoundException(id);
         Order orderToSave = mapperToOrder(dto);
-        orderToSave.setId(orderSaved.getId());
+        merge(orderToSave, orderSaved);
         orderRepository.save(orderToSave);
         return mapperToResponseDTO(orderToSave);
     }

@@ -1,12 +1,12 @@
 package com.brotherselectronics.orderregistration.services;
 
+import com.brotherselectronics.fakes.OrderFake;
 import com.brotherselectronics.orderregistration.domains.dtos.OrderRequestDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.OrderResponseDTO;
 import com.brotherselectronics.orderregistration.domains.entities.Order;
 import com.brotherselectronics.orderregistration.domains.mappers.OrderMapper;
 import com.brotherselectronics.orderregistration.exceptions.NotFoundException;
 import com.brotherselectronics.orderregistration.repositories.OrderRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
 import java.util.Optional;
 
+import static com.brotherselectronics.fakes.BaseEntityFake.FAKE_ID;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,7 +28,6 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 class OrderServiceTest {
-    private static final String FAKE_ID = "asdfadsfadfdasfadfafa";
     private static final String FAIL_MSG = "Must to be throw an exception and don't was threw.";
 
     @InjectMocks private OrderService orderService;
@@ -43,7 +43,7 @@ class OrderServiceTest {
 
     @BeforeEach
     public void setUp() {
-        order = new Order();
+        order = OrderFake.getOrder();
         order.setId(FAKE_ID);
         orderListNotEmpty = List.of(order);
         dtoListNotEmpty = List.of(new OrderResponseDTO());

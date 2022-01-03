@@ -8,8 +8,9 @@ import java.util.List;
  *
  * @param <E> element thaat represent a DTO Request
  * @param <R> element that represent a DTO Response
+ * @param <T> element that represent an Entity
  */
-public interface IBaseService<E, R> {
+public interface IBaseService<E, R, T> {
 
     List<R> findAll();
 
@@ -21,7 +22,7 @@ public interface IBaseService<E, R> {
 
     void delete(String id);
 
-    default void merge(Object source, Object target) {
+    default void merge(T source, T target) {
         BeanUtils.copyProperties(source, target, ignoreAtributes());
     }
 

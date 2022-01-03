@@ -2,9 +2,9 @@ package com.brotherselectronics.orderregistration.domains.entities;
 
 import com.brotherselectronics.orderregistration.domains.enums.PaymentType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document("Orders")
-@SuperBuilder
+@Builder
 public class Order extends BaseEntity {
     private LocalDateTime saleDate;
     private List<OrderItem> orderItens;
