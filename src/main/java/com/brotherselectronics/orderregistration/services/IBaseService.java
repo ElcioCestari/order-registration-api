@@ -1,5 +1,7 @@
 package com.brotherselectronics.orderregistration.services;
 
+import org.springframework.beans.BeanUtils;
+
 import java.util.List;
 
 /**
@@ -18,4 +20,12 @@ public interface IBaseService<E, R> {
     R update(E dto, String id);
 
     void delete(String id);
+
+    default void merge(Object source, Object target) {
+        BeanUtils.copyProperties(source, target, ignoreAtributes());
+    }
+
+    default String[] ignoreAtributes() {
+        return new String[]{"id"};
+    }
 }
