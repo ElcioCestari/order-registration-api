@@ -9,6 +9,8 @@ import com.brotherselectronics.orderregistration.domains.enums.Category;
 import com.github.javafaker.Faker;
 import org.apache.commons.lang3.RandomUtils;
 
+import java.math.BigDecimal;
+
 public class ProductFaker extends BaseEntity implements EntityFake<Product, ProductRequestDTO, ProductResponseDTO>{
 
     private static final Faker FAKER = new Faker();
@@ -30,9 +32,9 @@ public class ProductFaker extends BaseEntity implements EntityFake<Product, Prod
                 .name(FAKER.commerce().productName())
                 .category(Category.ELETRONIC)
                 .description(FAKER.lorem().characters())
-                .haveInStock(String.valueOf(RandomUtils.nextBoolean()))
-                .unitPurchasePrice(String.valueOf(RandomUtils.nextDouble()))
-                .unitPurchaseSale(String.valueOf(RandomUtils.nextDouble()))
+                .haveInStock(RandomUtils.nextBoolean())
+                .unitPurchasePrice(BigDecimal.valueOf(RandomUtils.nextDouble()))
+                .unitPurchaseSale(BigDecimal.valueOf(RandomUtils.nextDouble()))
                 .stock(getStock())
                 .build();
     }

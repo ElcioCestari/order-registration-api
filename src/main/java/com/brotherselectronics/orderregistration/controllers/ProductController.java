@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/products")
 public class ProductController {
@@ -26,7 +28,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody ProductRequestDTO dto) {
+    public ResponseEntity<?> save(@Valid @RequestBody ProductRequestDTO dto) {
         return ResponseEntity.ok(service.save(dto));
     }
 
