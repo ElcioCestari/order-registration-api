@@ -6,17 +6,23 @@ import com.brotherselectronics.orderregistration.domains.dtos.ProductResponseDTO
 import com.brotherselectronics.orderregistration.domains.entities.Product;
 import com.brotherselectronics.orderregistration.domains.mappers.ProductMapper;
 import com.brotherselectronics.orderregistration.repositories.ProductRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 class ProductServiceTest {
@@ -34,14 +40,22 @@ class ProductServiceTest {
     @Test
     void findAll() {
         List<Product> list = (List<Product>) fake.getEntityCollection();
-        Mockito.when(repository.findAll()).thenReturn(list);
-        Mockito.when(mapper.toDtoResponseList(list)).thenReturn((List<ProductResponseDTO>) fake.getResponseDTOCollection());
+        when(repository.findAll()).thenReturn(list);
+        when(mapper.toDtoResponseList(list)).thenReturn((List<ProductResponseDTO>) fake.getResponseDTOCollection());
         List<?> dtoList = service.findAll();
         assertThat(dtoList).isNotEmpty();
     }
 
     @Test
     void findById() {
+        Product entity = (Product) fake.getEntity();
+        when(repository.findById(anyString())).thenReturn(Optional.ofNullable(entity));
+
+        ProductResponseDTO responseDTO = (ProductResponseDTO) fake.getResponseDTO();
+        when(mapper.toDtoResponse(any(Product.class))).thenReturn(responseDTO);
+
+        ProductResponseDTO dto = service.findById("any id");
+        Assertions.assertEquals(responseDTO,dto);
     }
 
     @Test
