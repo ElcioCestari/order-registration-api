@@ -1,4 +1,4 @@
-package com.brotherselectronics.fakes;
+package com.brotherselectronics.fakers;
 
 import com.brotherselectronics.orderregistration.domains.dtos.OrderItemResponseDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.OrderResponseDTO;

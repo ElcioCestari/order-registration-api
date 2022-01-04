@@ -1,6 +1,6 @@
 package com.brotherselectronics.orderregistration.services;
 
-import com.brotherselectronics.fakes.OrderFake;
+import com.brotherselectronics.fakers.OrderFake;
 import com.brotherselectronics.orderregistration.domains.dtos.OrderRequestDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.OrderResponseDTO;
 import com.brotherselectronics.orderregistration.domains.entities.Order;
@@ -18,7 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
 import java.util.Optional;
 
-import static com.brotherselectronics.fakes.BaseEntityFake.FAKE_ID;
+import static com.brotherselectronics.fakers.BaseEntityFake.FAKE_ID;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;

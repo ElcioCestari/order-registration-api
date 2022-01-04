@@ -1,4 +1,4 @@
-package com.brotherselectronics.fakes;
+package com.brotherselectronics.fakers;
 
 import lombok.Data;
 

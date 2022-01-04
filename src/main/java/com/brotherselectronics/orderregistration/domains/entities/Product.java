@@ -2,6 +2,7 @@ package com.brotherselectronics.orderregistration.domains.entities;
 
 import com.brotherselectronics.orderregistration.domains.enums.Category;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document("Products")
+@Builder
 public class Product extends BaseEntity{
 
     private String name;
