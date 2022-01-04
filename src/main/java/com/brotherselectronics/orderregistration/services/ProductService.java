@@ -45,10 +45,10 @@ public class ProductService implements IBaseService<ProductRequestDTO, ProductRe
     @Override
     public ProductResponseDTO update(ProductRequestDTO dto, String id) {
         Product productSaved = this.getProductFromRepositoryOrThrowNotFoundException(id);
-        Product productToSave = mapperToProduct(dto);
-        merge(productToSave, productSaved);
-        productRepository.save(productToSave);
-        return mapperToResponseDTO(productToSave);
+        Product productToMerge = mapperToProduct(dto);
+        merge(productToMerge, productSaved);
+        productRepository.save(productSaved);
+        return mapperToResponseDTO(productSaved);
     }
 
     @Override
