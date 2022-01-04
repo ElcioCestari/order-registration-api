@@ -31,6 +31,8 @@ public class ProductFaker extends BaseEntity implements EntityFake<Product, Prod
                 .category(Category.ELETRONIC)
                 .description(FAKER.lorem().characters())
                 .haveInStock(String.valueOf(RandomUtils.nextBoolean()))
+                .unitPurchasePrice(String.valueOf(RandomUtils.nextDouble()))
+                .unitPurchaseSale(String.valueOf(RandomUtils.nextDouble()))
                 .stock(getStock())
                 .build();
     }

@@ -2,6 +2,7 @@ package com.brotherselectronics.orderregistration.services;
 
 import com.brotherselectronics.fakers.EntityFake;
 import com.brotherselectronics.fakers.ProductFaker;
+import com.brotherselectronics.orderregistration.domains.dtos.ProductRequestDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.ProductResponseDTO;
 import com.brotherselectronics.orderregistration.domains.entities.Product;
 import com.brotherselectronics.orderregistration.domains.mappers.ProductMapper;
@@ -20,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -55,7 +58,7 @@ class ProductServiceTest {
         when(mapper.toDtoResponse(any(Product.class))).thenReturn(responseDTO);
 
         ProductResponseDTO dto = service.findById("any id");
-        Assertions.assertEquals(responseDTO,dto);
+        assertEquals(responseDTO,dto);
     }
 
     @Test
