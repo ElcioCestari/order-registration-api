@@ -1,6 +1,7 @@
 package com.brotherselectronics.orderregistration.services;
 
-import com.brotherselectronics.fakers.OrderFake;
+import com.brotherselectronics.fakers.EntityFake;
+import com.brotherselectronics.fakers.OrderFaker;
 import com.brotherselectronics.orderregistration.domains.dtos.OrderRequestDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.OrderResponseDTO;
 import com.brotherselectronics.orderregistration.domains.entities.Order;
@@ -29,6 +30,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 class OrderServiceTest {
     private static final String FAIL_MSG = "Must to be throw an exception and don't was threw.";
+    private static final EntityFake<Order, OrderRequestDTO, OrderResponseDTO> fake = new OrderFaker();
 
     @InjectMocks private OrderService orderService;
     @Mock private OrderRepository orderRepository;
@@ -43,7 +45,7 @@ class OrderServiceTest {
 
     @BeforeEach
     public void setUp() {
-        order = OrderFake.getOrder();
+        order = fake.getEntity();
         order.setId(FAKE_ID);
         orderListNotEmpty = List.of(order);
         dtoListNotEmpty = List.of(new OrderResponseDTO());

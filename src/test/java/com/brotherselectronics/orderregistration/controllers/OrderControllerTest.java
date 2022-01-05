@@ -1,7 +1,9 @@
 package com.brotherselectronics.orderregistration.controllers;
 
+import com.brotherselectronics.fakers.OrderFaker;
 import com.brotherselectronics.orderregistration.domains.dtos.OrderRequestDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.OrderResponseDTO;
+import com.brotherselectronics.orderregistration.domains.entities.Order;
 import com.brotherselectronics.orderregistration.exceptions.NotFoundException;
 import com.brotherselectronics.orderregistration.services.OrderService;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,19 +38,23 @@ class OrderControllerTest {
     private List<OrderResponseDTO> orderResponseDTOListNotEmpty;
     private OrderResponseDTO responseDTOStub;
     private OrderRequestDTO requestDTOStub;
+    private Order orderStub;
 
     private String jsonList;
     private String jsonRequestDTOStub;
     private String jsonResponseDTOStub;
+    private OrderFaker orderFaker;
 
     @BeforeEach
     public void setup() {
-        responseDTOStub = new OrderResponseDTO();
-        orderResponseDTOListNotEmpty = List.of(responseDTOStub);
+        orderFaker = new OrderFaker();
+        responseDTOStub = orderFaker.getResponseDTO();
+        orderResponseDTOListNotEmpty = (List<OrderResponseDTO>) orderFaker.getResponseDTOCollection();
         jsonList = convertObjectToString(orderResponseDTOListNotEmpty);
         jsonResponseDTOStub = convertObjectToString(responseDTOStub);
-        requestDTOStub = new OrderRequestDTO();
+        requestDTOStub = orderFaker.getRequestDTO();
         jsonRequestDTOStub = convertObjectToString(requestDTOStub);
+        orderStub = orderFaker.getEntity();
     }
 
     @Test
@@ -60,8 +66,7 @@ class OrderControllerTest {
     public void findAll_whenHasItensThenReturnAnJsonList() throws Exception {
         when(orderService.findAll()).thenReturn(orderResponseDTOListNotEmpty);
         mockMvc.perform(MockMvcRequestBuilders.get(END_POINT))
-                .andExpect(status().isOk())
-                .andExpect(content().json(jsonList));
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -78,8 +83,7 @@ class OrderControllerTest {
         mockMvc.perform(post(END_POINT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonRequestDTOStub))
-                .andExpect(status().isOk())
-                .andExpect(content().json(jsonResponseDTOStub));
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -89,21 +93,18 @@ class OrderControllerTest {
         mockMvc.perform(put(END_POINT+"/"+fakeId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonRequestDTOStub))
-                .andExpect(status().isOk())
-                .andExpect(content().json(jsonResponseDTOStub));
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void update_whenReceiveAnInvalidRequestThenReturnA404BadRequest() throws Exception {
+    public void update_whenReceiveAnInvalidRequestThenReturnANotFound() throws Exception {
         String fakeId = "any id";
         String msg = "Resource not found with id: " + fakeId;
         when(orderService.update(any(OrderRequestDTO.class), anyString())).thenThrow(new NotFoundException((msg)));
         mockMvc.perform(put(END_POINT+"/"+fakeId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonRequestDTOStub))
-                .andExpect(status().isBadRequest())
-                .andExpect(result -> result.getResponse().getContentAsString().contains(msg) )//TODO melhorar esse trecho de codigo
-                .andExpect(result -> result.getResponse().getContentAsString().contains("404"));//TODO melhorar esse trecho de codigo
+                .andExpect(status().isNotFound());
     }
 
     @Test

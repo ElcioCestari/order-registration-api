@@ -4,6 +4,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ *
+ * @param <T> - Entity
+ * @param <E> - RequestDTO
+ * @param <R> - ResponseDTO
+ */
 public interface EntityFake<T, E, R> {
 
     T getEntity();

@@ -2,6 +2,7 @@ package com.brotherselectronics.orderregistration.domains.dtos;
 
 import com.brotherselectronics.orderregistration.domains.enums.PaymentType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Builder
 public class OrderRequestDTO {
 
     private LocalDateTime saleDate;
