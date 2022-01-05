@@ -29,7 +29,7 @@ public class ErrorModel {
 
     private List<CustomFieldError> convertToCustomFieldError(List<FieldError> fieldErrors) {
         return fieldErrors.stream()
-                .map(e -> new CustomFieldError(e.getField(), e.getRejectedValue()))
+                .map(e -> new CustomFieldError(e.getField(), e.getRejectedValue(), e.getDefaultMessage()))
                 .collect(Collectors.toList());
     }
 
@@ -38,5 +38,6 @@ public class ErrorModel {
     private class CustomFieldError {
         private String field;
         private Object rejectValue;
+        private String message;
     }
 }
