@@ -90,7 +90,20 @@ class ProductServiceTest {
     }
 
     @Test
-    void save() {
+    void save_whenSuccessfull() {
+        ProductRequestDTO fakeRequestDTO = fake.getRequestDTO();
+        Product fakeEntity = fake.getEntity();
+        when(mapper.toEntity(fakeRequestDTO)).thenReturn(fakeEntity);
+
+        when(repository.save(any(Product.class))).thenReturn(fakeEntity);
+
+        ProductResponseDTO fakeResponseDTO = fake.getResponseDTO();
+        when(mapper.toDtoResponse(fakeEntity)).thenReturn(fakeResponseDTO);
+
+        ProductResponseDTO productResponseDTO = service.save(fakeRequestDTO);
+
+        assertThat(productResponseDTO).isNotNull();
+        assertEquals(productResponseDTO.getName(),fakeRequestDTO.getName());
     }
 
     @Test
