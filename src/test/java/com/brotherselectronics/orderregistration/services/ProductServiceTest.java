@@ -18,6 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
 import java.util.Optional;
 
+import static com.brotherselectronics.fakers.BaseEntityFake.FAKE_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -107,8 +108,39 @@ class ProductServiceTest {
     }
 
     @Test
-    void update() {
+    void update_whenSuccessfull() {
+        ProductRequestDTO fakeNewProduct = fake.getRequestDTO();
+        Product fakeEntity = fake.getEntity();
+        when(mapper.toEntity(fakeNewProduct)).thenReturn(fakeEntity);
 
+        when(repository.save(any(Product.class))).thenReturn(fakeEntity);
+
+        String fakeId = "fakeId";
+        when(repository.findById(fakeId)).thenReturn(Optional.ofNullable(fakeEntity));
+
+        ProductResponseDTO fakeResponseDTO = fake.getResponseDTO();
+        when(mapper.toDtoResponse(fakeEntity)).thenReturn(fakeResponseDTO);
+
+        ProductResponseDTO productResponseDTO = service.update(fakeNewProduct, fakeId);
+
+        assertThat(productResponseDTO).isNotNull();
+        assertEquals(productResponseDTO.getName(),fakeNewProduct.getName());
+    }
+
+    @Test
+    void update_whenFail() {
+        ProductRequestDTO fakeNewProduct = fake.getRequestDTO();
+
+        String fakeId = "fakeId";
+        when(repository.findById(fakeId)).thenReturn(Optional.ofNullable(null));
+        ProductResponseDTO productResponseDTO = null;
+        try {
+             productResponseDTO = service.update(fakeNewProduct, fakeId);
+             fail(FAIL_MSG);
+        } catch (NotFoundException e) {
+            assertEquals(e.getMessage(), "Product not found with id: " + fakeId);
+        }
+        assertThat(productResponseDTO).isNull();
     }
 
     @Test
