@@ -6,22 +6,25 @@ import com.brotherselectronics.orderregistration.domains.entities.BaseEntity;
 import com.brotherselectronics.orderregistration.domains.entities.Product;
 import com.brotherselectronics.orderregistration.domains.entities.Stock;
 import com.brotherselectronics.orderregistration.domains.enums.Category;
-import com.github.javafaker.Faker;
-import org.apache.commons.lang3.RandomUtils;
 
 import java.math.BigDecimal;
 
 public class ProductFaker extends BaseEntity implements EntityFake<Product, ProductRequestDTO, ProductResponseDTO>{
 
-    private static final Faker FAKER = new Faker();
+    public static final String PRODUCT_NAME = "phone";
+    public static final String DESCRIPTION = "An Apple cellphone";
+    public static final boolean HAVE_IN_STOCK = true;
+    public static final BigDecimal UNIT_PURCHASE_PRICE = BigDecimal.valueOf(1000.00);
+    public static final BigDecimal UNIT_PURCHASE_SALE = BigDecimal.valueOf(1100.00);
+    public static final int STOCK_QUANTITY = 10;
 
     @Override
     public Product getEntity() {
         return Product.builder()
-                .name(FAKER.commerce().productName())
+                .name(PRODUCT_NAME)
                 .category(Category.ELETRONIC)
-                .description(FAKER.lorem().characters())
-                .haveInStock(String.valueOf(RandomUtils.nextBoolean()))
+                .description(DESCRIPTION)
+                .haveInStock(HAVE_IN_STOCK)
                 .stock(getStock())
                 .build();
     }
@@ -29,12 +32,12 @@ public class ProductFaker extends BaseEntity implements EntityFake<Product, Prod
     @Override
     public ProductRequestDTO getRequestDTO() {
         return ProductRequestDTO.builder()
-                .name(FAKER.commerce().productName())
+                .name(PRODUCT_NAME)
                 .category(Category.ELETRONIC)
-                .description(FAKER.lorem().characters())
-                .haveInStock(RandomUtils.nextBoolean())
-                .unitPurchasePrice(BigDecimal.valueOf(RandomUtils.nextDouble()))
-                .unitPurchaseSale(BigDecimal.valueOf(RandomUtils.nextDouble()))
+                .description(DESCRIPTION)
+                .haveInStock(HAVE_IN_STOCK)
+                .unitPurchasePrice(UNIT_PURCHASE_PRICE)
+                .unitPurchaseSale(UNIT_PURCHASE_SALE)
                 .stock(getStock())
                 .build();
     }
@@ -42,15 +45,15 @@ public class ProductFaker extends BaseEntity implements EntityFake<Product, Prod
     @Override
     public ProductResponseDTO getResponseDTO() {
         return ProductResponseDTO.builder()
-                .name(FAKER.commerce().productName())
+                .name(PRODUCT_NAME)
                 .category(Category.ELETRONIC)
-                .description(FAKER.lorem().characters())
-                .haveInStock(String.valueOf(RandomUtils.nextBoolean()))
+                .description(DESCRIPTION)
+                .haveInStock(HAVE_IN_STOCK)
                 .stock(getStock())
                 .build();
     }
 
     private Stock getStock() {
-        return new Stock(RandomUtils.nextInt());
+        return new Stock(STOCK_QUANTITY);
     }
 }

@@ -18,7 +18,7 @@ public class ProductResponseDTO {
     private String description;
     private String unitPurchasePrice;
     private String unitPurchaseSale;
-    private String haveInStock;
+    private boolean haveInStock;
     private Category category;
     private Stock stock;
 }
