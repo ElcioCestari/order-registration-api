@@ -6,6 +6,7 @@ import com.brotherselectronics.orderregistration.domains.dtos.ProductRequestDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.ProductResponseDTO;
 import com.brotherselectronics.orderregistration.domains.entities.Product;
 import com.brotherselectronics.orderregistration.domains.mappers.ProductMapper;
+import com.brotherselectronics.orderregistration.exceptions.NotFoundException;
 import com.brotherselectronics.orderregistration.repositories.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,14 +19,14 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 class ProductServiceTest {
-
+    private static final String FAIL_MSG = "Must to be throw an exception and don't was threw.";
     private static final EntityFake<Product, ProductRequestDTO, ProductResponseDTO> fake = new ProductFaker();
 
     @InjectMocks private ProductService service;
@@ -62,7 +63,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void findById() {
+    void findById_whenFoundThenReturnAresponseDTO() {
         Product entity = fake.getEntity();
         when(repository.findById(anyString())).thenReturn(Optional.ofNullable(entity));
 
@@ -71,6 +72,21 @@ class ProductServiceTest {
 
         ProductResponseDTO dto = service.findById("any id");
         assertEquals(responseDTO,dto);
+    }
+
+    @Test
+    void findById_whenNotFound_thenThrowAnException() {
+        when(repository.findById(anyString())).thenReturn(Optional.ofNullable(null));
+
+        ProductResponseDTO dto = null;
+        String anyId = "any id";
+        try {
+            dto = service.findById(anyId);
+            fail(FAIL_MSG);
+        } catch (NotFoundException e) {
+            assertEquals(e.getMessage(),"Product not found with id: " + anyId);
+        }
+        assertNull(dto);
     }
 
     @Test
