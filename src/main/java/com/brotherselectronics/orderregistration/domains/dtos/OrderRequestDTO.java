@@ -1,11 +1,14 @@
 package com.brotherselectronics.orderregistration.domains.dtos;
 
-import com.brotherselectronics.orderregistration.domains.entities.OrderItem;
 import com.brotherselectronics.orderregistration.domains.enums.PaymentType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.Valid;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,9 +19,19 @@ import java.util.List;
 public class OrderRequestDTO {
 
     private LocalDateTime saleDate;
-    private List<OrderItem> orderItens;
+
+    @NotNull
+    private List<@Valid OrderItemRequestDTO> orderItens;
+
+    @NotNull
     private boolean payment;
+
+    @NotNull
     private PaymentType paymentType;
+
+    @DecimalMin(value = "0")
     private BigDecimal totalValueOrder;
+
+    @NotEmpty
     private String userId;
 }

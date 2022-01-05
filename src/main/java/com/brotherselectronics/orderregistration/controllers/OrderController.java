@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
@@ -26,12 +28,12 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody OrderRequestDTO dto) {
+    public ResponseEntity<?> save(@Valid @RequestBody OrderRequestDTO dto) {
         return ResponseEntity.ok(service.save(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@RequestBody OrderRequestDTO dto, @PathVariable String id) {
+    public ResponseEntity<?> update(@Valid @RequestBody OrderRequestDTO dto, @PathVariable String id) {
         return ResponseEntity.ok(service.update(dto,id));
     }
 
