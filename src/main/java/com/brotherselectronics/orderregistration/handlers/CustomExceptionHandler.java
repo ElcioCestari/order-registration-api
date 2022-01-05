@@ -15,22 +15,31 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = {IllegalArgumentException.class, IllegalStateException.class, NotFoundException.class})
-    protected ResponseEntity<ErrorModel> handleConflict(RuntimeException ex, WebRequest request) {
-        ErrorModel errorModel = new ErrorModel(HttpStatus.NOT_FOUND, LocalDateTime.now(), ex.getMessage(), null, null,null,null);
-        return new ResponseEntity<ErrorModel>(errorModel, HttpStatus.NOT_FOUND);
+    @ExceptionHandler(value = NotFoundException.class)
+    protected ResponseEntity<ErrorModel> handleConflict(NotFoundException ex, WebRequest request) {
+
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        var errorModel =  ErrorModel.builder()
+                .httpStatus(status)
+                .timestamp(LocalDateTime.now())
+                .message(ex.getMessage())
+                .build();
+
+        return new ResponseEntity<>(errorModel, status);
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ErrorModel errorModel = new ErrorModel(HttpStatus.BAD_REQUEST,
-                LocalDateTime.now(),
-                ex.getParameter().toString(),
-                ex.getMessage(),
-                ex.getFieldError().getField(),
-                ex.getFieldError().getDefaultMessage(),
-                ex.getFieldError().getRejectedValue());
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+                                                                  HttpHeaders headers,
+                                                                  HttpStatus status, WebRequest request) {
 
-        return new ResponseEntity<>(errorModel, HttpStatus.NOT_FOUND);
+        var errorModel = ErrorModel.builder()
+                .httpStatus(status)
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        errorModel.setErrorList(ex.getFieldErrors());
+
+        return new ResponseEntity<>(errorModel, status);
     }
 }
