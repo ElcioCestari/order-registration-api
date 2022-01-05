@@ -144,6 +144,21 @@ class ProductServiceTest {
     }
 
     @Test
-    void delete() {
+    void delete_whenSucessfull() {
+        String fakeId = "fakeId";
+        when(repository.findById(fakeId)).thenReturn(Optional.ofNullable(fake.getEntity()));
+        service.delete(fakeId);
+    }
+
+    @Test
+    void delete_whenFail() {
+        String fakeId = "fakeId";
+        when(repository.findById(fakeId)).thenReturn(Optional.ofNullable(null));
+        try {
+            service.delete(fakeId);
+            fail(FAIL_MSG);
+        } catch (NotFoundException e) {
+            assertEquals(e.getMessage(), "Product not found with id: " + fakeId);
+        }
     }
 }
