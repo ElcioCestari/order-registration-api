@@ -22,7 +22,8 @@ import java.util.List;
 @Builder
 public class OrderRequestDTO {
 
-    @FutureOrPresent
+    @NotNull
+//    @FutureOrPresent //TODO its return a 400 and not showing anything that could help to know what hapend
     private LocalDateTime saleDate;
 
     @NotNull

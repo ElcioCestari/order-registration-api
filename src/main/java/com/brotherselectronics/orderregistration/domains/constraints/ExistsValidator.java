@@ -1,32 +1,27 @@
 package com.brotherselectronics.orderregistration.domains.constraints;
 
-import com.brotherselectronics.orderregistration.repositories.BaseRepository;
-import com.brotherselectronics.orderregistration.repositories.OrderRepository;
-import com.brotherselectronics.orderregistration.repositories.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.brotherselectronics.orderregistration.repositories.RepositoryDomain;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 public class ExistsValidator implements ConstraintValidator<ConstraintExists, String> {
 
-    private BaseRepository repository;
-    @Autowired private OrderRepository orderRepository;
-    @Autowired private ProductRepository productRepository;
+    /**
+     * TODO existe uma falha nos testes, principalmente nos de controllers pois não esta sendo possível mockar
+     * o comportamento do ExistsValidator, mesmo utilizando o mockito when(), ele esta chamando o metodo real
+     * e lançando exceção. Portanto deve ser verificado ou uma melhoria no projeto ou remover a funcionalidade do ExistsValidator
+     */
+    private RepositoryDomain repositoryDomain;
 
     @Override
     public void initialize(ConstraintExists constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
-        switch (constraintAnnotation.repository()) {
-            case ORDER: repository = orderRepository; break;
-            case PRODUCT: repository = productRepository; break;
-            default: throw new IllegalArgumentException("RepositoryDomain ["
-                    +constraintAnnotation.repository()+"] not implemented yet");
-        }
+        this.repositoryDomain = constraintAnnotation.repository();
     }
 
     @Override
     public boolean isValid(String id, ConstraintValidatorContext context) {
-        return repository.findById(id).isPresent();
+        return  repositoryDomain.getBaseRepository().findById(id).isPresent();
     }
 }
