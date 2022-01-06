@@ -1,5 +1,7 @@
 package com.brotherselectronics.orderregistration.domains.constraints;
 
+import com.brotherselectronics.orderregistration.repositories.RepositoryDomain;
+
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;
@@ -24,4 +26,6 @@ public @interface ConstraintExists {
 
     //represents additional information about annotation
     Class<? extends Payload>[] payload() default {};
+
+    RepositoryDomain repository();
 }

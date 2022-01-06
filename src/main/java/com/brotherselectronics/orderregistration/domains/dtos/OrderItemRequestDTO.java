@@ -1,6 +1,8 @@
 package com.brotherselectronics.orderregistration.domains.dtos;
 
 
+import com.brotherselectronics.orderregistration.domains.constraints.ConstraintExists;
+import com.brotherselectronics.orderregistration.repositories.RepositoryDomain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +19,7 @@ import javax.validation.constraints.NotNull;
 public class OrderItemRequestDTO {
 
     @NotEmpty
+    @ConstraintExists(repository = RepositoryDomain.PRODUCT)//TODO must to fix and change to ORDER_ITEM
     private String productId;
 
     @NotNull

@@ -2,6 +2,7 @@ package com.brotherselectronics.orderregistration.domains.dtos;
 
 import com.brotherselectronics.orderregistration.domains.constraints.ConstraintExists;
 import com.brotherselectronics.orderregistration.domains.enums.PaymentType;
+import com.brotherselectronics.orderregistration.repositories.RepositoryDomain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ import java.util.List;
 @Builder
 public class OrderRequestDTO {
 
+    @FutureOrPresent
     private LocalDateTime saleDate;
 
     @NotNull
@@ -35,6 +37,6 @@ public class OrderRequestDTO {
     @DecimalMin(value = "0")
     private BigDecimal totalValueOrder;
 
-    @ConstraintExists
+    @ConstraintExists(repository = RepositoryDomain.ORDER) //TODO its wrong must to be USER
     private String userId;
 }
