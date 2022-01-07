@@ -11,6 +11,10 @@ import javax.annotation.PostConstruct;
 import java.util.EnumSet;
 
 @Getter
+@Deprecated
+/**
+ * This was deprecated but was keeped to see the code
+ */
 public enum RepositoryDomain {
     PRODUCT(Product.class),
     ORDER(Order.class);

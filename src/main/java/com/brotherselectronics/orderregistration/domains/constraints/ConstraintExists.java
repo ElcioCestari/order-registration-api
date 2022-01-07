@@ -1,6 +1,6 @@
 package com.brotherselectronics.orderregistration.domains.constraints;
 
-import com.brotherselectronics.orderregistration.repositories.RepositoryDomain;
+import com.brotherselectronics.orderregistration.domains.entities.BaseEntity;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -18,14 +18,11 @@ import static java.lang.annotation.ElementType.PARAMETER;
 @Constraint(validatedBy = ExistsValidator.class)
 public @interface ConstraintExists {
 
-    //error message
     String message() default "Invalid id: not found";
 
-    //represents group of constraints
     Class<?>[] groups() default {};
 
-    //represents additional information about annotation
     Class<? extends Payload>[] payload() default {};
 
-    RepositoryDomain repository();
+    Class<? extends BaseEntity> entityRepository();
 }

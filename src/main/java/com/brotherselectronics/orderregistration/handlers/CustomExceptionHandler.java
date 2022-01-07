@@ -17,14 +17,12 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = NotFoundException.class)
     protected ResponseEntity<ErrorModel> handleConflict(NotFoundException ex, WebRequest request) {
-
         HttpStatus status = HttpStatus.NOT_FOUND;
         var errorModel =  ErrorModel.builder()
                 .httpStatus(status)
                 .timestamp(LocalDateTime.now())
                 .message(ex.getMessage())
                 .build();
-
         return new ResponseEntity<>(errorModel, status);
     }
 
@@ -32,14 +30,11 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,
                                                                   HttpStatus status, WebRequest request) {
-
         var errorModel = ErrorModel.builder()
                 .httpStatus(status)
                 .timestamp(LocalDateTime.now())
                 .build();
-
         errorModel.setErrorList(ex.getFieldErrors());
-
         return new ResponseEntity<>(errorModel, status);
     }
 }
