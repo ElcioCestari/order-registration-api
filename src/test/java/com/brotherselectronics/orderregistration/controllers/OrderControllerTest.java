@@ -1,11 +1,14 @@
 package com.brotherselectronics.orderregistration.controllers;
 
 import com.brotherselectronics.fakers.OrderFaker;
+import com.brotherselectronics.orderregistration.domains.constraints.ExistsValidator;
 import com.brotherselectronics.orderregistration.domains.dtos.OrderRequestDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.OrderResponseDTO;
 import com.brotherselectronics.orderregistration.domains.entities.Order;
 import com.brotherselectronics.orderregistration.exceptions.NotFoundException;
+import com.brotherselectronics.orderregistration.repositories.BaseRepository;
 import com.brotherselectronics.orderregistration.services.OrderService;
+import com.brotherselectronics.orderregistration.utils.InstancesUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.brotherselectronics.orderregistration.testsutils.JsonUtils.convertObjectToString;
 import static java.util.Collections.emptyList;
@@ -34,6 +38,9 @@ class OrderControllerTest {
 
     @Autowired private MockMvc mockMvc;
     @MockBean private OrderService orderService;
+    @MockBean private ExistsValidator existsValidator;
+    @MockBean private InstancesUtils instancesUtils;
+    @MockBean private BaseRepository orderRepository;
 
     private List<OrderResponseDTO> orderResponseDTOListNotEmpty;
     private OrderResponseDTO responseDTOStub;
@@ -80,31 +87,26 @@ class OrderControllerTest {
     @Test
     public void save_whenReceiveAValidRequestDTOThenReturnAResponseDTO() throws Exception {
         when(orderService.save(any(OrderRequestDTO.class))).thenReturn(responseDTOStub);
-//        mockMvc.perform(post(END_POINT)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(jsonRequestDTOStub))
-//                .andExpect(status().isOk());
-        /**
-         * TODO existe uma falha nos testes, principalmente nos de controllers pois não esta sendo possível mockar
-         * o comportamento do ExistsValidator, mesmo utilizando o mockito when(), ele esta chamando o metodo real
-         * e lançando exceção. Portanto deve ser verificado ou uma melhoria no projeto ou remover a funcionalidade do ExistsValidator
-         */
+        when(instancesUtils.getRepository(any())).thenReturn(this.orderRepository);
+        when(orderRepository.findById(anyString())).thenReturn(Optional.ofNullable(orderFaker));
+        mockMvc.perform(post(END_POINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonRequestDTOStub))
+                .andExpect(status().isOk());
+
     }
 
     @Test
     public void update_whenReceiveAValidRequestDTOThenReturnAResponseDTO() throws Exception {
         String fakeId = "any id";
         when(orderService.update(any(OrderRequestDTO.class), anyString())).thenReturn(responseDTOStub);
-//        mockMvc.perform(put(END_POINT+"/"+fakeId)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(jsonRequestDTOStub))
-//                .andExpect(status().isOk());
+        when(instancesUtils.getRepository(any())).thenReturn(this.orderRepository);
+        when(orderRepository.findById(anyString())).thenReturn(Optional.ofNullable(orderFaker));
 
-        /**
-         * TODO existe uma falha nos testes, principalmente nos de controllers pois não esta sendo possível mockar
-         * o comportamento do ExistsValidator, mesmo utilizando o mockito when(), ele esta chamando o metodo real
-         * e lançando exceção. Portanto deve ser verificado ou uma melhoria no projeto ou remover a funcionalidade do ExistsValidator
-         */
+        mockMvc.perform(put(END_POINT+"/"+fakeId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonRequestDTOStub))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -112,16 +114,13 @@ class OrderControllerTest {
         String fakeId = "any id";
         String msg = "Resource not found with id: " + fakeId;
         when(orderService.update(any(OrderRequestDTO.class), anyString())).thenThrow(new NotFoundException((msg)));
-//        mockMvc.perform(put(END_POINT+"/"+fakeId)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(jsonRequestDTOStub))
-//                .andExpect(status().isNotFound());
+        when(instancesUtils.getRepository(any())).thenReturn(this.orderRepository);
+        when(orderRepository.findById(anyString())).thenReturn(Optional.ofNullable(orderFaker));
 
-        /**
-         * TODO existe uma falha nos testes, principalmente nos de controllers pois não esta sendo possível mockar
-         * o comportamento do ExistsValidator, mesmo utilizando o mockito when(), ele esta chamando o metodo real
-         * e lançando exceção. Portanto deve ser verificado ou uma melhoria no projeto ou remover a funcionalidade do ExistsValidator
-         */
+        mockMvc.perform(put(END_POINT+"/"+fakeId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonRequestDTOStub))
+                .andExpect(status().isNotFound());
     }
 
     @Test
