@@ -30,7 +30,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-<!--			<optional>true</optional>-->
+			<optional>true</optional>
 		</dependency>
 
 		<dependency>
@@ -53,28 +53,19 @@
 
 	</dependencies>
 
-	<repositories>
-		<!--other repositories if any-->
-		<repository>
-			<id>com.brothers-electronics</id>
-			<name>order-registration</name>
-			<url>file:order-registration/repo</url>
-		</repository>
-	</repositories>
-
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-<!--				<configuration>-->
-<!--					<excludes>-->
-<!--						<exclude>-->
-<!--							<groupId>org.projectlombok</groupId>-->
-<!--							<artifactId>lombok</artifactId>-->
-<!--						</exclude>-->
-<!--					</excludes>-->
-<!--				</configuration>-->
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
