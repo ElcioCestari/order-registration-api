@@ -1,7 +1,5 @@
 spring:
   data:
     mongodb:
-      host: localhost
-      port: 27017
-      database: order-registration
+      uri: ${MONGODB_URI}
 
