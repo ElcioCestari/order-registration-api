@@ -1,5 +1,25 @@
 spring:
+  config:
+    use-legacy-processing: true
+  profiles:
+    active: staging
+---
+spring:
+  profiles: development
+  data:
+    mongodb:
+      host: localhost
+      port:  27017
+      database: order-registration
+---
+spring:
+  profiles: staging
   data:
     mongodb:
       uri: ${MONGODB_URI}
-
+---
+spring:
+  profiles: production
+  data:
+    mongodb:
+      uri: ${MONGODB_URI}
