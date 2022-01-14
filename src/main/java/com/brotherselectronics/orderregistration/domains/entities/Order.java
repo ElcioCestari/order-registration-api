@@ -14,7 +14,7 @@ import java.util.List;
 @Document("Orders")
 @Builder
 @EqualsAndHashCode(callSuper=true)
-public class Order extends BaseEntity {
+public class Order extends BaseEntityImp {
     private LocalDateTime saleDate;
     private List<OrderItem> orderItens;
     private boolean payment;

@@ -1,7 +1,7 @@
 package com.brotherselectronics.orderregistration.repositories;
 
 import com.brotherselectronics.fakers.UserFaker;
-import com.brotherselectronics.orderregistration.domains.entities.User;
+import com.brotherselectronics.orderregistration.domains.entities.SystemUser;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,13 +23,13 @@ class UserRepositoryTest {
 
     @Test
     void findByLogin() {
-        Optional<User> user = userRepository.findByLogin(fakeUser.getEntity().getLogin());
+        Optional<SystemUser> user = userRepository.findByUsername(fakeUser.getEntity().getUsername());
         Assertions.assertThat(user).isNotNull();
     }
 
     @Test
     void save() {
-//        User save = userRepository.save(fakeUser.getEntity());
-//        Assertions.assertThat(save).isNotNull();
+//        SystemUser user = userRepository.save(fakeUser.getEntity());
+//        Assertions.assertThat(user).isNotNull();
     }
 }

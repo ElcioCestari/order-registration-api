@@ -2,18 +2,21 @@ package com.brotherselectronics.fakers;
 
 import com.brotherselectronics.orderregistration.domains.dtos.UserRequestDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.UserResponseDTO;
-import com.brotherselectronics.orderregistration.domains.entities.BaseEntity;
-import com.brotherselectronics.orderregistration.domains.entities.User;
+import com.brotherselectronics.orderregistration.domains.entities.BaseEntityImp;
+import com.brotherselectronics.orderregistration.domains.entities.SystemUser;
+import com.brotherselectronics.orderregistration.domains.enums.GrantedAuthority;
 
-public class UserFaker extends BaseEntity implements EntityFake<User, UserRequestDTO, UserResponseDTO>{
+import java.util.Collections;
+
+public class UserFaker extends BaseEntityImp implements EntityFake<SystemUser, UserRequestDTO, UserResponseDTO>{
 
     private final String login = "elcio";
-    private final String password = "elcio123";
+    private final String password = "$2a$10$CKtbFy2R0qxNLPF.d6Jaeuf1UQOmDxSQFh/1ToxNEaxgxgnIy6SUC";//elcio123
     private final String name = "elcio";
 
     @Override
-    public User getEntity() {
-        return new User(login, password, name);
+    public SystemUser getEntity() {
+        return new SystemUser(login, password, Collections.singleton(GrantedAuthority.ADMIN.getAuthority()));
     }
 
     @Override

@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper=true)
-public class OrderItem extends BaseEntity{
+public class OrderItem extends BaseEntityImp {
 
     private String productId;
     private int quantity;

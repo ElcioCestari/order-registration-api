@@ -1,6 +1,6 @@
 package com.brotherselectronics.orderregistration.repositories;
 
-import com.brotherselectronics.orderregistration.domains.entities.BaseEntity;
+import com.brotherselectronics.orderregistration.domains.entities.BaseEntityImp;
 import com.brotherselectronics.orderregistration.domains.entities.Order;
 import com.brotherselectronics.orderregistration.domains.entities.Product;
 import lombok.Getter;
@@ -22,7 +22,7 @@ public enum RepositoryDomain {
     private final Class<?> clazz;
     private BaseRepository baseRepository;
 
-    RepositoryDomain(Class<? extends BaseEntity> entity) {
+    RepositoryDomain(Class<? extends BaseEntityImp> entity) {
         clazz = entity;
     }
 

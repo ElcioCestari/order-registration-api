@@ -4,15 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document("Users")
+//@Document("Users")
 @EqualsAndHashCode(callSuper=true)
-public class User extends BaseEntity {
+public class User extends BaseEntityImp {
 
     private String login;
     private String password;
