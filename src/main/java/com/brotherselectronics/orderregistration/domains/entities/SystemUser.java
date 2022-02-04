@@ -14,14 +14,24 @@ import java.util.Collection;
 @Document("Users")
 public class SystemUser extends User implements BaseEntity {
 
-    public SystemUser(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public SystemUser(){
+        super(null, null, null);
+    }
+
+    public SystemUser(
+            String username,
+            String password,
+            Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
     }
 
     @PersistenceConstructor
-    public SystemUser(String username, String password,
-                      boolean enabled, boolean accountNonExpired,
-                      boolean credentialsNonExpired, boolean accountNonLocked,
+    public SystemUser(String username,
+                      String password,
+                      boolean enabled,
+                      boolean accountNonExpired,
+                      boolean credentialsNonExpired,
+                      boolean accountNonLocked,
                       Collection<? extends GrantedAuthority> authorities) {
         super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
     }
