@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SystemUserService implements IBaseService<SystemUserRequestDTO, SystemUserResponseDTO, SystemUser> {
@@ -29,12 +30,14 @@ public class SystemUserService implements IBaseService<SystemUserRequestDTO, Sys
 
     @Override
     public SystemUserResponseDTO findById(String id) {
-        return null;
+        return this.mapper.toDtoResponse(this.userRepository.findById(id).orElseThrow());
     }
 
     @Override
     public SystemUserResponseDTO save(SystemUserRequestDTO dto) {
-        return null;
+        var entity = this.mapper.toEntity(dto);
+        SystemUser save = this.userRepository.save(entity);
+        return this.mapper.toDtoResponse(save);
     }
 
     @Override
