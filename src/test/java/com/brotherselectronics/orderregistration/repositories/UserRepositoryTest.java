@@ -14,22 +14,22 @@ import java.util.Optional;
 class UserRepositoryTest {
 
     @Autowired private UserRepository userRepository;
-    private UserFaker fakeUser;
+    private SystemUser fakeUser;
 
     @BeforeEach
     void setUp() {
-        fakeUser = new UserFaker();
+        fakeUser = new UserFaker().getEntity();
     }
 
     @Test
     void findByLogin() {
-        Optional<SystemUser> user = userRepository.findByUsername(fakeUser.getEntity().getUsername());
+        Optional<SystemUser> user = userRepository.findByUsername(fakeUser.getUsername());
         Assertions.assertThat(user).isNotNull();
     }
 
     @Test
     void save() {
-//        SystemUser user = userRepository.save(fakeUser.getEntity());
-//        Assertions.assertThat(user).isNotNull();
+        SystemUser user = userRepository.save(fakeUser);
+        Assertions.assertThat(user).isNotNull();
     }
 }

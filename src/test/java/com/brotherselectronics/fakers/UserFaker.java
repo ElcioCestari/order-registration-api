@@ -4,7 +4,7 @@ import com.brotherselectronics.orderregistration.domains.dtos.UserRequestDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.UserResponseDTO;
 import com.brotherselectronics.orderregistration.domains.entities.BaseEntityImp;
 import com.brotherselectronics.orderregistration.domains.entities.SystemUser;
-import com.brotherselectronics.orderregistration.domains.enums.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collections;
 
@@ -16,7 +16,8 @@ public class UserFaker extends BaseEntityImp implements EntityFake<SystemUser, U
 
     @Override
     public SystemUser getEntity() {
-        return new SystemUser(login, password, Collections.singleton(GrantedAuthority.ADMIN.getAuthority()));
+        var admin = new SimpleGrantedAuthority("ADMIN");
+        return new SystemUser(login, password, Collections.singleton(admin));
     }
 
     @Override
