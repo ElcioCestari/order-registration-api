@@ -1,10 +1,13 @@
 package com.brotherselectronics.orderregistration.configs;
 
 import com.brotherselectronics.orderregistration.services.MyUserDetailService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -14,12 +17,13 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import static org.springframework.http.HttpMethod.*;
 
-@Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
+@Slf4j
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private MyUserDetailService userDetailService;
+    private final MyUserDetailService userDetailService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -31,26 +35,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 //                .antMatchers("/home", "/")
 //                .permitAll()
-                .antMatchers(GET, "/**").hasAnyRole("USER","ADMIN")
-                .antMatchers(POST, "/**").hasAnyRole("ADMIN")
-                .antMatchers(PUT, "/**").hasAnyRole("ADMIN")
-                .antMatchers(DELETE, "/**").hasAnyRole("ADMIN")
+//                .antMatchers(GET, "/**").hasAnyRole("USER","ADMIN")
+//                .antMatchers(POST, "/**").hasAnyRole("ADMIN")
+//                .antMatchers(PUT, "/**").hasAnyRole("ADMIN")
+//                .antMatchers(DELETE, "/**").hasAnyRole("ADMIN")
                 .anyRequest()
-                .denyAll()
+                .authenticated()
+//                .denyAll()
+//                .permitAll()
                 .and().httpBasic();
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        auth.inMemoryAuthentication()
-                .withUser("elcio")
-                .password(encoder.encode("elcio"))
-                .roles("ADMIN")
-                .and()
-                .withUser("maria")
-                .password(encoder.encode("maria"))
-                .roles("USER");
+//        auth.inMemoryAuthentication()
+//                .withUser("elcio")
+//                .password(encoder.encode("elcio"))
+//                .roles("ADMIN")
+//                .and()
+//                .withUser("maria")
+//                .password(encoder.encode("maria"))
+//                .roles("USER");
 
+        log.info(encoder.encode("elcio"));
+
+        auth.userDetailsService(userDetailService).passwordEncoder(encoder);
     }
 }

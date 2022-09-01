@@ -1,38 +1,55 @@
 package com.brotherselectronics.orderregistration.domains.entities;
 
 import lombok.*;
-import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 @Document("Users")
-public class SystemUser extends User implements BaseEntity {
+public class SystemUser implements BaseEntity, UserDetails {
 
-    public SystemUser(){
-        super(null, null, null);
+    private String username;
+    private String password;
+    private Collection<SimpleGrantedAuthority> authorities;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.authorities;
     }
 
-    public SystemUser(
-            String username,
-            String password,
-            Collection<? extends GrantedAuthority> authorities) {
-        super(username, password, authorities);
+    @Override
+    public String getPassword() {
+        return this.password;
     }
 
-    @PersistenceConstructor
-    public SystemUser(String username,
-                      String password,
-                      boolean enabled,
-                      boolean accountNonExpired,
-                      boolean credentialsNonExpired,
-                      boolean accountNonLocked,
-                      Collection<? extends GrantedAuthority> authorities) {
-        super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
+    @Override
+    public String getUsername() {
+        return this.username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

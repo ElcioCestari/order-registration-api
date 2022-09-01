@@ -6,6 +6,8 @@ import com.brotherselectronics.orderregistration.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,7 +25,9 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<?> findAll(){
+    public ResponseEntity<?> findAll(/*@AuthenticationPrincipal UserDetails userDetails*/){
+        // userDetails will contain all information about user.
+        // if was necessary can take from this.
         return ResponseEntity.ok(service.findAll());
     }
 
