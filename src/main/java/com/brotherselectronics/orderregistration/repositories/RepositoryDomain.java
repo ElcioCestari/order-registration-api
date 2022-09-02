@@ -11,7 +11,7 @@ import javax.annotation.PostConstruct;
 import java.util.EnumSet;
 
 @Getter
-@Deprecated
+@Deprecated(forRemoval = true)
 /**
  * This was deprecated but was keeped to see the code
  */
@@ -29,16 +29,19 @@ public enum RepositoryDomain {
     @Component
     public static class RepositoryDomainInjector {
 
-        @Autowired private ProductRepository productRepository;
-        @Autowired private OrderRepository orderRepository;
+        @Autowired
+        private ProductRepository productRepository;
+        @Autowired
+        private OrderRepository orderRepository;
 
         @PostConstruct
         public void postConstruct() {
             for (RepositoryDomain domain : EnumSet.allOf(RepositoryDomain.class))
                 switch (domain) {
-                    case ORDER   -> domain.setBaseRepository(orderRepository);
+                    case ORDER -> domain.setBaseRepository(orderRepository);
                     case PRODUCT -> domain.setBaseRepository(productRepository);
-                    default      -> throw new IllegalArgumentException("RepositoryDomain ["+domain.name()+"] not implemented yet");
+                    default ->
+                            throw new IllegalArgumentException("RepositoryDomain [" + domain.name() + "] not implemented yet");
                 }
         }
     }

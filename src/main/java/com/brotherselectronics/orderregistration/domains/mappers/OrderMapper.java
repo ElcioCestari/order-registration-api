@@ -7,5 +7,4 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface OrderMapper extends IBaseMapper<Order, OrderRequestDTO, OrderResponseDTO> {
-
 }

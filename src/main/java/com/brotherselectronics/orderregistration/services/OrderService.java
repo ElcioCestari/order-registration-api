@@ -6,22 +6,16 @@ import com.brotherselectronics.orderregistration.domains.entities.Order;
 import com.brotherselectronics.orderregistration.domains.mappers.OrderMapper;
 import com.brotherselectronics.orderregistration.exceptions.NotFoundException;
 import com.brotherselectronics.orderregistration.repositories.OrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class OrderService implements IBaseService<OrderRequestDTO, OrderResponseDTO, Order>{
-
+@RequiredArgsConstructor
+public class OrderService implements IBaseService<OrderRequestDTO, OrderResponseDTO, Order> {
     private final OrderMapper mapper;
     private final OrderRepository orderRepository;
-
-    @Autowired
-    public OrderService(OrderMapper mapper, OrderRepository orderRepository) {
-        this.mapper = mapper;
-        this.orderRepository = orderRepository;
-    }
 
     @Override
     public List<OrderResponseDTO> findAll() {
@@ -58,11 +52,11 @@ public class OrderService implements IBaseService<OrderRequestDTO, OrderResponse
     }
 
     private Order mapperToOrder(OrderRequestDTO dto) {
-        return (Order) mapper.toEntity(dto);
+        return mapper.toEntity(dto);
     }
 
     private OrderResponseDTO mapperToResponseDTO(Order order) {
-        return (OrderResponseDTO) mapper.toDtoResponse(order);
+        return mapper.toDtoResponse(order);
     }
 
     private Order getOrderFromRepositoryOrThrowNotFoundException(String id) {

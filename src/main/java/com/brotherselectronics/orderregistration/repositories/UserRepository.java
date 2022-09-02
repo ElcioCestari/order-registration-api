@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends BaseRepository<SystemUser,String> {
+public interface UserRepository extends BaseRepository<SystemUser, String> {
 
     Optional<SystemUser> findByUsername(String login);
 }

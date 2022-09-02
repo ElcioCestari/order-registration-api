@@ -6,22 +6,17 @@ import com.brotherselectronics.orderregistration.domains.entities.Product;
 import com.brotherselectronics.orderregistration.domains.mappers.ProductMapper;
 import com.brotherselectronics.orderregistration.exceptions.NotFoundException;
 import com.brotherselectronics.orderregistration.repositories.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ProductService implements IBaseService<ProductRequestDTO, ProductResponseDTO, Product>{
+@RequiredArgsConstructor
+public class ProductService implements IBaseService<ProductRequestDTO, ProductResponseDTO, Product> {
 
     private final ProductMapper mapper;
     private final ProductRepository productRepository;
-
-    @Autowired
-    public ProductService(ProductMapper mapper, ProductRepository productRepository) {
-        this.mapper = mapper;
-        this.productRepository = productRepository;
-    }
 
     @Override
     public List<ProductResponseDTO> findAll() {
@@ -58,11 +53,11 @@ public class ProductService implements IBaseService<ProductRequestDTO, ProductRe
     }
 
     private Product mapperToProduct(ProductRequestDTO dto) {
-        return (Product) mapper.toEntity(dto);
+        return mapper.toEntity(dto);
     }
 
     private ProductResponseDTO mapperToResponseDTO(Product product) {
-        return (ProductResponseDTO) mapper.toDtoResponse(product);
+        return mapper.toDtoResponse(product);
     }
 
     private Product getProductFromRepositoryOrThrowNotFoundException(String id) {

@@ -23,10 +23,10 @@ public interface IBaseService<E, R, T> {
     void delete(String id);
 
     default void merge(T source, T target) {
-        BeanUtils.copyProperties(source, target, ignoreAtributes());
+        BeanUtils.copyProperties(source, target, ignoreAttributes());
     }
 
-    default String[] ignoreAtributes() {
+    default String[] ignoreAttributes() {
         return new String[]{"id"};
     }
 }

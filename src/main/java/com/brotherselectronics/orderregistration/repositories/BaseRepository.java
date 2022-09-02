@@ -5,5 +5,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
-public interface BaseRepository<T extends BaseEntity, ID> extends MongoRepository<T,ID> {
+public interface BaseRepository<T extends BaseEntity, U> extends MongoRepository<T, U> {
 }

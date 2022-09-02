@@ -6,16 +6,17 @@ import com.brotherselectronics.orderregistration.domains.entities.Order;
 import com.brotherselectronics.orderregistration.domains.entities.Product;
 import com.brotherselectronics.orderregistration.repositories.BaseRepository;
 import com.brotherselectronics.orderregistration.repositories.OrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@AllArgsConstructor
 public class InstancesUtils {
 
-    @Autowired private OrderRepository orderRepository;
-    @Autowired private BaseRepository productRepository;
+    private final OrderRepository orderRepository;
+    private final BaseRepository productRepository;
 
-    public BaseRepository getRepository (Class<? extends BaseEntity> clazz) {
+    public BaseRepository getRepository(Class<? extends BaseEntity> clazz) {
 
         final String order = Order.class.getCanonicalName();
         if (isEquals((Class<? extends BaseEntityImp>) clazz, order)) return orderRepository;

@@ -8,8 +8,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 @Getter
 public enum GrantedAuthority {
 
-    ADMIN( new SimpleGrantedAuthority("ROLE_ADMIN")),
-    USER(new SimpleGrantedAuthority("ROLE_USER"));
+    ADMIN(new SimpleGrantedAuthority(Role.ADMIN.getAuthority())),
+    USER(new SimpleGrantedAuthority(Role.USER.getAuthority()));
 
     private final SimpleGrantedAuthority authority;
 
