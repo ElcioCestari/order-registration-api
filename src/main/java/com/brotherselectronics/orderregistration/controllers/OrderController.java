@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @RequestMapping("/orders")
@@ -33,7 +35,7 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<OrderResponseDTO> save(@Valid @RequestBody OrderRequestDTO dto) {
-        return ok(service.save(dto));
+        return status(CREATED).body(service.save(dto));
     }
 
     @PutMapping("/{id}")
@@ -44,7 +46,7 @@ public class OrderController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable String id) {
         service.delete(id);
-        return ok(OK);
+        return status(NO_CONTENT).build();
     }
 
 }

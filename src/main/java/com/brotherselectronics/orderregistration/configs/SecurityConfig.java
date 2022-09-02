@@ -2,7 +2,6 @@ package com.brotherselectronics.orderregistration.configs;
 
 import com.brotherselectronics.orderregistration.services.MyUserDetailService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,7 +15,6 @@ import static org.springframework.security.crypto.factory.PasswordEncoderFactori
 
 @EnableWebSecurity
 @RequiredArgsConstructor
-@Slf4j
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
