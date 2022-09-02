@@ -19,7 +19,6 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 class MyUserDetailServiceTest {
-
     @InjectMocks
     private MyUserDetailService myUserDetailService;
 

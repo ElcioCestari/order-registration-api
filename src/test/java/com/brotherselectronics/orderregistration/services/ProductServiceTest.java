@@ -8,7 +8,6 @@ import com.brotherselectronics.orderregistration.domains.entities.Product;
 import com.brotherselectronics.orderregistration.domains.mappers.ProductMapper;
 import com.brotherselectronics.orderregistration.exceptions.NotFoundException;
 import com.brotherselectronics.orderregistration.repositories.ProductRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -80,7 +79,7 @@ class ProductServiceTest {
 
     @Test
     void findById_whenNotFound_thenThrowAnException() {
-        when(repository.findById(anyString())).thenReturn(Optional.ofNullable(null));
+        when(repository.findById(anyString())).thenReturn(Optional.empty());
 
         ProductResponseDTO dto = null;
         String anyId = "any id";
@@ -135,7 +134,7 @@ class ProductServiceTest {
         ProductRequestDTO fakeNewProduct = fake.getRequestDTO();
 
         String fakeId = "fakeId";
-        when(repository.findById(fakeId)).thenReturn(Optional.ofNullable(null));
+        when(repository.findById(fakeId)).thenReturn(Optional.empty());
         ProductResponseDTO productResponseDTO = null;
         try {
             productResponseDTO = service.update(fakeNewProduct, fakeId);
@@ -156,7 +155,7 @@ class ProductServiceTest {
     @Test
     void delete_whenFail() {
         String fakeId = "fakeId";
-        when(repository.findById(fakeId)).thenReturn(Optional.ofNullable(null));
+        when(repository.findById(fakeId)).thenReturn(Optional.empty());
         try {
             service.delete(fakeId);
             fail(FAIL_MSG);

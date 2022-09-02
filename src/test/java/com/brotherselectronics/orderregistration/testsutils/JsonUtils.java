@@ -8,7 +8,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 
 public abstract class JsonUtils {
-
     private static final ObjectMapper CONVERTER = getJsonMapper();
 
     public static String convertObjectToString(Object obj) {

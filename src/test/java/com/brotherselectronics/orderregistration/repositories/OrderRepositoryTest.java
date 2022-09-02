@@ -11,7 +11,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest
 class OrderRepositoryTest {
-
     @Autowired
     private OrderRepository orderRepository;
     private String userId;
@@ -29,6 +28,7 @@ class OrderRepositoryTest {
 
     @AfterEach
     void tearDown() {
-        orderRepository.deleteAll();
+        var list = orderRepository.findByUserId(this.userId);
+        orderRepository.deleteAll(list);
     }
 }

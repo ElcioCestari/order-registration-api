@@ -16,16 +16,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 class IBaseServiceTest {
-
     @InjectMocks
     private OrderService orderService;
     private BigDecimal totalValueExpected;
-    private String idTeste;
+    private String testId;
 
     @BeforeEach
     void setUp() {
         totalValueExpected = BigDecimal.valueOf(155.75);
-        idTeste = "id teste";
+        testId = "id teste";
     }
 
     @Test
@@ -61,10 +60,10 @@ class IBaseServiceTest {
                 .orderItens(List.of(new OrderItem()))
                 .totalValueOrder(totalValueExpected)
                 .build();
-        source.setId(idTeste);
+        source.setId(testId);
 
         orderService.merge(source, target);
 
-        assertThat(target.getId()).isNotEqualTo(idTeste);
+        assertThat(target.getId()).isNotEqualTo(testId);
     }
 }
