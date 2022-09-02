@@ -8,6 +8,7 @@ import com.brotherselectronics.orderregistration.domains.entities.Product;
 import com.brotherselectronics.orderregistration.domains.mappers.ProductMapper;
 import com.brotherselectronics.orderregistration.exceptions.NotFoundException;
 import com.brotherselectronics.orderregistration.repositories.ProductRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +19,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
 import java.util.Optional;
 
-import static com.brotherselectronics.fakers.BaseEntityFake.FAKE_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,9 +30,12 @@ class ProductServiceTest {
     private static final String FAIL_MSG = "Must to be throw an exception and don't was threw.";
     private static final EntityFake<Product, ProductRequestDTO, ProductResponseDTO> fake = new ProductFaker();
 
-    @InjectMocks private ProductService service;
-    @Mock private ProductMapper mapper;
-    @Mock private ProductRepository repository;
+    @InjectMocks
+    private ProductService service;
+    @Mock
+    private ProductMapper mapper;
+    @Mock
+    private ProductRepository repository;
 
     @BeforeEach
     void setUp() {
@@ -72,7 +75,7 @@ class ProductServiceTest {
         when(mapper.toDtoResponse(any(Product.class))).thenReturn(responseDTO);
 
         ProductResponseDTO dto = service.findById("any id");
-        assertEquals(responseDTO,dto);
+        assertEquals(responseDTO, dto);
     }
 
     @Test
@@ -85,7 +88,7 @@ class ProductServiceTest {
             dto = service.findById(anyId);
             fail(FAIL_MSG);
         } catch (NotFoundException e) {
-            assertEquals(e.getMessage(),"Product not found with id: " + anyId);
+            assertEquals(e.getMessage(), "Product not found with id: " + anyId);
         }
         assertNull(dto);
     }
@@ -104,7 +107,7 @@ class ProductServiceTest {
         ProductResponseDTO productResponseDTO = service.save(fakeRequestDTO);
 
         assertThat(productResponseDTO).isNotNull();
-        assertEquals(productResponseDTO.getName(),fakeRequestDTO.getName());
+        assertEquals(productResponseDTO.getName(), fakeRequestDTO.getName());
     }
 
     @Test
@@ -124,7 +127,7 @@ class ProductServiceTest {
         ProductResponseDTO productResponseDTO = service.update(fakeNewProduct, fakeId);
 
         assertThat(productResponseDTO).isNotNull();
-        assertEquals(productResponseDTO.getName(),fakeNewProduct.getName());
+        assertEquals(productResponseDTO.getName(), fakeNewProduct.getName());
     }
 
     @Test
@@ -135,8 +138,8 @@ class ProductServiceTest {
         when(repository.findById(fakeId)).thenReturn(Optional.ofNullable(null));
         ProductResponseDTO productResponseDTO = null;
         try {
-             productResponseDTO = service.update(fakeNewProduct, fakeId);
-             fail(FAIL_MSG);
+            productResponseDTO = service.update(fakeNewProduct, fakeId);
+            fail(FAIL_MSG);
         } catch (NotFoundException e) {
             assertEquals(e.getMessage(), "Product not found with id: " + fakeId);
         }
@@ -147,7 +150,7 @@ class ProductServiceTest {
     void delete_whenSucessfull() {
         String fakeId = "fakeId";
         when(repository.findById(fakeId)).thenReturn(Optional.ofNullable(fake.getEntity()));
-        service.delete(fakeId);
+        assertDoesNotThrow(() -> service.delete(fakeId));
     }
 
     @Test

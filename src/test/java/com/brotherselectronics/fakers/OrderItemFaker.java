@@ -5,15 +5,17 @@ import com.brotherselectronics.orderregistration.domains.dtos.OrderItemResponseD
 import com.brotherselectronics.orderregistration.domains.entities.BaseEntityImp;
 import com.brotherselectronics.orderregistration.domains.entities.OrderItem;
 
-public class OrderItemFaker extends BaseEntityImp implements EntityFake<OrderItem, OrderItemRequestDTO, OrderItemResponseDTO>{
+import static java.util.UUID.randomUUID;
 
-    public static final int QUANTITTY = 10;
-    private static final String FAKE_PRODUCT_ID = "any id";
+public class OrderItemFaker extends BaseEntityImp implements EntityFake<OrderItem, OrderItemRequestDTO, OrderItemResponseDTO> {
+
+    public static final int QUANTITY = 10;
+    private static final String FAKE_PRODUCT_ID = randomUUID().toString();
 
     @Override
     public OrderItem getEntity() {
         return OrderItem.builder()
-                .quantity(QUANTITTY)
+                .quantity(QUANTITY)
                 .productId(FAKE_PRODUCT_ID)
                 .build();
     }
@@ -21,7 +23,7 @@ public class OrderItemFaker extends BaseEntityImp implements EntityFake<OrderIte
     @Override
     public OrderItemRequestDTO getRequestDTO() {
         return OrderItemRequestDTO.builder()
-                .quantity(QUANTITTY)
+                .quantity(QUANTITY)
                 .productId(FAKE_PRODUCT_ID)
                 .build();
     }
@@ -29,7 +31,7 @@ public class OrderItemFaker extends BaseEntityImp implements EntityFake<OrderIte
     @Override
     public OrderItemResponseDTO getResponseDTO() {
         return OrderItemResponseDTO.builder()
-                .quantity(QUANTITTY)
+                .quantity(QUANTITY)
                 .productId(FAKE_PRODUCT_ID)
                 .build();
     }

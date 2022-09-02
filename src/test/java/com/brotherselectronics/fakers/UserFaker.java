@@ -8,7 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collections;
 
-public class UserFaker extends BaseEntityImp implements EntityFake<SystemUser, UserRequestDTO, UserResponseDTO>{
+public class UserFaker extends BaseEntityImp implements EntityFake<SystemUser, UserRequestDTO, UserResponseDTO> {
 
     private final String login = "elcio";
     private final String password = "$2a$10$CKtbFy2R0qxNLPF.d6Jaeuf1UQOmDxSQFh/1ToxNEaxgxgnIy6SUC";//elcio123

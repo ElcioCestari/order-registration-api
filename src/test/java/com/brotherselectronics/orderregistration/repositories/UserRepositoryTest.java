@@ -13,7 +13,8 @@ import java.util.Optional;
 @DataMongoTest
 class UserRepositoryTest {
 
-    @Autowired private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
     private SystemUser fakeUser;
 
     @BeforeEach

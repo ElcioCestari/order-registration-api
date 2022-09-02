@@ -10,14 +10,14 @@ class GrantedAuthorityTest {
         String adminRole = GrantedAuthority.ADMIN.getAuthority().getAuthority();
         String userRole = GrantedAuthority.USER.getAuthority().getAuthority();
 
-        Assertions.assertEquals(adminRole, "ROLE_ADMIN");
-        Assertions.assertEquals(userRole, "ROLE_USER");
+        Assertions.assertEquals(adminRole, Role.ADMIN.getAuthority());
+        Assertions.assertEquals(userRole, Role.USER.getAuthority());
     }
 
     @Test
     void values() {
         GrantedAuthority[] authorities = GrantedAuthority.values();
-        Assertions.assertEquals(authorities.length, 2);
+        Assertions.assertEquals(2, authorities.length);
     }
 
     @Test

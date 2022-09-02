@@ -9,13 +9,15 @@ import com.brotherselectronics.orderregistration.domains.enums.Category;
 
 import java.math.BigDecimal;
 
-public class ProductFaker extends BaseEntityImp implements EntityFake<Product, ProductRequestDTO, ProductResponseDTO>{
+import static java.math.BigDecimal.valueOf;
+
+public class ProductFaker extends BaseEntityImp implements EntityFake<Product, ProductRequestDTO, ProductResponseDTO> {
 
     public static final String PRODUCT_NAME = "phone";
     public static final String DESCRIPTION = "An Apple cellphone";
     public static final boolean HAVE_IN_STOCK = true;
-    public static final BigDecimal UNIT_PURCHASE_PRICE = BigDecimal.valueOf(1000.00);
-    public static final BigDecimal UNIT_PURCHASE_SALE = BigDecimal.valueOf(1100.00);
+    public static final BigDecimal UNIT_PURCHASE_PRICE = valueOf(1000.00);
+    public static final BigDecimal UNIT_PURCHASE_SALE = valueOf(1100.00);
     public static final int STOCK_QUANTITY = 10;
 
     @Override

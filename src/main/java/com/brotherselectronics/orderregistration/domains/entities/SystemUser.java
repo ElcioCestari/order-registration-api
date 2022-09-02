@@ -6,16 +6,17 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
 
 @Getter
+@Setter
 @EqualsAndHashCode
 @ToString
 @Document("Users")
+@AllArgsConstructor
 public class SystemUser implements BaseEntity, UserDetails {
 
-    private String username;
+    private final String username;
     private String password;
     private Collection<SimpleGrantedAuthority> authorities;
     @Override
