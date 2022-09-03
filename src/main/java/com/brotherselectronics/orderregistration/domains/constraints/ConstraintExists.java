@@ -1,6 +1,7 @@
 package com.brotherselectronics.orderregistration.domains.constraints;
 
 import com.brotherselectronics.orderregistration.domains.entities.BaseEntity;
+import com.brotherselectronics.orderregistration.domains.entities.BaseEntityImp;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

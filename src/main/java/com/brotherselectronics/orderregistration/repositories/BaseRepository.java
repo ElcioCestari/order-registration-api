@@ -2,8 +2,8 @@ package com.brotherselectronics.orderregistration.repositories;
 
 import com.brotherselectronics.orderregistration.domains.entities.BaseEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.NoRepositoryBean;
 
-@Repository
-public interface BaseRepository<T extends BaseEntity, ID> extends MongoRepository<T,ID> {
+@NoRepositoryBean
+public interface BaseRepository<T extends BaseEntity, U> extends MongoRepository<T, U> {
 }

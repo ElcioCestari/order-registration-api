@@ -13,5 +13,5 @@ public enum PaymentType {
     MONEY("Dinheiro em Espécie"),
     PIX("PIX");
 
-    private String description;
+    private final String description;
 }

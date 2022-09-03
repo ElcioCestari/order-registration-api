@@ -1,19 +1,16 @@
-package com.brotherselectronics.orderregistration.domains.entities;
+package com.brotherselectronics.orderregistration.domains.dtos;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-//@Document("Users")
-@EqualsAndHashCode(callSuper=true)
-public class User extends BaseEntityImp {
-
+@Builder
+public class UserRequestDTO {
     private String login;
     private String password;
     private String name;
-
 }

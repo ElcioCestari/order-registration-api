@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Document("Products")
 @Builder
 @EqualsAndHashCode(callSuper=true)
-public class Product extends BaseEntity{
+public class Product extends BaseEntityImp {
 
     private String name;
     private String description;

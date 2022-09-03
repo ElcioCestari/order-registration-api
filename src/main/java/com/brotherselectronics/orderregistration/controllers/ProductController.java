@@ -2,45 +2,51 @@ package com.brotherselectronics.orderregistration.controllers;
 
 
 import com.brotherselectronics.orderregistration.domains.dtos.ProductRequestDTO;
+import com.brotherselectronics.orderregistration.domains.dtos.ProductResponseDTO;
 import com.brotherselectronics.orderregistration.services.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @RequestMapping("/products")
+@RequiredArgsConstructor
 public class ProductController {
-
-    @Autowired
-    private ProductService service;
+    private final ProductService service;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable("id") String id){
-        return ResponseEntity.ok(service.findById(id));
+    public ResponseEntity<ProductResponseDTO> findById(@PathVariable("id") String id) {
+        return ok(service.findById(id));
     }
 
     @GetMapping
-    public ResponseEntity<?> findAll(){
-        return ResponseEntity.ok(service.findAll());
+    public ResponseEntity<List<ProductResponseDTO>> findAll() {
+        return ok(service.findAll());
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@Valid @RequestBody ProductRequestDTO dto) {
-        return ResponseEntity.ok(service.save(dto));
+    public ResponseEntity<ProductResponseDTO> save(@Valid @RequestBody ProductRequestDTO dto) {
+        return status(CREATED).body(service.save(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@Valid @RequestBody ProductRequestDTO dto, @PathVariable String id) {
-        return ResponseEntity.ok(service.update(dto,id));
+    public ResponseEntity<ProductResponseDTO> update(@Valid @RequestBody ProductRequestDTO dto,
+                                                     @PathVariable String id) {
+        return ok(service.update(dto, id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable String id) {
         service.delete(id);
-        return ResponseEntity.ok(HttpStatus.ACCEPTED);
+        return status(NO_CONTENT).build();
     }
 
 }

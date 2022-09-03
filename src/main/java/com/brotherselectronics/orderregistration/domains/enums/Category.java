@@ -6,10 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum Category {
-
     ELETRONIC("Eletrônicos");
 
-    private String value;
-
-
+    private final String value;
 }
