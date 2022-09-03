@@ -1,43 +1,53 @@
-//package com.brotherselectronics.orderregistration.controllers;
-//
-//import com.brotherselectronics.fakers.OrderFaker;
-//import com.brotherselectronics.orderregistration.domains.constraints.ExistsValidator;
-//import com.brotherselectronics.orderregistration.domains.dtos.OrderRequestDTO;
-//import com.brotherselectronics.orderregistration.domains.dtos.OrderResponseDTO;
-//import com.brotherselectronics.orderregistration.domains.entities.Order;
-//import com.brotherselectronics.orderregistration.exceptions.NotFoundException;
-//import com.brotherselectronics.orderregistration.repositories.BaseRepository;
-//import com.brotherselectronics.orderregistration.services.OrderService;
-//import com.brotherselectronics.orderregistration.utils.InstancesUtils;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-//import org.springframework.boot.test.mock.mockito.MockBean;
-//import org.springframework.http.MediaType;
-//import org.springframework.test.web.servlet.MockMvc;
-//import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-//
-//import java.util.List;
-//import java.util.Optional;
-//
-//import static com.brotherselectronics.orderregistration.testsutils.JsonUtils.convertObjectToString;
-//import static java.util.Collections.emptyList;
-//import static org.assertj.core.api.Assertions.assertThat;
-//import static org.mockito.ArgumentMatchers.any;
-//import static org.mockito.ArgumentMatchers.anyString;
-//import static org.mockito.Mockito.when;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-//
-//@WebMvcTest(controllers = OrderController.class)
-//class OrderControllerTest {
-//    private static final String END_POINT = "/orders";
-//
-//    @Autowired private MockMvc mockMvc;
-//    @MockBean private OrderService orderService;
+package com.brotherselectronics.orderregistration.controllers;
+
+import com.brotherselectronics.configs.TestConfig;
+import com.brotherselectronics.fakers.OrderFaker;
+import com.brotherselectronics.orderregistration.configs.SecurityConfig;
+import com.brotherselectronics.orderregistration.domains.constraints.ExistsValidator;
+import com.brotherselectronics.orderregistration.domains.dtos.OrderRequestDTO;
+import com.brotherselectronics.orderregistration.domains.dtos.OrderResponseDTO;
+import com.brotherselectronics.orderregistration.domains.entities.Order;
+import com.brotherselectronics.orderregistration.exceptions.NotFoundException;
+import com.brotherselectronics.orderregistration.repositories.BaseRepository;
+import com.brotherselectronics.orderregistration.services.OrderService;
+import com.brotherselectronics.orderregistration.utils.InstancesUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import java.util.List;
+import java.util.Optional;
+
+import static com.brotherselectronics.orderregistration.testsutils.JsonUtils.convertObjectToString;
+import static java.util.Collections.emptyList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@WebMvcTest(controllers = OrderController.class)
+//@SpringBootTest
+@AutoConfigureWebTestClient
+@Import(TestConfig.class)
+class OrderControllerTest {
+    private static final String END_POINT = "/orders";
+
+    @Autowired private MockMvc mockMvc;
+    @MockBean private OrderService orderService;
 //    @MockBean private ExistsValidator existsValidator;
 //    @MockBean private InstancesUtils instancesUtils;
 //    @MockBean private BaseRepository orderRepository;
@@ -63,11 +73,11 @@
 //        jsonRequestDTOStub = convertObjectToString(requestDTOStub);
 //        orderStub = orderFaker.getEntity();
 //    }
-//
-//    @Test
-//    public void findById() {
-//        assertThat(true);
-//    }
+
+    @Test
+    public void findById() {
+        assertThat(true);
+    }
 //
 //    @Test
 //    public void findAll_whenHasItensThenReturnAnJsonList() throws Exception {
@@ -127,4 +137,4 @@
 //    public void delete(){
 //        assertThat(true);
 //    }
-//}
+}
