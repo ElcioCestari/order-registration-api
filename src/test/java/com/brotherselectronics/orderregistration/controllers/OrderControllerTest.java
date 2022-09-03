@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -56,12 +55,7 @@ class OrderControllerTest {
 
     private List<OrderResponseDTO> orderResponseDTOListNotEmpty;
     private OrderResponseDTO responseDTOStub;
-    private OrderRequestDTO requestDTOStub;
-    private Order orderStub;
-
-    private String jsonList;
     private String jsonRequestDTOStub;
-    private String jsonResponseDTOStub;
     private OrderFaker orderFaker;
 
     @BeforeEach
@@ -70,29 +64,29 @@ class OrderControllerTest {
         orderFaker = new OrderFaker();
         responseDTOStub = orderFaker.getResponseDTO();
         orderResponseDTOListNotEmpty = (List<OrderResponseDTO>) orderFaker.getResponseDTOCollection();
-        jsonList = convertObjectToString(orderResponseDTOListNotEmpty);
-        jsonResponseDTOStub = convertObjectToString(responseDTOStub);
-        requestDTOStub = orderFaker.getRequestDTO();
+        String jsonList = convertObjectToString(orderResponseDTOListNotEmpty);
+        String jsonResponseDTOStub = convertObjectToString(responseDTOStub);
+        OrderRequestDTO requestDTOStub = orderFaker.getRequestDTO();
         jsonRequestDTOStub = convertObjectToString(requestDTOStub);
-        orderStub = orderFaker.getEntity();
+        Order orderStub = orderFaker.getEntity();
     }
 
     @Test
-    public void findById() {
+    void findById() {
         assertThat(true);
     }
 
     @Test
-    @WithMockUser("spring")
-    public void findAll_whenHasItemsThenReturnAnJsonList() throws Exception {
+    @WithMockUser(roles = {"USER", "ADMIN"})
+    void findAll_whenHasItemsThenReturnAnJsonList() throws Exception {
         when(orderService.findAll()).thenReturn(orderResponseDTOListNotEmpty);
         mockMvc.perform(MockMvcRequestBuilders.get(END_POINT))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser("spring")
-    public void findAll_whenHasNoItemsThenReturnAnEmptyJson() throws Exception {
+    @WithMockUser(roles = {"USER", "ADMIN"})
+    void findAll_whenHasNoItemsThenReturnAnEmptyJson() throws Exception {
         when(orderService.findAll()).thenReturn(emptyList());
         mockMvc.perform(MockMvcRequestBuilders.get(END_POINT))
                 .andExpect(status().isOk())
@@ -100,21 +94,21 @@ class OrderControllerTest {
     }
 
     @Test
-    @WithMockUser("spring")
-    public void save_whenReceiveAValidRequestDTOThenReturnAResponseDTO() throws Exception {
+    @WithMockUser(roles = {"ADMIN"})
+    void save_whenReceiveAValidRequestDTOThenReturnAResponseDTO() throws Exception {
         when(orderService.save(any(OrderRequestDTO.class))).thenReturn(responseDTOStub);
         when(instancesUtils.getRepository(any())).thenReturn(this.orderRepository);
         when(orderRepository.findById(anyString())).thenReturn(Optional.ofNullable(orderFaker));
         mockMvc.perform(post(END_POINT)
                         .contentType(APPLICATION_JSON)
                         .content(jsonRequestDTOStub))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
     }
 
     @Test
-    @WithMockUser("spring")
-    public void update_whenReceiveAValidRequestDTOThenReturnAResponseDTO() throws Exception {
+    @WithMockUser(roles = {"ADMIN"})
+    void update_whenReceiveAValidRequestDTOThenReturnAResponseDTO() throws Exception {
         String fakeId = "any id";
         when(orderService.update(any(OrderRequestDTO.class), anyString())).thenReturn(responseDTOStub);
         when(instancesUtils.getRepository(any())).thenReturn(this.orderRepository);
@@ -127,8 +121,8 @@ class OrderControllerTest {
     }
 
     @Test
-    @WithMockUser("spring")
-    public void update_whenReceiveAnInvalidRequestThenReturnANotFound() throws Exception {
+    @WithMockUser(roles = {"ADMIN"})
+    void update_whenReceiveAnInvalidRequestThenReturnANotFound() throws Exception {
         String fakeId = "any id";
         String msg = "Resource not found with id: " + fakeId;
         when(orderService.update(any(OrderRequestDTO.class), anyString())).thenThrow(new NotFoundException((msg)));
@@ -142,8 +136,8 @@ class OrderControllerTest {
     }
 
     @Test
-    @WithMockUser("spring")
-    public void delete() {
+    @WithMockUser(roles = {"ADMIN"})
+    void delete() {
         assertThat(true);
     }
 }
