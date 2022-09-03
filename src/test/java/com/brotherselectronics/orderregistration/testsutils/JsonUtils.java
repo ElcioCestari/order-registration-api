@@ -6,7 +6,10 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public abstract class JsonUtils {
     private static final ObjectMapper CONVERTER = getJsonMapper();
 
@@ -14,7 +17,7 @@ public abstract class JsonUtils {
         try {
             return CONVERTER.writeValueAsString(obj);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             throw new IllegalArgumentException(e.getMessage());
         }
     }
@@ -34,5 +37,14 @@ public abstract class JsonUtils {
                 .addModule(new Jdk8Module())
                 .addModule(new JavaTimeModule())
                 .build();
+    }
+
+    public static <T> T convertJsonToObject(@NonNull final String resBody, @NonNull final Class<T> clazz) {
+        try {
+            return CONVERTER.readValue(resBody, clazz);
+        } catch (JsonProcessingException e) {
+            log.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 }
