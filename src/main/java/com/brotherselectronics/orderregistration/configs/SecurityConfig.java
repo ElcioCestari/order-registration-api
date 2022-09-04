@@ -38,7 +38,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .requiresChannel()
 //                .requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
 //                .requiresSecure();
-        http.authorizeHttpRequests().anyRequest().permitAll();
+        http
+
+                .requiresChannel()
+                .requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
+                .requiresSecure();
     }
 
     @Override
