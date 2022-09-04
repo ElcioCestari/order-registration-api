@@ -45,7 +45,7 @@ class UserRepositoryTest {
     @Test
     void save_whenAlreadyExistsAnUserWithTheSameUserName() {
         userRepository.insert(fakeUser);
-        var invalidUser = new SystemUser(fakeUser.getUsername(), "", null);
+        var invalidUser = SystemUser.Factory.simpleUser(fakeUser.getUsername(), "");
         assertThrows(DuplicateKeyException.class, () -> userRepository.insert(invalidUser));
 
     }
