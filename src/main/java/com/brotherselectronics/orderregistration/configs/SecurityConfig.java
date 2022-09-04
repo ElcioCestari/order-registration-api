@@ -22,22 +22,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/home", "/")
-                .permitAll()
-                .antMatchers(GET, "/**").hasAnyRole(USER.getAuthority(), ADMIN.getAuthority())
-                .antMatchers(POST, "/**").hasAnyRole(ADMIN.getAuthority())
-                .antMatchers(PUT, "/**").hasAnyRole(ADMIN.getAuthority())
-                .antMatchers(DELETE, "/**").hasAnyRole(ADMIN.getAuthority())
-                .anyRequest()
-                .authenticated()
-                .and()
-                .httpBasic()
-                .and()
-                .requiresChannel()
-                .requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
-                .requiresSecure();
+//        http.csrf().disable()
+//                .authorizeRequests()
+//                .antMatchers("/home", "/")
+//                .permitAll()
+//                .antMatchers(GET, "/**").hasAnyRole(USER.getAuthority(), ADMIN.getAuthority())
+//                .antMatchers(POST, "/**").hasAnyRole(ADMIN.getAuthority())
+//                .antMatchers(PUT, "/**").hasAnyRole(ADMIN.getAuthority())
+//                .antMatchers(DELETE, "/**").hasAnyRole(ADMIN.getAuthority())
+//                .anyRequest()
+//                .authenticated()
+//                .and()
+//                .httpBasic()
+//                .and()
+//                .requiresChannel()
+//                .requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
+//                .requiresSecure();
+        http.authorizeHttpRequests().anyRequest().permitAll();
     }
 
     @Override
