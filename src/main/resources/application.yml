@@ -10,6 +10,7 @@ spring:
     cors:
       allowed-origins: 'http://localhost:4200'
       allowed-methods: '*'
+      allowed-headers: '*'
   data:
     mongodb:
       host: localhost
@@ -23,6 +24,7 @@ spring:
     cors:
       allowed-origins: 'http://localhost:4200'
       allowed-methods: '*'
+      allowed-headers: '*'
   data:
     mongodb:
       uri: ${MONGODB_URI:mongodb+srv://${USER}:${PASSWORD}@cluster0.0wakd.mongodb.net/order-registration?retryWrites=true&w=majority}
@@ -33,6 +35,7 @@ spring:
     cors:
       allowed-origins: 'http://localhost:4200'
       allowed-methods: '*'
+      allowed-headers: '*'
   data:
     mongodb:
       uri: ${MONGODB_URI}

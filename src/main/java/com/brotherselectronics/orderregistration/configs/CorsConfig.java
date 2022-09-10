@@ -16,6 +16,8 @@ public class CorsConfig {
     private List<String> allowedOrigins;
     @Value("${spring.web.cors.allowed-methods}")
     private List<String> allowedMethods;
+    @Value("${spring.web.cors.allowed-headers}")
+    private List<String> allowedHeaders;
 
 
     @Bean
@@ -23,6 +25,7 @@ public class CorsConfig {
         var configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(allowedOrigins);
         configuration.setAllowedMethods(allowedMethods);
+        configuration.setAllowedHeaders(allowedHeaders);
         var source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
