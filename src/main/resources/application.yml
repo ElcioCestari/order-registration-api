@@ -6,6 +6,10 @@ spring:
 ---
 spring:
   profiles: development
+  web:
+    cors:
+      allowed-origins: 'http://localhost:4200'
+      allowed-methods: '*'
   data:
     mongodb:
       host: localhost
@@ -15,12 +19,20 @@ spring:
 ---
 spring:
   profiles: staging
+  web:
+    cors:
+      allowed-origins: 'http://localhost:4200'
+      allowed-methods: '*'
   data:
     mongodb:
-      uri: ${MONGODB_URI}
+      uri: ${MONGODB_URI:mongodb+srv://elcio:elcio@cluster0.0wakd.mongodb.net/order-registration?retryWrites=true&w=majority}
 ---
 spring:
   profiles: production
+  web:
+    cors:
+      allowed-origins: 'http://localhost:4200'
+      allowed-methods: '*'
   data:
     mongodb:
       uri: ${MONGODB_URI}

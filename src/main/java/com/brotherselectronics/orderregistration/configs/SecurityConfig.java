@@ -22,16 +22,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http
+                .csrf().disable()
+                .cors()
+                .and()
                 .authorizeRequests()
                 .antMatchers("/home", "/")
                 .permitAll()
-                .antMatchers(GET, "/**").hasAnyRole(USER.getAuthority(), ADMIN.getAuthority())
-                .antMatchers(POST, "/**").hasAnyRole(ADMIN.getAuthority())
-                .antMatchers(PUT, "/**").hasAnyRole(ADMIN.getAuthority())
-                .antMatchers(DELETE, "/**").hasAnyRole(ADMIN.getAuthority())
+//                .antMatchers(GET, "/**").hasAnyRole(USER.getAuthority(), ADMIN.getAuthority())
+//                .antMatchers(POST, "/**").hasAnyRole(ADMIN.getAuthority())
+//                .antMatchers(PUT, "/**").hasAnyRole(ADMIN.getAuthority())
+//                .antMatchers(DELETE, "/**").hasAnyRole(ADMIN.getAuthority())
                 .anyRequest()
-                .authenticated()
+//                .authenticated()
+                .permitAll()
                 .and()
                 .httpBasic()
                 .and()
