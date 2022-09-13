@@ -7,6 +7,8 @@ import com.brotherselectronics.orderregistration.domains.mappers.ProductMapper;
 import com.brotherselectronics.orderregistration.exceptions.NotFoundException;
 import com.brotherselectronics.orderregistration.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +21,7 @@ public class ProductService implements IBaseService<ProductRequestDTO, ProductRe
     private final ProductRepository productRepository;
 
     @Override
+    @Cacheable("productFindAll")
     public List<ProductResponseDTO> findAll() {
         List<Product> productList = productRepository.findAll();
         return mapper.toDtoResponseList(productList);
@@ -30,6 +33,7 @@ public class ProductService implements IBaseService<ProductRequestDTO, ProductRe
         return mapperToResponseDTO(product);
     }
 
+    @CacheEvict(allEntries = true, cacheNames = "productFindAll")
     @Override
     public ProductResponseDTO save(ProductRequestDTO dto) {
         Product product = mapperToProduct(dto);
@@ -37,6 +41,7 @@ public class ProductService implements IBaseService<ProductRequestDTO, ProductRe
         return mapperToResponseDTO(product);
     }
 
+    @CacheEvict(allEntries = true, cacheNames = "productFindAll")
     @Override
     public ProductResponseDTO update(ProductRequestDTO dto, String id) {
         Product productSaved = this.getProductFromRepositoryOrThrowNotFoundException(id);
@@ -46,6 +51,7 @@ public class ProductService implements IBaseService<ProductRequestDTO, ProductRe
         return mapperToResponseDTO(productSaved);
     }
 
+    @CacheEvict(allEntries = true, cacheNames = "productFindAll")
     @Override
     public void delete(String id) {
         this.getProductFromRepositoryOrThrowNotFoundException(id);
