@@ -33,7 +33,9 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<List<ProductResponseDTO>> findAll() {
         return ok(service.findAll());
-    }@GetMapping
+    }
+
+    @GetMapping("/pageable")
     public ResponseEntity<List<ProductResponseDTO>> findAllPageable(@RequestParam @Valid @Min(1) int size,
                                                                     @RequestParam @Valid @Min(1) int page,
                                                                     @RequestParam @Valid @NotNull String[] sort) {
