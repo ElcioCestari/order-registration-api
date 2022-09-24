@@ -36,8 +36,8 @@ public class ProductController {
     }
 
     @GetMapping("/pageable")
-    public ResponseEntity<List<ProductResponseDTO>> findAllPageable(@RequestParam @Valid @Min(1) int size,
-                                                                    @RequestParam @Valid @Min(1) int page,
+    public ResponseEntity<List<ProductResponseDTO>> findAllPageable(@RequestParam(defaultValue = "10") @Valid @Min(1) int size,
+                                                                    @RequestParam(defaultValue = "1") @Valid @Min(1) int page,
                                                                     @RequestParam @Valid @NotNull String[] sort) {
         return ok(service.findAll(size, page, sort));
     }
@@ -54,7 +54,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable String id) {
+    public ResponseEntity<Void> delete(@PathVariable String id) {
         service.delete(id);
         return status(NO_CONTENT).build();
     }

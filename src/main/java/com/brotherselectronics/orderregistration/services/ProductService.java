@@ -40,7 +40,7 @@ public class ProductService implements IBaseService<ProductRequestDTO, ProductRe
     @Override
     public ProductResponseDTO findById(String id) {
         Product product = getProductFromRepositoryOrThrowNotFoundException(id);
-        return mapperToResponseDTO(product);
+        return mapper.toDtoResponse(product);
     }
 
     @CacheEvict(allEntries = true, cacheNames = "productFindAll")
@@ -48,7 +48,7 @@ public class ProductService implements IBaseService<ProductRequestDTO, ProductRe
     public ProductResponseDTO save(ProductRequestDTO dto) {
         Product product = mapperToProduct(dto);
         productRepository.save(product);
-        return mapperToResponseDTO(product);
+        return mapper.toDtoResponse(product);
     }
 
     @CacheEvict(allEntries = true, cacheNames = "productFindAll")
@@ -58,7 +58,7 @@ public class ProductService implements IBaseService<ProductRequestDTO, ProductRe
         Product productToMerge = mapperToProduct(dto);
         merge(productToMerge, productSaved);
         productRepository.save(productSaved);
-        return mapperToResponseDTO(productSaved);
+        return mapper.toDtoResponse(productSaved);
     }
 
     @CacheEvict(allEntries = true, cacheNames = "productFindAll")
@@ -70,10 +70,6 @@ public class ProductService implements IBaseService<ProductRequestDTO, ProductRe
 
     private Product mapperToProduct(ProductRequestDTO dto) {
         return mapper.toEntity(dto);
-    }
-
-    private ProductResponseDTO mapperToResponseDTO(Product product) {
-        return mapper.toDtoResponse(product);
     }
 
     private Product getProductFromRepositoryOrThrowNotFoundException(String id) {
