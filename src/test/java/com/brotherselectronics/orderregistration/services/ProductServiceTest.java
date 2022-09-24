@@ -63,7 +63,7 @@ class ProductServiceTest {
         when(repository.findAll(pageable))
                 .thenReturn(new PageImpl<>((List<Product>) fake.getEmptyEntityCollection()));
 
-        assertThat((List<?>) service.findAll(1, 2, "name")).isEmpty();
+        assertThat(service.findAll(1, 2, "name")).isEmpty();
     }
 
     @Test
