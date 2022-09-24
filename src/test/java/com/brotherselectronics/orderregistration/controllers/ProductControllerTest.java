@@ -82,6 +82,16 @@ class ProductControllerTest {
     }
 
     @Test
+    @WithMockUser
+    @Order(30)
+    void findAll_dontGivenParamInRequestDontToBeReturnBadRequest() throws Exception {
+        String jsonResponse = mockMvc.perform(get("%s".formatted(PATH)))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        var responseDTOS = new ObjectMapper().readValue(jsonResponse, ProductResponseDTO[].class);
+        assertThat(stream(responseDTOS).toList()).isNotEmpty();
+    }
+
+    @Test
     @WithMockUser(roles = {"ADMIN"})
     @Order(40)
     void update() throws Exception {

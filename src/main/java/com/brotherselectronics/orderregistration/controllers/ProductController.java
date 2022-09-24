@@ -32,9 +32,15 @@ public class ProductController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<ProductResponseDTO>> findAll(@RequestParam(defaultValue = "10") @Valid @Min(1) int size,
-                                                            @RequestParam(defaultValue = "1") @Valid @Min(1) int page,
-                                                            @RequestParam @Valid @NotNull String[] sort) {
+    public ResponseEntity<List<ProductResponseDTO>> findAll(@RequestParam(required = false, defaultValue = "10")
+                                                            @Valid
+                                                            @Min(1) int size,
+                                                            @RequestParam(required = false, defaultValue = "1")
+                                                            @Valid
+                                                            @Min(1) int page,
+                                                            @RequestParam(required = false, defaultValue = "name")
+                                                            @Valid
+                                                            @NotNull String[] sort) {
         return ok(service.findAll(page, size, sort));
     }
 
