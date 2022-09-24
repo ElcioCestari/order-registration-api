@@ -66,7 +66,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void findById_whenFoundThenReturnAresponseDTO() {
+    void findById_whenFoundThenReturnResponseDTO() {
         Product entity = fake.getEntity();
         when(repository.findById(anyString())).thenReturn(Optional.ofNullable(entity));
 
@@ -93,7 +93,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void save_whenSuccessfull() {
+    void save_whenSuccessful() {
         ProductRequestDTO fakeRequestDTO = fake.getRequestDTO();
         Product fakeEntity = fake.getEntity();
         when(mapper.toEntity(fakeRequestDTO)).thenReturn(fakeEntity);
@@ -110,7 +110,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void update_whenSuccessfull() {
+    void update_whenSuccessful() {
         ProductRequestDTO fakeNewProduct = fake.getRequestDTO();
         Product fakeEntity = fake.getEntity();
         when(mapper.toEntity(fakeNewProduct)).thenReturn(fakeEntity);
@@ -146,7 +146,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void delete_whenSucessfull() {
+    void delete_whenSuccessful() {
         String fakeId = "fakeId";
         when(repository.findById(fakeId)).thenReturn(Optional.ofNullable(fake.getEntity()));
         assertDoesNotThrow(() -> service.delete(fakeId));
