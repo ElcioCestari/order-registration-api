@@ -30,16 +30,12 @@ public class ProductController {
     public ResponseEntity<ProductResponseDTO> findById(@PathVariable("id") String id) {
         return ok(service.findById(id));
     }
-    @GetMapping
-    public ResponseEntity<List<ProductResponseDTO>> findAll() {
-        return ok(service.findAll());
-    }
 
-    @GetMapping("/pageable")
-    public ResponseEntity<List<ProductResponseDTO>> findAllPageable(@RequestParam(defaultValue = "10") @Valid @Min(1) int size,
-                                                                    @RequestParam(defaultValue = "1") @Valid @Min(1) int page,
-                                                                    @RequestParam @Valid @NotNull String[] sort) {
-        return ok(service.findAll(size, page, sort));
+    @GetMapping()
+    public ResponseEntity<List<ProductResponseDTO>> findAll(@RequestParam(defaultValue = "10") @Valid @Min(1) int size,
+                                                            @RequestParam(defaultValue = "1") @Valid @Min(1) int page,
+                                                            @RequestParam @Valid @NotNull String[] sort) {
+        return ok(service.findAll(page, size, sort));
     }
 
     @PostMapping
