@@ -35,9 +35,9 @@ public class ProductController {
     public ResponseEntity<List<ProductResponseDTO>> findAll(@RequestParam(required = false, defaultValue = "10")
                                                             @Valid
                                                             @Min(1) int size,
-                                                            @RequestParam(required = false, defaultValue = "1")
+                                                            @RequestParam(required = false, defaultValue = "0")
                                                             @Valid
-                                                            @Min(1) int page,
+                                                            @Min(0) int page,
                                                             @RequestParam(required = false, defaultValue = "name")
                                                             @Valid
                                                             @NotNull String[] sort) {
