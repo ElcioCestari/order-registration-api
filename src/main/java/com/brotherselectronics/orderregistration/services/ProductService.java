@@ -9,9 +9,7 @@ import com.brotherselectronics.orderregistration.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,10 +22,14 @@ public class ProductService implements IBaseService<ProductRequestDTO, ProductRe
     private final ProductRepository productRepository;
 
     @Cacheable("productFindAll")
-    public List<ProductResponseDTO> findAll(final Integer page, final Integer size, final String... sort) {
+    public Page<ProductResponseDTO> findAll(final Integer page, final Integer size, final String... sort) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
-        List<Product> productList = productRepository.findAll(pageable).toList();
-        return mapper.toDtoResponseList(productList);
+        Page<Product> productPage = productRepository.findAll(pageable);
+        return new PageImpl<>(mapper.toDtoResponseList(
+                productPage.toList()),
+                pageable,
+                productPage.getTotalElements()
+        );
     }
 
     @Override

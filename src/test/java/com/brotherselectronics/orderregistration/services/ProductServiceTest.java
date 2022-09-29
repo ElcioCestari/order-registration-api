@@ -13,10 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -71,12 +68,12 @@ class ProductServiceTest {
         var pageable = PageRequest.of(1, 2, Sort.by("name"));
         when(repository.findAll(any(Pageable.class)))
                 .thenReturn(new PageImpl<>((List<Product>) fake.getEntityCollection(20)));
-
-        assertThat(service.findAll(
+        Page<ProductResponseDTO> all = service.findAll(
                 pageable.getPageNumber(),
                 pageable.getPageSize(),
-                valueOf(pageable.getSort())))
-                .isNotEmpty();
+                valueOf(pageable.getSort()));
+
+        assertThat(all).isNotEmpty();
     }
 
     @Test

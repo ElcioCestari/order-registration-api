@@ -5,6 +5,7 @@ import com.brotherselectronics.orderregistration.domains.dtos.ProductRequestDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.ProductResponseDTO;
 import com.brotherselectronics.orderregistration.services.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -32,7 +34,7 @@ public class ProductController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<ProductResponseDTO>> findAll(@RequestParam(required = false, defaultValue = "10")
+    public ResponseEntity<Page<ProductResponseDTO>> findAll(@RequestParam(required = false, defaultValue = "10")
                                                             @Valid
                                                             @Min(1) int size,
                                                             @RequestParam(required = false, defaultValue = "0")
@@ -42,6 +44,11 @@ public class ProductController {
                                                             @Valid
                                                             @NotNull String[] sort) {
         return ok(service.findAll(page, size, sort));
+    }
+
+    @GetMapping("all")
+    public ResponseEntity<List<ProductResponseDTO>> findAll() {
+        return ok(service.findAll());
     }
 
     @PostMapping
