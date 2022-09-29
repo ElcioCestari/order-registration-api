@@ -6,12 +6,15 @@ import com.brotherselectronics.orderregistration.domains.entities.SystemUser;
 import com.brotherselectronics.orderregistration.domains.mappers.SystemUserMapper;
 import com.brotherselectronics.orderregistration.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SystemUserService implements IBaseService<SystemUserRequestDTO, SystemUserResponseDTO, SystemUser> {
 
     private final UserRepository userRepository;
@@ -29,9 +32,16 @@ public class SystemUserService implements IBaseService<SystemUserRequestDTO, Sys
 
     @Override
     public SystemUserResponseDTO save(SystemUserRequestDTO dto) {
-        var entity = this.mapper.toEntity(dto);
-        SystemUser save = this.userRepository.save(entity);
-        return this.mapper.toDtoResponse(save);
+        try {
+            var entity = this.mapper.toEntity(dto);
+            SystemUser save = this.userRepository.save(entity);
+            return this.mapper.toDtoResponse(save);
+        } catch (DuplicateKeyException e) {
+            throw new KeyAlreadyExistsException(e);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new RuntimeException();
+        }
     }
 
     @Override

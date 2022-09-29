@@ -10,7 +10,10 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.dao.DuplicateKeyException;
 
 import java.util.Optional;
+import java.util.UUID;
 
+import static com.brotherselectronics.orderregistration.domains.entities.SystemUser.Factory.simpleUser;
+import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -39,13 +42,15 @@ class UserRepositoryTest {
 
     @Test
     void save() {
-        assertThat(userRepository.save(fakeUser)).isNotNull();
+        var user = simpleUser(randomUUID().toString(), randomUUID().toString());
+        var save = userRepository.save(user);
+        assertThat(save).isNotNull();
     }
 
     @Test
     void save_whenAlreadyExistsAnUserWithTheSameUserName() {
         userRepository.insert(fakeUser);
-        var invalidUser = SystemUser.Factory.simpleUser(fakeUser.getUsername(), "");
+        var invalidUser = simpleUser(fakeUser.getUsername(), "");
         assertThrows(DuplicateKeyException.class, () -> userRepository.insert(invalidUser));
 
     }

@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Set;
 
@@ -13,10 +12,11 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 public class SystemUserResponseDTO {
-    private  String username;
-    private Set<GrantedAuthority> authorities;
-    private  boolean accountNonExpired;
-    private  boolean accountNonLocked;
-    private  boolean credentialsNonExpired;
-    private  boolean enabled;
+    private String id;
+    private String username;
+    private Set<String> authorities;
+    private boolean accountNonExpired;
+    private boolean accountNonLocked;
+    private boolean credentialsNonExpired;
+    private boolean enabled;
 }

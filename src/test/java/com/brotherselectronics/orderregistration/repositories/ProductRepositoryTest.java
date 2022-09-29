@@ -21,6 +21,13 @@ class ProductRepositoryTest {
     private ProductRepository repository;
 
     @Test
+    void save() {
+        Product entity = new Product();
+        Product save = this.repository.save(entity);
+        assertThat(save).isNotNull();
+    }
+
+    @Test
     void findAll_whenSuccessful_thenReturnAList() {
         assertThat(repository.findAll()).isNotEmpty();
     }

@@ -1,7 +1,8 @@
 package com.brotherselectronics.orderregistration.controllers;
 
 import com.brotherselectronics.orderregistration.domains.dtos.ProductRequestDTO;
-import com.brotherselectronics.orderregistration.domains.dtos.ProductResponseDTO;
+import com.brotherselectronics.orderregistration.domains.dtos.SystemUserRequestDTO;
+import com.brotherselectronics.orderregistration.domains.dtos.SystemUserResponseDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +14,14 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.UUID;
+
 import static com.brotherselectronics.orderregistration.testsutils.GenericFactory.buildObjectOfAnyType;
 import static com.brotherselectronics.orderregistration.testsutils.JsonUtils.convertJsonToObject;
 import static com.brotherselectronics.orderregistration.testsutils.JsonUtils.convertObjectToString;
 import static java.lang.Integer.parseInt;
 import static java.util.Arrays.stream;
+import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -27,13 +31,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class ProductControllerTest {
-    private static final String PATH = "/products";
+class UserControllerTest {
+    private static final String PATH = "/users";
 
     @Autowired
     private WebApplicationContext context;
     private MockMvc mockMvc;
-    private static ProductResponseDTO product;
+    private static SystemUserResponseDTO responseDTO;
 
     @BeforeEach
     void setUp() {
@@ -47,35 +51,51 @@ class ProductControllerTest {
     @WithMockUser(roles = {"ADMIN"})
     @Order(10)
     void save() throws Exception {
-        String reqBody = convertObjectToString(buildObjectOfAnyType(ProductRequestDTO.class));
-        MvcResult response = mockMvc.perform(post(PATH)
+        String reqBody = convertObjectToString(buildObjectOfAnyType(SystemUserRequestDTO.class));
+        var response = mockMvc.perform(post(PATH)
                         .contentType(APPLICATION_JSON)
-                        .content(reqBody))
+                        .content("""
+                                        {
+                                            "password":"yedUsFwdkelQbxeTeQOvaScfqIOOmaa",
+                                            "username":"%s"
+                                        }
+                                """.formatted(randomUUID().toString())))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andReturn();
+                .andReturn().getResponse().getContentAsString();
 
-        String resBody = response.getResponse().getContentAsString();
-        product = convertJsonToObject(resBody, ProductResponseDTO.class);
-        assertThat(product).isNotNull();
-        assertThat(product.getId()).isNotNull();
+        responseDTO = convertJsonToObject(response, SystemUserResponseDTO.class);
+        assertThat(responseDTO).isNotNull();
+        assertThat(responseDTO.getUsername()).isNotNull();
     }
 
     @Test
     @WithMockUser
     @Order(20)
     void findById() throws Exception {
-        mockMvc.perform(get(PATH + "/" + product.getId()))
+        mockMvc.perform(get(PATH + "/" + responseDTO.getId()))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser
     @Order(30)
-    void findAll_dontGivenParamInRequestDontToBeReturnBadRequest() throws Exception {
-        String jsonResponse = mockMvc.perform(get("%s/all".formatted(PATH)))
+    void findAll() throws Exception {
+        final var size = "10";
+        String jsonResponse = mockMvc.perform(get("%s?size=%s&page=1&sort=name".formatted(PATH, size)))
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-        var responseDTOS = new ObjectMapper().readValue(jsonResponse, ProductResponseDTO[].class);
+        var responseDTOS = new ObjectMapper().readValue(jsonResponse, SystemUserRequestDTO[].class);
+        assertThat(stream(responseDTOS).toList())
+                .hasSizeLessThanOrEqualTo(parseInt(size));
+    }
+
+    @Test
+    @WithMockUser
+    @Order(30)
+    void findAll_dontGivenParamInRequestDontToBeReturnBadRequest() throws Exception {
+        String jsonResponse = mockMvc.perform(get("%s".formatted(PATH)))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        var responseDTOS = new ObjectMapper().readValue(jsonResponse, SystemUserRequestDTO[].class);
         assertThat(stream(responseDTOS).toList()).isNotEmpty();
     }
 
@@ -84,7 +104,7 @@ class ProductControllerTest {
     @Order(40)
     void update() throws Exception {
         String reqBody = convertObjectToString(buildObjectOfAnyType(ProductRequestDTO.class));
-        mockMvc.perform(put(PATH + "/" + product.getId()).contentType(APPLICATION_JSON).content(reqBody))
+        mockMvc.perform(put(PATH + "/" + responseDTO.getId()).contentType(APPLICATION_JSON).content(reqBody))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -93,7 +113,7 @@ class ProductControllerTest {
     @WithMockUser(roles = {"ADMIN"})
     @Order(50)
     void delete() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete(PATH + "/" + product.getId()))
+        mockMvc.perform(MockMvcRequestBuilders.delete(PATH + "/" + responseDTO.getId()))
                 .andDo(print())
                 .andExpect(status().isNoContent());
     }
