@@ -1,23 +1,30 @@
 package com.brotherselectronics.orderregistration.repositories;
 
 import com.brotherselectronics.fakers.UserFaker;
+import com.brotherselectronics.orderregistration.configs.MongoConfig;
 import com.brotherselectronics.orderregistration.domains.entities.SystemUser;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.validation.ConstraintViolationException;
 import java.util.Optional;
-import java.util.UUID;
 
 import static com.brotherselectronics.orderregistration.domains.entities.SystemUser.Factory.simpleUser;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataMongoTest
+@ExtendWith(SpringExtension.class)
+@Import(MongoConfig.class)
 class UserRepositoryTest {
 
     @Autowired
@@ -43,14 +50,20 @@ class UserRepositoryTest {
     @Test
     void save() {
         var user = simpleUser(randomUUID().toString(), randomUUID().toString());
-        var save = userRepository.save(user);
-        assertThat(save).isNotNull();
+        assertThat(userRepository.save(user)).isNotNull();
+    }
+
+    @Test
+    void save_whenUserPasswordEmptyThenShouldNotBeSaved() {
+        var user = simpleUser(randomUUID().toString(), randomUUID().toString());
+        user.setPassword("");
+        assertThatThrownBy(() -> userRepository.save(user)).isInstanceOf(ConstraintViolationException.class);
     }
 
     @Test
     void save_whenAlreadyExistsAnUserWithTheSameUserName() {
         userRepository.insert(fakeUser);
-        var invalidUser = simpleUser(fakeUser.getUsername(), "");
+        var invalidUser = simpleUser(fakeUser.getUsername(), randomUUID().toString());
         assertThrows(DuplicateKeyException.class, () -> userRepository.insert(invalidUser));
 
     }

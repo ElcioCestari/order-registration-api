@@ -1,14 +1,11 @@
 package com.brotherselectronics.orderregistration.domains.entities;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 
@@ -17,20 +14,13 @@ import static com.brotherselectronics.orderregistration.domains.enums.Role.USER;
 import static java.util.Objects.isNull;
 import static java.util.Set.of;
 import static java.util.UUID.randomUUID;
-import static lombok.AccessLevel.NONE;
 
 @Getter
 @Setter
-@EqualsAndHashCode
-@ToString
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @Document("Users")
-public class SystemUser implements BaseEntity, UserDetails {
-
-    @Id
-    @NotBlank
-    @Setter(NONE)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+public class SystemUser extends BaseEntityImp implements BaseEntity, UserDetails {
 
     @Indexed(unique = true)
     @NonNull
@@ -48,7 +38,7 @@ public class SystemUser implements BaseEntity, UserDetails {
                       @NonNull String username,
                       @NonNull String password,
                       Collection<SimpleGrantedAuthority> authorities) {
-        this.id = id;
+        super(id);
         this.username = username;
         this.password = password;
         if (isNull(authorities) || authorities.isEmpty()) {

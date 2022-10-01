@@ -9,12 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.util.UUID;
 
 import static com.brotherselectronics.orderregistration.testsutils.GenericFactory.buildObjectOfAnyType;
 import static com.brotherselectronics.orderregistration.testsutils.JsonUtils.convertJsonToObject;
@@ -51,7 +48,6 @@ class UserControllerTest {
     @WithMockUser(roles = {"ADMIN"})
     @Order(10)
     void save() throws Exception {
-        String reqBody = convertObjectToString(buildObjectOfAnyType(SystemUserRequestDTO.class));
         var response = mockMvc.perform(post(PATH)
                         .contentType(APPLICATION_JSON)
                         .content("""
@@ -67,6 +63,7 @@ class UserControllerTest {
         responseDTO = convertJsonToObject(response, SystemUserResponseDTO.class);
         assertThat(responseDTO).isNotNull();
         assertThat(responseDTO.getUsername()).isNotNull();
+        assertThat(responseDTO.getId()).isNotNull();
     }
 
     @Test
@@ -84,9 +81,9 @@ class UserControllerTest {
         final var size = "10";
         String jsonResponse = mockMvc.perform(get("%s?size=%s&page=1&sort=name".formatted(PATH, size)))
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-        var responseDTOS = new ObjectMapper().readValue(jsonResponse, SystemUserRequestDTO[].class);
+        var responseDTOS = new ObjectMapper().readValue(jsonResponse, SystemUserResponseDTO[].class);
         assertThat(stream(responseDTOS).toList())
-                .hasSizeLessThanOrEqualTo(parseInt(size));
+                .hasSizeGreaterThanOrEqualTo(parseInt(size));
     }
 
     @Test
@@ -95,7 +92,7 @@ class UserControllerTest {
     void findAll_dontGivenParamInRequestDontToBeReturnBadRequest() throws Exception {
         String jsonResponse = mockMvc.perform(get("%s".formatted(PATH)))
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-        var responseDTOS = new ObjectMapper().readValue(jsonResponse, SystemUserRequestDTO[].class);
+        var responseDTOS = new ObjectMapper().readValue(jsonResponse, SystemUserResponseDTO[].class);
         assertThat(stream(responseDTOS).toList()).isNotEmpty();
     }
 

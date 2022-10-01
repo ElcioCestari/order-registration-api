@@ -19,6 +19,7 @@ public interface SystemUserMapper extends IBaseMapper<SystemUser, SystemUserRequ
     default SystemUserResponseDTO toDtoResponse(@NonNull SystemUser entity) {
         return SystemUserResponseDTO.builder()
                 .username(entity.getUsername())
+                .id(entity.getId())
                 .credentialsNonExpired(entity.isCredentialsNonExpired())
                 .accountNonExpired(entity.isAccountNonExpired())
                 .accountNonLocked(entity.isAccountNonLocked())

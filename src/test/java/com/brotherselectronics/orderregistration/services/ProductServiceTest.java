@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static java.lang.String.valueOf;
+import static java.util.Optional.ofNullable;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -78,9 +79,9 @@ class ProductServiceTest {
 
     @Test
     void findById_whenFoundThenReturnResponseDTO() {
-        when(repository.findById(anyString())).thenReturn(Optional.ofNullable(fake.getEntity()));
+        when(repository.findById(anyString())).thenReturn(ofNullable(fake.getEntity()));
 
-        assertEquals(fake.getResponseDTO(), service.findById("any id"));
+        assertEquals(fake.getResponseDTO().getName(), service.findById("any id").getName());
     }
 
     @Test
@@ -119,7 +120,7 @@ class ProductServiceTest {
         when(repository.save(any(Product.class))).thenReturn(fakeEntity);
 
         var fakeId = "fakeId";
-        when(repository.findById(fakeId)).thenReturn(Optional.ofNullable(fakeEntity));
+        when(repository.findById(fakeId)).thenReturn(ofNullable(fakeEntity));
 
         var productResponseDTO = service.update(fakeNewProduct, fakeId);
 
@@ -146,7 +147,7 @@ class ProductServiceTest {
     @Test
     void delete_whenSuccessful() {
         String fakeId = "fakeId";
-        when(repository.findById(fakeId)).thenReturn(Optional.ofNullable(fake.getEntity()));
+        when(repository.findById(fakeId)).thenReturn(ofNullable(fake.getEntity()));
         assertDoesNotThrow(() -> service.delete(fakeId));
     }
 
