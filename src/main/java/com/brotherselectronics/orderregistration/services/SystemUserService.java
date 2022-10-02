@@ -19,6 +19,7 @@ public class SystemUserService implements IBaseService<SystemUserRequestDTO, Sys
 
     private final UserRepository userRepository;
     private final SystemUserMapper mapper;
+    private final MyUserDetailService userDetailService;
 
     @Override
     public List<SystemUserResponseDTO> findAll() {
@@ -52,5 +53,18 @@ public class SystemUserService implements IBaseService<SystemUserRequestDTO, Sys
     @Override
     public void delete(String id) {
         throw new UnsupportedOperationException("Sorry! But this was not implemented yet.");
+    }
+
+    public SystemUserResponseDTO getLoggedUser() {
+        try {
+            return mapper.toDtoResponse(
+                    (SystemUser) this.userDetailService
+                            .getAuthentication()
+                            .getPrincipal());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new RuntimeException();
+        }
+
     }
 }

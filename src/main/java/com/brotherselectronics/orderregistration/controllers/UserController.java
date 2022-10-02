@@ -25,6 +25,11 @@ public class UserController {
         return ok(this.systemUserService.findAll());
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<SystemUserResponseDTO> getUser() {
+        return ok(this.systemUserService.getLoggedUser());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<SystemUserResponseDTO> getUserById(@PathVariable String id) {
         return ok(this.systemUserService.findById(id));
@@ -36,7 +41,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable String id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable String id) {
         this.systemUserService.delete(id);
         return status(NO_CONTENT).build();
     }
