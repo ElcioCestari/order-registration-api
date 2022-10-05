@@ -2,7 +2,7 @@ spring:
   config:
     use-legacy-processing: true
   profiles:
-    active: staging
+    active: development
 ---
 spring:
   profiles: development
