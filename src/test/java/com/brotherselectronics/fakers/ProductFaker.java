@@ -26,6 +26,7 @@ public class ProductFaker extends BaseEntityImp implements EntityFake<Product, P
                 .name(PRODUCT_NAME)
                 .category(Category.ELETRONIC)
                 .description(DESCRIPTION)
+                .unitPurchasePrice(UNIT_PURCHASE_PRICE)
                 .haveInStock(HAVE_IN_STOCK)
                 .stock(getStock())
                 .build();
