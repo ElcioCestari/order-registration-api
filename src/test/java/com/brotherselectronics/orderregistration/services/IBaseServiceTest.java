@@ -2,6 +2,7 @@ package com.brotherselectronics.orderregistration.services;
 
 import com.brotherselectronics.orderregistration.domains.entities.Order;
 import com.brotherselectronics.orderregistration.domains.entities.OrderItem;
+import com.brotherselectronics.orderregistration.domains.entities.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class IBaseServiceTest {
     @InjectMocks
     private OrderService orderService;
+
+    @InjectMocks
+    private ProductService productService;
     private BigDecimal totalValueExpected;
     private String testId;
 
@@ -65,5 +69,24 @@ class IBaseServiceTest {
         orderService.merge(source, target);
 
         assertThat(target.getId()).isNotEqualTo(testId);
+    }
+
+    @Test
+    void testMerge_whenSourceIsNullAndTargetNot_thenAssertThatTargetFieldWillBeNullToo() {
+        Product target = Product.builder()
+                .description("some name")
+                .haveInStock(true)
+                .unitPurchasePrice(BigDecimal.valueOf(1000.00))
+                .unitPurchaseSale(BigDecimal.valueOf(1500.00))
+                .build();
+        Product source = Product.builder()
+                .description(null)
+                .haveInStock(false)
+                .unitPurchasePrice(null)
+                .unitPurchaseSale(null)
+                .build();
+
+        productService.merge(source, target);
+        assertThat(target.getDescription()).isNull();
     }
 }

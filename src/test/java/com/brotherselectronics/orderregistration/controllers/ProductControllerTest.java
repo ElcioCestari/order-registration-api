@@ -14,10 +14,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static com.brotherselectronics.orderregistration.testsutils.GenericFactory.buildObjectOfAnyType;
-import static com.brotherselectronics.orderregistration.testsutils.JsonUtils.convertJsonToObject;
-import static com.brotherselectronics.orderregistration.testsutils.JsonUtils.convertObjectToString;
-import static java.lang.Integer.parseInt;
+import static com.brotherselectronics.orderregistration.testsutils.JsonUtils.*;
 import static java.util.Arrays.stream;
+import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -87,6 +86,28 @@ class ProductControllerTest {
         mockMvc.perform(put(PATH + "/" + product.getId()).contentType(APPLICATION_JSON).content(reqBody))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(roles = {"ADMIN"})
+    @Order(41)
+    void patchUpdate() throws Exception {
+        ProductRequestDTO body = ProductRequestDTO.builder()
+                .name(randomUUID().toString())
+                .build();
+
+        String response = mockMvc.perform(patch(PATH + "/" + product.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content(convertObjectToString(body)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        var productResponseDTO = stringToObject(response, ProductResponseDTO.class);
+        assertThat(productResponseDTO).isNotNull();
+        assertThat(productResponseDTO.getName()).isEqualTo(body.getName());
     }
 
     @Test

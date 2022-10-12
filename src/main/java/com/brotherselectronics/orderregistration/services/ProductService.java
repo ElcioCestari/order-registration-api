@@ -78,4 +78,11 @@ public class ProductService implements IBaseService<ProductRequestDTO, ProductRe
         return productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Product not found with id: " + id));
     }
+
+    public ProductResponseDTO patch(ProductRequestDTO dto, String id) {
+        Product product = getProductFromRepositoryOrThrowNotFoundException(id);
+        mapper.merge(dto, product);
+        productRepository.save(product);
+        return mapper.toDtoResponse(product);
+    }
 }

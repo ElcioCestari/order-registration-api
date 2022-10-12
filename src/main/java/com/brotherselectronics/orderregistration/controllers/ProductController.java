@@ -62,6 +62,12 @@ public class ProductController {
         return ok(service.update(dto, id));
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<ProductResponseDTO> patchUpdate(@RequestBody ProductRequestDTO dto,
+                                                     @PathVariable String id) {
+        return ok(service.patch(dto, id));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         service.delete(id);

@@ -22,7 +22,7 @@ public abstract class JsonUtils {
         }
     }
 
-    public static Object stringToObject(String string, Class<?> type) {
+    public static <T> T stringToObject(String string, Class<T> type) {
         try {
             return CONVERTER.readValue(string, type);
         } catch (JsonProcessingException e) {
