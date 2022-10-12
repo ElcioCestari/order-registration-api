@@ -109,6 +109,25 @@ class ProductControllerTest {
         assertThat(productResponseDTO).isNotNull();
         assertThat(productResponseDTO.getName()).isEqualTo(body.getName());
     }
+    @Test
+    @WithMockUser(roles = {"ADMIN"})
+    @Order(42)
+    void patchUpdate_whenSendInvalidBodyThenReturnBadRequest() throws Exception {
+        ProductRequestDTO body = ProductRequestDTO.builder()
+                .name("")
+                .build();
+
+        String response = mockMvc.perform(patch(PATH + "/" + product.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content(convertObjectToString(body)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        assertThat(response).isNotNull();
+    }
 
     @Test
     @WithMockUser(roles = {"ADMIN"})
