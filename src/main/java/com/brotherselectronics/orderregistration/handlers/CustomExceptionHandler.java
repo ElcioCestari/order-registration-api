@@ -10,22 +10,42 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.time.LocalDateTime;
+import javax.validation.ConstraintViolationException;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static java.time.LocalDateTime.now;
+import static org.springframework.http.HttpStatus.*;
 
 @ControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(value = Exception.class)
+    protected ResponseEntity<ErrorModel> genericException(Exception ex, WebRequest request) {
+        var errorModel = ErrorModel.builder()
+                .httpStatus(INTERNAL_SERVER_ERROR)
+                .timestamp(now())
+                .message("Ocorreu um erro inesperado, tente novamente mais tarde.")
+                .build();
+        return new ResponseEntity<>(errorModel, INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(value = NotFoundException.class)
     protected ResponseEntity<ErrorModel> handleConflict(NotFoundException ex, WebRequest request) {
-        HttpStatus status = NOT_FOUND;
         var errorModel = ErrorModel.builder()
-                .httpStatus(status)
-                .timestamp(LocalDateTime.now())
+                .httpStatus(NOT_FOUND)
+                .timestamp(now())
                 .message(ex.getMessage())
                 .build();
-        return new ResponseEntity<>(errorModel, status);
+        return new ResponseEntity<>(errorModel, NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = ConstraintViolationException.class)
+    protected ResponseEntity<ErrorModel> handleBeanValidation(ConstraintViolationException ex, WebRequest request) {
+        var errorModel = ErrorModel.builder()
+                .httpStatus(UNPROCESSABLE_ENTITY)
+                .timestamp(now())
+                .message(ex.getMessage())
+                .build();
+        return new ResponseEntity<>(errorModel, UNPROCESSABLE_ENTITY);
     }
 
     @Override
@@ -35,7 +55,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         var errorModel = ErrorModel
                 .builder()
                 .httpStatus(status)
-                .timestamp(LocalDateTime.now())
+                .timestamp(now())
                 .build();
         errorModel.setErrorList(ex.getFieldErrors());
         return new ResponseEntity<>(errorModel, status);

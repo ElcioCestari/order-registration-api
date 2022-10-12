@@ -121,7 +121,7 @@ class ProductControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(convertObjectToString(body)))
                 .andDo(print())
-                .andExpect(status().isBadRequest())
+                .andExpect(status().is4xxClientError())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
