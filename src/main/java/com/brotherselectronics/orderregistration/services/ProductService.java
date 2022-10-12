@@ -79,6 +79,7 @@ public class ProductService implements IBaseService<ProductRequestDTO, ProductRe
                 .orElseThrow(() -> new NotFoundException("Product not found with id: " + id));
     }
 
+    @CacheEvict(allEntries = true, cacheNames = "productFindAll")
     public ProductResponseDTO patch(ProductRequestDTO dto, String id) {
         Product product = getProductFromRepositoryOrThrowNotFoundException(id);
         mapper.merge(dto, product);
