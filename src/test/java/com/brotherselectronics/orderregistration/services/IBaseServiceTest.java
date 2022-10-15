@@ -12,11 +12,17 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static com.brotherselectronics.orderregistration.domains.entities.SystemUser.Factory.buildAdmin;
+import static com.brotherselectronics.orderregistration.domains.entities.SystemUser.Factory.simpleUser;
+import static com.brotherselectronics.orderregistration.domains.enums.Role.ADMIN;
+import static com.brotherselectronics.orderregistration.domains.enums.Role.USER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 class IBaseServiceTest {
+    @InjectMocks
+    private SystemUserService userService;
     @InjectMocks
     private OrderService orderService;
 
@@ -88,5 +94,18 @@ class IBaseServiceTest {
 
         productService.merge(source, target);
         assertThat(target.getDescription()).isNull();
+    }
+
+    @Test
+    void testMerge_givenASourceWithCollections_thenAssertThatTargetWillBeSameCollections() {
+        var target = simpleUser("elcio", "elcio");
+        var source = buildAdmin("elcio", "elcio_admin");
+
+        assertThat(target.getAuthorities().stream().findFirst().get().toString()).isEqualTo(USER.getAuthority());
+        assertThat(source.getAuthorities().stream().findFirst().get().toString()).isEqualTo(ADMIN.getAuthority());
+
+        userService.merge(source, target);
+        assertThat(target.getAuthorities()).isEqualTo(source.getAuthorities());
+        assertThat(target.getAuthorities().stream().findFirst().get().toString()).isEqualTo(ADMIN.getAuthority());
     }
 }

@@ -21,6 +21,7 @@ import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @DataMongoTest
 @ExtendWith(SpringExtension.class)
@@ -45,6 +46,16 @@ class UserRepositoryTest {
     void findByLogin() {
         Optional<SystemUser> user = userRepository.findByUsername(fakeUser.getUsername());
         assertThat(user).isNotNull();
+    }
+    @Test
+    void deleteByLogin() {
+        try {
+            userRepository.findById(fakeUser.getId())
+                    .ifPresentOrElse(systemUser -> userRepository.delete(systemUser), RuntimeException::new);
+        } catch (Exception e) {
+            fail("should not be throw exception");
+        }
+
     }
 
     @Test

@@ -100,10 +100,69 @@ class UserControllerTest {
     @WithMockUser(roles = {"ADMIN"})
     @Order(40)
     void update() throws Exception {
-        String reqBody = convertObjectToString(buildObjectOfAnyType(ProductRequestDTO.class));
-        mockMvc.perform(put(PATH + "/" + responseDTO.getId()).contentType(APPLICATION_JSON).content(reqBody))
+        mockMvc.perform(put(PATH + "/" + responseDTO.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content("""
+                                        {
+                                            "username": "elcio",
+                                            "password": "elcio",
+                                            "authorities": [
+                                                "ROLE_ADMIN"
+                                            ],
+                                            "accountNonExpired": true,
+                                            "accountNonLocked": true,
+                                            "credentialsNonExpired": true,
+                                            "enabled": true
+                                        }
+                                """))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(roles = {"ADMIN"})
+    @Order(41)
+    void update_whenSendUsername_thenIgnoreNewUsername() throws Exception {
+        var response = mockMvc
+                .perform(get(PATH + "/" + responseDTO.getId()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        final var userBeforeUpdate = new ObjectMapper()
+                .readValue(response, SystemUserResponseDTO.class);
+
+        response = mockMvc
+                .perform(put(PATH + "/" + responseDTO.getId()).
+                        contentType(APPLICATION_JSON)
+                        .content("""
+                                        {
+                                            "username": "elcio",
+                                            "password": "elcio",
+                                            "authorities": [
+                                                "ROLE_ADMIN"
+                                            ],
+                                            "accountNonExpired": true,
+                                            "accountNonLocked": true,
+                                            "credentialsNonExpired": true,
+                                            "enabled": true
+                                        }
+                                """))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        final var userAfterUpdate = new ObjectMapper().readValue(response, SystemUserResponseDTO.class);
+        assertThat(userAfterUpdate).isNotNull();
+        assertThat(userAfterUpdate.getId()).isEqualTo(userBeforeUpdate.getId());
+        assertThat(userAfterUpdate.getUsername()).isEqualTo(userBeforeUpdate.getUsername());
+        assertThat(userAfterUpdate.getAuthorities()).isNotEqualTo(userBeforeUpdate.getAuthorities());
+
+
     }
 
     @Test

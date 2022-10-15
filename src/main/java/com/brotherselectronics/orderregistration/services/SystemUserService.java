@@ -4,6 +4,7 @@ import com.brotherselectronics.orderregistration.domains.dtos.SystemUserRequestD
 import com.brotherselectronics.orderregistration.domains.dtos.SystemUserResponseDTO;
 import com.brotherselectronics.orderregistration.domains.entities.SystemUser;
 import com.brotherselectronics.orderregistration.domains.mappers.SystemUserMapper;
+import com.brotherselectronics.orderregistration.exceptions.NotFoundException;
 import com.brotherselectronics.orderregistration.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,12 +48,19 @@ public class SystemUserService implements IBaseService<SystemUserRequestDTO, Sys
 
     @Override
     public SystemUserResponseDTO update(SystemUserRequestDTO dto, String id) {
-        throw new UnsupportedOperationException("Sorry! But this was not implemented yet.");
+        var systemUser = userRepository
+                .findById(id)
+                .orElseThrow(NotFoundException::new);
+        merge(mapper.toEntity(dto), systemUser);
+        userRepository.save(systemUser);
+        return mapper.toDtoResponse(systemUser);
     }
 
     @Override
     public void delete(String id) {
-        throw new UnsupportedOperationException("Sorry! But this was not implemented yet.");
+        userRepository
+                .findById(id)
+                .ifPresentOrElse(systemUser -> userRepository.delete(systemUser), NotFoundException::new);
     }
 
     public SystemUserResponseDTO getLoggedUser() {

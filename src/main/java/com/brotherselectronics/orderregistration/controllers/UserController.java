@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -36,7 +37,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<SystemUserResponseDTO> createUser(@RequestBody SystemUserRequestDTO dto) {
+    public ResponseEntity<SystemUserResponseDTO> createUser(@Valid @RequestBody SystemUserRequestDTO dto) {
         return status(CREATED).body(this.systemUserService.save(dto));
     }
 
@@ -47,7 +48,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SystemUserResponseDTO> updateUsers(SystemUserRequestDTO dto, String id) {
+    public ResponseEntity<SystemUserResponseDTO> updateUser(@Valid @RequestBody SystemUserRequestDTO dto, @PathVariable String id) {
         return ok(this.systemUserService.update(dto, id));
     }
 }
