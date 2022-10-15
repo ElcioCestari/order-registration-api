@@ -33,7 +33,6 @@ public interface SystemUserMapper extends IBaseMapper<SystemUser, SystemUserRequ
     }
 
     @Override
-    @Mapping(target = "authorities", ignore = true)
     @Mapping(target = "id", ignore = true)
     SystemUser toEntity(SystemUserRequestDTO dtoRequest);
 }

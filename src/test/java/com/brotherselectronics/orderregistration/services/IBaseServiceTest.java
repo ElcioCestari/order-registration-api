@@ -101,11 +101,14 @@ class IBaseServiceTest {
         var target = simpleUser("elcio", "elcio");
         var source = buildAdmin("elcio", "elcio_admin");
 
-        assertThat(target.getAuthorities().stream().findFirst().get().toString()).isEqualTo(USER.getAuthority());
-        assertThat(source.getAuthorities().stream().findFirst().get().toString()).isEqualTo(ADMIN.getAuthority());
+        assertThat(target.getAuthorities().stream().findFirst().orElseThrow(RuntimeException::new).toString())
+                .hasToString(USER.getAuthority());
+        assertThat(source.getAuthorities().stream().findFirst().orElseThrow(RuntimeException::new).toString())
+                .hasToString(ADMIN.getAuthority());
 
         userService.merge(source, target);
-        assertThat(target.getAuthorities()).isEqualTo(source.getAuthorities());
-        assertThat(target.getAuthorities().stream().findFirst().get().toString()).isEqualTo(ADMIN.getAuthority());
+        assertThat(target.getAuthorities().toString()).hasToString(source.getAuthorities().toString());
+        assertThat(target.getAuthorities().stream().findFirst().orElseThrow(RuntimeException::new).toString())
+                .hasToString(ADMIN.getAuthority());
     }
 }

@@ -1,7 +1,5 @@
 package com.brotherselectronics.orderregistration.controllers;
 
-import com.brotherselectronics.orderregistration.domains.dtos.ProductRequestDTO;
-import com.brotherselectronics.orderregistration.domains.dtos.SystemUserRequestDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.SystemUserResponseDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
@@ -13,9 +11,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static com.brotherselectronics.orderregistration.testsutils.GenericFactory.buildObjectOfAnyType;
+import java.util.Collections;
+import java.util.Set;
+
 import static com.brotherselectronics.orderregistration.testsutils.JsonUtils.convertJsonToObject;
-import static com.brotherselectronics.orderregistration.testsutils.JsonUtils.convertObjectToString;
 import static java.lang.Integer.parseInt;
 import static java.util.Arrays.stream;
 import static java.util.UUID.randomUUID;
@@ -98,29 +97,6 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(roles = {"ADMIN"})
-    @Order(40)
-    void update() throws Exception {
-        mockMvc.perform(put(PATH + "/" + responseDTO.getId())
-                        .contentType(APPLICATION_JSON)
-                        .content("""
-                                        {
-                                            "username": "elcio",
-                                            "password": "elcio",
-                                            "authorities": [
-                                                "ROLE_ADMIN"
-                                            ],
-                                            "accountNonExpired": true,
-                                            "accountNonLocked": true,
-                                            "credentialsNonExpired": true,
-                                            "enabled": true
-                                        }
-                                """))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockUser(roles = {"ADMIN"})
     @Order(41)
     void update_whenSendUsername_thenIgnoreNewUsername() throws Exception {
         var response = mockMvc
@@ -133,6 +109,8 @@ class UserControllerTest {
 
         final var userBeforeUpdate = new ObjectMapper()
                 .readValue(response, SystemUserResponseDTO.class);
+
+        Set<String> authoritiesBeforeUpdate = Collections.unmodifiableSet(userBeforeUpdate.getAuthorities());
 
         response = mockMvc
                 .perform(put(PATH + "/" + responseDTO.getId()).
@@ -160,7 +138,7 @@ class UserControllerTest {
         assertThat(userAfterUpdate).isNotNull();
         assertThat(userAfterUpdate.getId()).isEqualTo(userBeforeUpdate.getId());
         assertThat(userAfterUpdate.getUsername()).isEqualTo(userBeforeUpdate.getUsername());
-        assertThat(userAfterUpdate.getAuthorities()).isNotEqualTo(userBeforeUpdate.getAuthorities());
+        assertThat(userAfterUpdate.getAuthorities()).isNotEqualTo(authoritiesBeforeUpdate);
 
 
     }
