@@ -7,10 +7,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import static com.brotherselectronics.orderregistration.domains.enums.Role.ADMIN;
 import static com.brotherselectronics.orderregistration.domains.enums.Role.USER;
+import static java.util.Collections.unmodifiableCollection;
 import static java.util.Objects.isNull;
 import static java.util.Set.of;
 import static java.util.UUID.randomUUID;
@@ -42,15 +44,16 @@ public class SystemUser extends BaseEntityImp implements BaseEntity, UserDetails
         this.username = username;
         this.password = password;
         if (isNull(authorities) || authorities.isEmpty()) {
-            this.authorities = of(new SimpleGrantedAuthority(USER.getAuthority()));
+            this.authorities = new ArrayList<>();
+            this.authorities.add(new SimpleGrantedAuthority(USER.getAuthority()));
         } else {
-            this.authorities = authorities;
+            this.authorities = new ArrayList<>(authorities);
         }
     }
 
     @Override
     public Collection<? extends SimpleGrantedAuthority> getAuthorities() {
-        return this.authorities;
+        return unmodifiableCollection(this.authorities);
     }
 
     @Override
@@ -61,6 +64,14 @@ public class SystemUser extends BaseEntityImp implements BaseEntity, UserDetails
     @Override
     public String getUsername() {
         return this.username;
+    }
+
+    public void setAuthorities(@NonNull Collection<? extends SimpleGrantedAuthority> authorities) throws IllegalAccessException {
+        if (authorities.isEmpty()) {
+            throw new IllegalAccessException("invalid authorities");
+        }
+        this.authorities.clear();
+        this.authorities.addAll(authorities);
     }
 
     @Override
