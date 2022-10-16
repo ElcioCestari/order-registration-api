@@ -2,6 +2,7 @@ package com.brotherselectronics.orderregistration.controllers;
 
 import com.brotherselectronics.orderregistration.domains.dtos.SystemUserRequestDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.SystemUserResponseDTO;
+import com.brotherselectronics.orderregistration.domains.dtos.SystemUserUpdateRequestDTO;
 import com.brotherselectronics.orderregistration.services.SystemUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +49,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SystemUserResponseDTO> updateUser(@Valid @RequestBody SystemUserRequestDTO dto, @PathVariable String id) {
+    public ResponseEntity<SystemUserResponseDTO> updateUser(@Valid @RequestBody SystemUserUpdateRequestDTO dto, @PathVariable String id) {
         return ok(this.systemUserService.update(dto, id));
     }
 }
