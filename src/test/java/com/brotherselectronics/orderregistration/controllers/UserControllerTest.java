@@ -44,7 +44,7 @@ class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(authorities = {"ADMIN"})
     @Order(10)
     void save() throws Exception {
         var response = mockMvc.perform(post(PATH)
@@ -66,7 +66,7 @@ class UserControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(authorities = {"ADMIN"})
     @Order(20)
     void findById() throws Exception {
         mockMvc.perform(get(PATH + "/" + responseDTO.getId()))
@@ -74,7 +74,7 @@ class UserControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(authorities = {"ADMIN"})
     @Order(30)
     void findAll() throws Exception {
         String jsonResponse = mockMvc.perform(get("%s?size=%s&page=1&sort=name".formatted(PATH, "10")))
@@ -84,7 +84,7 @@ class UserControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(authorities = {"ADMIN"})
     @Order(30)
     void findAll_dontGivenParamInRequestDontToBeReturnBadRequest() throws Exception {
         String jsonResponse = mockMvc.perform(get("%s".formatted(PATH)))
@@ -94,7 +94,7 @@ class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(authorities = {"ADMIN"})
     @Order(41)
     void update_whenSendUsername_thenIgnoreNewUsername() throws Exception {
         var response = mockMvc
@@ -142,7 +142,7 @@ class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(authorities = {"ADMIN"})
     @Order(50)
     void delete() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete(PATH + "/" + responseDTO.getId()))
