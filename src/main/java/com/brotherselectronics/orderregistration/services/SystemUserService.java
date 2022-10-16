@@ -71,8 +71,8 @@ public class SystemUserService implements IBaseService<SystemUserRequestDTO, Sys
             var systemUser = userRepository
                     .findById(id)
                     .orElseThrow(NotFoundException::new);
-            systemUser.setPassword(encoder.encode(systemUser.getPassword()));
             merge(mapper.toEntity((SystemUserUpdateRequestDTO) dto), systemUser);
+            systemUser.setPassword(encoder.encode(dto.getPassword()));
             userRepository.save(systemUser);
             return mapper.toDtoResponse(systemUser);
         } catch (NotFoundException e) {
