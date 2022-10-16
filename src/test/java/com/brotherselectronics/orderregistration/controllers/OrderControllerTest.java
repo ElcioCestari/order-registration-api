@@ -77,7 +77,7 @@ class OrderControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = {"USER", "ADMIN"})
+    @WithMockUser(authorities = {"USER", "ADMIN"})
     void findAll_whenHasItemsThenReturnAnJsonList() throws Exception {
         when(orderService.findAll()).thenReturn(orderResponseDTOListNotEmpty);
         mockMvc.perform(MockMvcRequestBuilders.get(END_POINT))
@@ -85,7 +85,7 @@ class OrderControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = {"USER", "ADMIN"})
+    @WithMockUser(authorities = {"USER", "ADMIN"})
     void findAll_whenHasNoItemsThenReturnAnEmptyJson() throws Exception {
         when(orderService.findAll()).thenReturn(emptyList());
         mockMvc.perform(MockMvcRequestBuilders.get(END_POINT))
@@ -94,7 +94,7 @@ class OrderControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(authorities = {"ADMIN"})
     void save_whenReceiveAValidRequestDTOThenReturnAResponseDTO() throws Exception {
         when(orderService.save(any(OrderRequestDTO.class))).thenReturn(responseDTOStub);
         when(instancesUtils.getRepository(any())).thenReturn(this.orderRepository);
@@ -107,7 +107,7 @@ class OrderControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(authorities = {"ADMIN"})
     void update_whenReceiveAValidRequestDTOThenReturnAResponseDTO() throws Exception {
         String fakeId = "any id";
         when(orderService.update(any(OrderRequestDTO.class), anyString())).thenReturn(responseDTOStub);
@@ -121,7 +121,7 @@ class OrderControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(authorities = {"ADMIN"})
     void update_whenReceiveAnInvalidRequestThenReturnANotFound() throws Exception {
         String fakeId = "any id";
         String msg = "Resource not found with id: " + fakeId;
@@ -136,7 +136,7 @@ class OrderControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(authorities = {"ADMIN"})
     void delete() {
         assertThat(true);
     }
