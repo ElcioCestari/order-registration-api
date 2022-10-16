@@ -12,6 +12,7 @@ import com.brotherselectronics.orderregistration.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class SystemUserService implements IBaseService<SystemUserRequestDTO, Sys
     private final UserRepository userRepository;
     private final SystemUserMapper mapper;
     private final MyUserDetailService userDetailService;
+    private final PasswordEncoder encoder;
 
     @Override
     public List<SystemUserResponseDTO> findAll() {
@@ -38,12 +40,11 @@ public class SystemUserService implements IBaseService<SystemUserRequestDTO, Sys
     @Override
     public SystemUserResponseDTO findById(String id) {
         try {
-            return this.mapper
-                    .toDtoResponse(this.userRepository.findById(id)
+            return this.mapper.toDtoResponse(this.userRepository.findById(id)
                     .orElseThrow(NotFoundException::new));
         } catch (NotFoundException e) {
             throw e;
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new InternalApiException();
         }
@@ -53,6 +54,7 @@ public class SystemUserService implements IBaseService<SystemUserRequestDTO, Sys
     public SystemUserResponseDTO save(SystemUserRequestDTO dto) {
         try {
             var entity = this.mapper.toEntity((SystemUserCreateRequestDTO) dto);
+            entity.setPassword(encoder.encode(entity.getPassword()));
             SystemUser save = this.userRepository.save(entity);
             return this.mapper.toDtoResponse(save);
         } catch (DuplicateKeyException e) {
@@ -69,6 +71,7 @@ public class SystemUserService implements IBaseService<SystemUserRequestDTO, Sys
             var systemUser = userRepository
                     .findById(id)
                     .orElseThrow(NotFoundException::new);
+            systemUser.setPassword(encoder.encode(systemUser.getPassword()));
             merge(mapper.toEntity((SystemUserUpdateRequestDTO) dto), systemUser);
             userRepository.save(systemUser);
             return mapper.toDtoResponse(systemUser);
