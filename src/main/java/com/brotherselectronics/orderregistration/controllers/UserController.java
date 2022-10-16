@@ -1,6 +1,6 @@
 package com.brotherselectronics.orderregistration.controllers;
 
-import com.brotherselectronics.orderregistration.domains.dtos.SystemUserRequestDTO;
+import com.brotherselectronics.orderregistration.domains.dtos.SystemUserCreateRequestDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.SystemUserResponseDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.SystemUserUpdateRequestDTO;
 import com.brotherselectronics.orderregistration.services.SystemUserService;
@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<SystemUserResponseDTO> createUser(@Valid @RequestBody SystemUserRequestDTO dto) {
+    public ResponseEntity<SystemUserResponseDTO> createUser(@Valid @RequestBody SystemUserCreateRequestDTO dto) {
         return status(CREATED).body(this.systemUserService.save(dto));
     }
 
@@ -49,7 +49,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SystemUserResponseDTO> updateUser(@Valid @RequestBody SystemUserUpdateRequestDTO dto, @PathVariable String id) {
+    public ResponseEntity<SystemUserResponseDTO> updateUser(@Valid @RequestBody SystemUserUpdateRequestDTO dto,
+                                                            @PathVariable String id) {
         return ok(this.systemUserService.update(dto, id));
     }
 }

@@ -1,7 +1,9 @@
 package com.brotherselectronics.orderregistration.domains.mappers;
 
+import com.brotherselectronics.orderregistration.domains.dtos.SystemUserCreateRequestDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.SystemUserRequestDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.SystemUserResponseDTO;
+import com.brotherselectronics.orderregistration.domains.dtos.SystemUserUpdateRequestDTO;
 import com.brotherselectronics.orderregistration.domains.entities.SystemUser;
 import lombok.NonNull;
 import org.mapstruct.Mapper;
@@ -35,4 +37,11 @@ public interface SystemUserMapper extends IBaseMapper<SystemUser, SystemUserRequ
     @Override
     @Mapping(target = "id", ignore = true)
     SystemUser toEntity(SystemUserRequestDTO dtoRequest);
+
+    @Mapping(target = "id", ignore = true)
+    SystemUser toEntity(SystemUserCreateRequestDTO dtoRequest);
+
+    default SystemUser toEntity(@NonNull SystemUserUpdateRequestDTO dtoRequest) {
+        return new SystemUser(null, "", dtoRequest.getPassword(), dtoRequest.getAuthorities());
+    }
 }

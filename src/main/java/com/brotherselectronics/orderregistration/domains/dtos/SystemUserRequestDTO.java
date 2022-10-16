@@ -10,8 +10,6 @@ import java.util.Set;
 public class SystemUserRequestDTO {
     @NotBlank
     private String password;
-    @NotBlank
-    private String username;
     private Set<SimpleGrantedAuthority> authorities;
     private boolean accountNonExpired;
     private boolean accountNonLocked;
