@@ -43,7 +43,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(authorities = {"ADMIN"})
     @Order(10)
     void save() throws Exception {
         String reqBody = convertObjectToString(buildObjectOfAnyType(ProductRequestDTO.class));
@@ -61,7 +61,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(authorities = {"ADMIN"})
     @Order(20)
     void findById() throws Exception {
         mockMvc.perform(get(PATH + "/" + product.getId()))
@@ -69,7 +69,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(authorities = {"ADMIN"})
     @Order(30)
     void findAll_dontGivenParamInRequestDontToBeReturnBadRequest() throws Exception {
         String jsonResponse = mockMvc.perform(get("%s/all".formatted(PATH)))
@@ -79,7 +79,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(authorities = {"ADMIN"})
     @Order(40)
     void update() throws Exception {
         String reqBody = convertObjectToString(buildObjectOfAnyType(ProductRequestDTO.class));
@@ -89,7 +89,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(authorities = {"ADMIN"})
     @Order(41)
     void patchUpdate() throws Exception {
         ProductRequestDTO body = ProductRequestDTO.builder()
@@ -110,7 +110,7 @@ class ProductControllerTest {
         assertThat(productResponseDTO.getName()).isEqualTo(body.getName());
     }
     @Test
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(authorities = {"ADMIN"})
     @Order(42)
     void patchUpdate_whenSendInvalidBodyThenReturnBadRequest() throws Exception {
         ProductRequestDTO body = ProductRequestDTO.builder()
@@ -130,7 +130,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(authorities = {"ADMIN"})
     @Order(50)
     void delete() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete(PATH + "/" + product.getId()))
