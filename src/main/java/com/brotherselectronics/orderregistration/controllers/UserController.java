@@ -1,5 +1,6 @@
 package com.brotherselectronics.orderregistration.controllers;
 
+import com.brotherselectronics.orderregistration.controllers.docs.UserControllerSwagger;
 import com.brotherselectronics.orderregistration.domains.dtos.SystemUserCreateRequestDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.SystemUserResponseDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.SystemUserUpdateRequestDTO;
@@ -19,38 +20,38 @@ import static org.springframework.http.ResponseEntity.status;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
-public class UserController {
-    private final SystemUserService systemUserService;
+public class UserController implements UserControllerSwagger {
+  private final SystemUserService systemUserService;
 
-    @GetMapping
-    public ResponseEntity<List<SystemUserResponseDTO>> getUsers() {
-        return ok(this.systemUserService.findAll());
-    }
+  @GetMapping
+  public ResponseEntity<List<SystemUserResponseDTO>> getUsers() {
+    return ok(this.systemUserService.findAll());
+  }
 
-    @PostMapping("/login")
-    public ResponseEntity<SystemUserResponseDTO> getUser() {
-        return ok(this.systemUserService.getLoggedUser());
-    }
+  @PostMapping("/login")
+  public ResponseEntity<SystemUserResponseDTO> getUser() {
+    return ok(this.systemUserService.getLoggedUser());
+  }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<SystemUserResponseDTO> getUserById(@PathVariable String id) {
-        return ok(this.systemUserService.findById(id));
-    }
+  @GetMapping("/{id}")
+  public ResponseEntity<SystemUserResponseDTO> getUserById(@PathVariable String id) {
+    return ok(this.systemUserService.findById(id));
+  }
 
-    @PostMapping
-    public ResponseEntity<SystemUserResponseDTO> createUser(@Valid @RequestBody SystemUserCreateRequestDTO dto) {
-        return status(CREATED).body(this.systemUserService.save(dto));
-    }
+  @PostMapping
+  public ResponseEntity<SystemUserResponseDTO> createUser(@Valid @RequestBody SystemUserCreateRequestDTO dto) {
+    return status(CREATED).body(this.systemUserService.save(dto));
+  }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable String id) {
-        this.systemUserService.delete(id);
-        return status(NO_CONTENT).build();
-    }
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> deleteUser(@PathVariable String id) {
+    this.systemUserService.delete(id);
+    return status(NO_CONTENT).build();
+  }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<SystemUserResponseDTO> updateUser(@Valid @RequestBody SystemUserUpdateRequestDTO dto,
-                                                            @PathVariable String id) {
-        return ok(this.systemUserService.update(dto, id));
-    }
+  @PutMapping("/{id}")
+  public ResponseEntity<SystemUserResponseDTO> updateUser(@Valid @RequestBody SystemUserUpdateRequestDTO dto,
+                                                          @PathVariable String id) {
+    return ok(this.systemUserService.update(dto, id));
+  }
 }

@@ -1,6 +1,7 @@
 package com.brotherselectronics.orderregistration.controllers;
 
 
+import com.brotherselectronics.orderregistration.controllers.docs.CategoryControllerSwagger;
 import com.brotherselectronics.orderregistration.domains.enums.Category;
 import com.brotherselectronics.orderregistration.services.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping("/categories")
 @RequiredArgsConstructor
-public class CategoryController {
+public class CategoryController implements CategoryControllerSwagger {
     private final CategoryService service;
 
     @GetMapping("/{key}")
