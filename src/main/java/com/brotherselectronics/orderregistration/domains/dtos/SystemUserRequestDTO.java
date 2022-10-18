@@ -1,7 +1,7 @@
 package com.brotherselectronics.orderregistration.domains.dtos;
 
+import com.brotherselectronics.orderregistration.domains.enums.Role;
 import lombok.Data;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.validation.constraints.NotBlank;
 import java.util.Set;
@@ -10,7 +10,7 @@ import java.util.Set;
 public class SystemUserRequestDTO {
     @NotBlank
     private String password;
-    private Set<SimpleGrantedAuthority> authorities;
+    private Set<Role> authorities;
     private boolean accountNonExpired;
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;

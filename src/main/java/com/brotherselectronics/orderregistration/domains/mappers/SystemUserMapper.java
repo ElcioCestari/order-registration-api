@@ -5,12 +5,15 @@ import com.brotherselectronics.orderregistration.domains.dtos.SystemUserRequestD
 import com.brotherselectronics.orderregistration.domains.dtos.SystemUserResponseDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.SystemUserUpdateRequestDTO;
 import com.brotherselectronics.orderregistration.domains.entities.SystemUser;
+import com.brotherselectronics.orderregistration.domains.enums.Role;
 import lombok.NonNull;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
 
@@ -42,6 +45,12 @@ public interface SystemUserMapper extends IBaseMapper<SystemUser, SystemUserRequ
     SystemUser toEntity(SystemUserCreateRequestDTO dtoRequest);
 
     default SystemUser toEntity(@NonNull SystemUserUpdateRequestDTO dtoRequest) {
-        return new SystemUser(null, "", dtoRequest.getPassword(), dtoRequest.getAuthorities());
+        Set<SimpleGrantedAuthority> authorities = dtoRequest.getAuthorities().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getAuthority())).collect(toSet());
+        return new SystemUser(null, "", dtoRequest.getPassword(), authorities);
+    }
+
+    default Set<Role> map(@NonNull Collection<SimpleGrantedAuthority> value) {
+        return value.stream().map(v -> Role.valueOf(v.getAuthority())).collect(toSet());
     }
 }

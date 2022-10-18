@@ -64,6 +64,23 @@ class UserControllerTest {
         assertThat(responseDTO.getUsername()).isNotNull();
         assertThat(responseDTO.getId()).isNotNull();
     }
+    @Test
+    @WithMockUser(roles = {"ADMIN"})
+    @Order(10)
+    void save_whenSendInValidAuthority_thenReturnBadRequest() throws Exception {
+        var response = mockMvc.perform(post(PATH)
+                        .contentType(APPLICATION_JSON)
+                        .content("""
+                                        {
+                                            "password":"yedUsFwdkelQbxeTeQOvaScfqIOOmaa",
+                                            "username":"%s",
+                                            "authorities": ["BANANA"]
+                                        }
+                                """.formatted(randomUUID().toString())))
+                .andDo(print())
+                .andExpect(status().is4xxClientError())
+                .andReturn().getResponse().getContentAsString();
+    }
 
     @Test
     @WithMockUser
@@ -118,7 +135,7 @@ class UserControllerTest {
                                             "username": "elcio",
                                             "password": "elcio",
                                             "authorities": [
-                                                "ROLE_ADMIN"
+                                                "ADMIN"
                                             ],
                                             "accountNonExpired": true,
                                             "accountNonLocked": true,
