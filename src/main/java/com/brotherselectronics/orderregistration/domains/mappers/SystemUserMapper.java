@@ -50,7 +50,11 @@ public interface SystemUserMapper extends IBaseMapper<SystemUser, SystemUserRequ
         return new SystemUser(null, "", dtoRequest.getPassword(), authorities);
     }
 
-    default Set<Role> map(@NonNull Collection<SimpleGrantedAuthority> value) {
+    default Set<Role> map(@NonNull
+                          // Was not possible resolve warning because of mapstruct
+                          // therefore I suppress the warning
+                          @SuppressWarnings("java:S4968")
+                          Collection<? extends SimpleGrantedAuthority> value) {
         return value.stream().map(v -> Role.valueOf(v.getAuthority())).collect(toSet());
     }
 }

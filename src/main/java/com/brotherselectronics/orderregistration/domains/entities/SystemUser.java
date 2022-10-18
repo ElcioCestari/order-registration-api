@@ -66,7 +66,7 @@ public class SystemUser extends BaseEntityImp implements BaseEntity, UserDetails
         return this.username;
     }
 
-    public void setAuthorities(@NonNull Collection<? extends SimpleGrantedAuthority> authorities) throws IllegalAccessException {
+    public void setAuthorities(@NonNull Collection<SimpleGrantedAuthority> authorities) throws IllegalAccessException {
         if (authorities.isEmpty()) {
             throw new IllegalAccessException("invalid authorities");
         }
