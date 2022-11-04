@@ -29,14 +29,14 @@ public interface ProductControllerSwagger {
   @ResponseStatus(OK)
   @Operation(summary = "Get all products paginated")
   ResponseEntity<Page<ProductResponseDTO>> findAll(@RequestParam(required = false, defaultValue = "10")
-
-                                                   @Min(1) int size,
+                                                   @Min(1)
+                                                   int size,
                                                    @RequestParam(required = false, defaultValue = "0")
-
-                                                   @Min(0) int page,
+                                                   @Min(0)
+                                                   int page,
                                                    @RequestParam(required = false, defaultValue = "name")
-
-                                                   @NotNull String[] sort);
+                                                   @NotNull
+                                                   String[] sort);
 
   @GetMapping("all")
   @ResponseStatus(OK)
