@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -29,12 +30,15 @@ public interface ProductControllerSwagger {
   @ResponseStatus(OK)
   @Operation(summary = "Get all products paginated")
   ResponseEntity<Page<ProductResponseDTO>> findAll(@RequestParam(required = false, defaultValue = "10")
+                                                   @Valid
                                                    @Min(1)
                                                    int size,
                                                    @RequestParam(required = false, defaultValue = "0")
+                                                   @Valid
                                                    @Min(0)
                                                    int page,
                                                    @RequestParam(required = false, defaultValue = "name")
+                                                   @Valid
                                                    @NotNull
                                                    String[] sort);
 
@@ -46,12 +50,12 @@ public interface ProductControllerSwagger {
   @PostMapping
   @ResponseStatus(CREATED)
   @Operation(summary = "save product")
-  ResponseEntity<ProductResponseDTO> save(@RequestBody ProductRequestDTO dto);
+  ResponseEntity<ProductResponseDTO> save(@Valid @RequestBody ProductRequestDTO dto);
 
   @PutMapping("/{id}")
   @ResponseStatus(OK)
   @Operation(summary = "Get all product")
-  ResponseEntity<ProductResponseDTO> update(@RequestBody ProductRequestDTO dto,
+  ResponseEntity<ProductResponseDTO> update(@Valid @RequestBody ProductRequestDTO dto,
                                             @PathVariable String id);
 
   @PatchMapping("/{id}")
