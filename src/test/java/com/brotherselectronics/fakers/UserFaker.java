@@ -9,7 +9,7 @@ import org.assertj.core.internal.bytebuddy.utility.RandomString;
 public class UserFaker extends BaseEntityImp implements EntityFake<SystemUser, UserRequestDTO, UserResponseDTO> {
 
     private final String login = RandomString.make(10);
-    private final String password = "$2a$10$CKtbFy2R0qxNLPF.d6Jaeuf1UQOmDxSQFh/1ToxNEaxgxgnIy6SUC";//elcio123
+    private final String password = "$2a$10$CKtbFy2R0qxNLPF.d6Jaeuf1UQOmDxSQFh/1ToxNEaxgxgnIy6SUC"; //elcio123
     private final String name = RandomString.make(10);
 
     @Override

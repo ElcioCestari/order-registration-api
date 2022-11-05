@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Document("Orders")
 @Builder
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper = true)
 public class Order extends BaseEntityImp {
     private LocalDateTime saleDate;
     private List<OrderItem> orderItens;

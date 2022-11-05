@@ -21,7 +21,7 @@ class ProductMapperTest {
     }
 
     @Test
-    void merge_givenASourceWithNull_assertThatTargetWillPreserveOldValue() {
+    void merge_givenSourceWithNull_assertThatTargetWillPreserveOldValue() {
         var source = ProductRequestDTO.builder()
                 .name("new name")
                 .build();

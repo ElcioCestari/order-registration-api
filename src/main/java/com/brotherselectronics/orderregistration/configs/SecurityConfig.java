@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(DELETE, "/**").hasAnyAuthority(ADMIN.getAuthority())
                 .anyRequest()
                 .authenticated()
-//                .permitAll()
+                //.permitAll()
                 .and()
                 .httpBasic()
                 .and()

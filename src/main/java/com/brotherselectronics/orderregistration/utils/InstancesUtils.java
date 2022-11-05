@@ -19,10 +19,14 @@ public class InstancesUtils {
     public BaseRepository getRepository(Class<? extends BaseEntity> clazz) {
 
         final String order = Order.class.getCanonicalName();
-        if (isEquals((Class<? extends BaseEntityImp>) clazz, order)) return orderRepository;
+        if (isEquals((Class<? extends BaseEntityImp>) clazz, order)) {
+            return orderRepository;
+        }
 
         final String product = Product.class.getCanonicalName();
-        if (isEquals((Class<? extends BaseEntityImp>) clazz, product)) return productRepository;
+        if (isEquals((Class<? extends BaseEntityImp>) clazz, product)) {
+            return productRepository;
+        }
 
         throw new IllegalArgumentException("Instance's BaseRepository " + clazz + " not found");
     }

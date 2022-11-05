@@ -18,7 +18,7 @@ import java.util.Set;
 import static java.util.stream.Collectors.toSet;
 
 @Mapper(componentModel = "spring")
-public interface SystemUserMapper extends IBaseMapper<SystemUser, SystemUserRequestDTO, SystemUserResponseDTO> {
+public interface SystemUserMapper extends BaseMapper<SystemUser, SystemUserRequestDTO, SystemUserResponseDTO> {
 
     @Override
     default SystemUserResponseDTO toDtoResponse(@NonNull SystemUser entity) {

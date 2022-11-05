@@ -9,7 +9,7 @@ import static org.mapstruct.NullValueCheckStrategy.*;
 import static org.mapstruct.NullValuePropertyMappingStrategy.*;
 
 @Mapper(componentModel = "spring")
-public interface ProductMapper extends IBaseMapper<Product, ProductRequestDTO, ProductResponseDTO> {
+public interface ProductMapper extends BaseMapper<Product, ProductRequestDTO, ProductResponseDTO> {
 
     @BeanMapping(nullValuePropertyMappingStrategy = IGNORE, nullValueCheckStrategy = ALWAYS)
     void merge(ProductRequestDTO source, @MappingTarget Product target);

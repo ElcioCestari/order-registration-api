@@ -27,140 +27,139 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserControllerTest {
-  private static final String PATH = "/users";
+    private static final String PATH = "/users";
 
-  @Autowired
-  private WebApplicationContext context;
-  private MockMvc mockMvc;
-  private static SystemUserResponseDTO responseDTO;
+    @Autowired
+    private WebApplicationContext context;
+    private MockMvc mockMvc;
+    private static SystemUserResponseDTO responseDTO;
 
-  @BeforeEach
-  void setUp() {
-    mockMvc = MockMvcBuilders
-        .webAppContextSetup(context)
-        .apply(springSecurity())
-        .build();
-  }
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .apply(springSecurity())
+                .build();
+    }
 
-  @Test
-  @WithMockUser(authorities = {"ADMIN"})
-  @Order(10)
-  void save() throws Exception {
-    var response = mockMvc.perform(post(PATH)
-            .contentType(APPLICATION_JSON)
-            .content("""
-                        {
-                            "password":"yedUsFwdkelQbxeTeQOvaScfqIOOmaa",
-                            "username":"%s"
-                        }
-                """.formatted(randomUUID().toString())))
-        .andDo(print())
-        .andExpect(status().isCreated())
-        .andReturn().getResponse().getContentAsString();
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    @Order(10)
+    void save() throws Exception {
+        var response = mockMvc.perform(post(PATH)
+                        .contentType(APPLICATION_JSON)
+                        .content("""
+                                        {
+                                            "password":"yedUsFwdkelQbxeTeQOvaScfqIOOmaa",
+                                            "username":"%s"
+                                        }
+                                """.formatted(randomUUID().toString())))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
 
-    responseDTO = convertJsonToObject(response, SystemUserResponseDTO.class);
-    assertThat(responseDTO).isNotNull();
-    assertThat(responseDTO.getUsername()).isNotNull();
-    assertThat(responseDTO.getId()).isNotNull();
-  }
+        responseDTO = convertJsonToObject(response, SystemUserResponseDTO.class);
+        assertThat(responseDTO).isNotNull();
+        assertThat(responseDTO.getUsername()).isNotNull();
+        assertThat(responseDTO.getId()).isNotNull();
+    }
 
-  @Test
-  @WithMockUser(roles = {"ADMIN"})
-  @Order(10)
-  void save_whenSendInValidAuthority_thenReturnBadRequest() throws Exception {
-    mockMvc.perform(post(PATH)
-            .contentType(APPLICATION_JSON)
-            .content("""
-                        {
-                            "password":"yedUsFwdkelQbxeTeQOvaScfqIOOmaa",
-                            "username":"%s",
-                            "authorities": ["BANANA"]
-                        }
-                """.formatted(randomUUID().toString())))
-        .andDo(print())
-        .andExpect(status().is4xxClientError());
-  }
+    @Test
+    @WithMockUser(roles = {"ADMIN"})
+    @Order(10)
+    void save_whenSendInValidAuthority_thenReturnBadRequest() throws Exception {
+        mockMvc.perform(post(PATH)
+                        .contentType(APPLICATION_JSON)
+                        .content("""
+                                        {
+                                            "password":"yedUsFwdkelQbxeTeQOvaScfqIOOmaa",
+                                            "username":"%s",
+                                            "authorities": ["BANANA"]
+                                        }
+                                """.formatted(randomUUID().toString())))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
 
-  @Test
-  @WithMockUser(authorities = {"ADMIN"})
-  @Order(20)
-  void findById() throws Exception {
-    mockMvc.perform(get(PATH + "/" + responseDTO.getId()))
-        .andExpect(status().isOk());
-  }
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    @Order(20)
+    void findById() throws Exception {
+        mockMvc.perform(get(PATH + "/" + responseDTO.getId()))
+                .andExpect(status().isOk());
+    }
 
-  @Test
-  @WithMockUser(authorities = {"ADMIN"})
-  @Order(30)
-  void findAll() throws Exception {
-    String jsonResponse = mockMvc.perform(get("%s?size=%s&page=1&sort=name".formatted(PATH, "10")))
-        .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-    var responseDTOS = new ObjectMapper().readValue(jsonResponse, SystemUserResponseDTO[].class);
-    assertThat(stream(responseDTOS).toList()).isNotEmpty();
-  }
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    @Order(30)
+    void findAll() throws Exception {
+        String jsonResponse = mockMvc.perform(get("%s?size=%s&page=1&sort=name".formatted(PATH, "10")))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        var dtos = new ObjectMapper().readValue(jsonResponse, SystemUserResponseDTO[].class);
+        assertThat(stream(dtos).toList()).isNotEmpty();
+    }
 
-  @Test
-  @WithMockUser(authorities = {"ADMIN"})
-  @Order(30)
-  void findAll_dontGivenParamInRequestDontToBeReturnBadRequest() throws Exception {
-    String jsonResponse = mockMvc.perform(get("%s".formatted(PATH)))
-        .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-    var responseDTOS = new ObjectMapper().readValue(jsonResponse, SystemUserResponseDTO[].class);
-    assertThat(stream(responseDTOS).toList()).isNotEmpty();
-  }
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    @Order(30)
+    void findAll_dontGivenParamInRequestDontToBeReturnBadRequest() throws Exception {
+        String jsonResponse = mockMvc.perform(get("%s".formatted(PATH)))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        var dtos = new ObjectMapper().readValue(jsonResponse, SystemUserResponseDTO[].class);
+        assertThat(stream(dtos).toList()).isNotEmpty();
+    }
 
-  @Test
-  @WithMockUser(authorities = {"ADMIN"})
-  @Order(41)
-  void update_whenSendUsername_thenIgnoreNewUsername() throws Exception {
-    var response = mockMvc
-        .perform(get(PATH + "/" + responseDTO.getId()))
-        .andDo(print())
-        .andExpect(status().isOk())
-        .andReturn()
-        .getResponse()
-        .getContentAsString();
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    @Order(41)
+    void update_whenSendUsername_thenIgnoreNewUsername() throws Exception {
+        var response = mockMvc
+                .perform(get(PATH + "/" + responseDTO.getId()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
 
-    final var userBeforeUpdate = new ObjectMapper()
-        .readValue(response, SystemUserResponseDTO.class);
+        final var userBeforeUpdate = new ObjectMapper()
+                .readValue(response, SystemUserResponseDTO.class);
 
-    Set<String> authoritiesBeforeUpdate = Collections.unmodifiableSet(userBeforeUpdate.getAuthorities());
+        final Set<String> authoritiesBeforeUpdate = Collections.unmodifiableSet(userBeforeUpdate.getAuthorities());
 
-    response = mockMvc
-        .perform(put(PATH + "/" + responseDTO.getId()).
-            contentType(APPLICATION_JSON)
-            .content("""
-                        {
-                            "username": "elcio",
-                            "password": "elcio",
-                            "authorities": [
-                                "ADMIN"
-                            ],
-                            "accountNonExpired": true,
-                            "accountNonLocked": true,
-                            "credentialsNonExpired": true,
-                            "enabled": true
-                        }
-                """))
-        .andDo(print())
-        .andExpect(status().isOk())
-        .andReturn()
-        .getResponse()
-        .getContentAsString();
+        response = mockMvc.perform(put(PATH + "/" + responseDTO.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content("""
+                                        {
+                                            "username": "elcio",
+                                            "password": "elcio",
+                                            "authorities": [
+                                                "ADMIN"
+                                            ],
+                                            "accountNonExpired": true,
+                                            "accountNonLocked": true,
+                                            "credentialsNonExpired": true,
+                                            "enabled": true
+                                        }
+                                """))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
 
-    final var userAfterUpdate = new ObjectMapper().readValue(response, SystemUserResponseDTO.class);
-    assertThat(userAfterUpdate).isNotNull();
-    assertThat(userAfterUpdate.getId()).isEqualTo(userBeforeUpdate.getId());
-    assertThat(userAfterUpdate.getUsername()).isEqualTo(userBeforeUpdate.getUsername());
-    assertThat(userAfterUpdate.getAuthorities()).isNotEqualTo(authoritiesBeforeUpdate);
-  }
+        final var userAfterUpdate = new ObjectMapper().readValue(response, SystemUserResponseDTO.class);
+        assertThat(userAfterUpdate).isNotNull();
+        assertThat(userAfterUpdate.getId()).isEqualTo(userBeforeUpdate.getId());
+        assertThat(userAfterUpdate.getUsername()).isEqualTo(userBeforeUpdate.getUsername());
+        assertThat(userAfterUpdate.getAuthorities()).isNotEqualTo(authoritiesBeforeUpdate);
+    }
 
-  @Test
-  @WithMockUser(authorities = {"ADMIN"})
-  @Order(50)
-  void delete() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.delete(PATH + "/" + responseDTO.getId()))
-        .andDo(print())
-        .andExpect(status().isNoContent());
-  }
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    @Order(50)
+    void delete() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete(PATH + "/" + responseDTO.getId()))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+    }
 }

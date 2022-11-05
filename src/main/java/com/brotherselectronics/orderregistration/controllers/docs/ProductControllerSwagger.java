@@ -21,52 +21,52 @@ import static org.springframework.http.HttpStatus.*;
 @Tag(name = "Product")
 public interface ProductControllerSwagger {
 
-  @GetMapping("/{id}")
-  @ResponseStatus(OK)
-  @Operation(summary = "Get a product by id")
-  ResponseEntity<ProductResponseDTO> findById(@PathVariable("id") String id);
+    @GetMapping("/{id}")
+    @ResponseStatus(OK)
+    @Operation(summary = "Get a product by id")
+    ResponseEntity<ProductResponseDTO> findById(@PathVariable("id") String id);
 
-  @GetMapping()
-  @ResponseStatus(OK)
-  @Operation(summary = "Get all products paginated")
-  ResponseEntity<Page<ProductResponseDTO>> findAll(@RequestParam(required = false, defaultValue = "10")
-                                                   @Valid
-                                                   @Min(1)
-                                                   int size,
-                                                   @RequestParam(required = false, defaultValue = "0")
-                                                   @Valid
-                                                   @Min(0)
-                                                   int page,
-                                                   @RequestParam(required = false, defaultValue = "name")
-                                                   @Valid
-                                                   @NotNull
-                                                   String[] sort);
+    @GetMapping()
+    @ResponseStatus(OK)
+    @Operation(summary = "Get all products paginated")
+    ResponseEntity<Page<ProductResponseDTO>> findAll(@RequestParam(required = false, defaultValue = "10")
+                                                     @Valid
+                                                     @Min(1)
+                                                     int size,
+                                                     @RequestParam(required = false, defaultValue = "0")
+                                                     @Valid
+                                                     @Min(0)
+                                                     int page,
+                                                     @RequestParam(required = false, defaultValue = "name")
+                                                     @Valid
+                                                     @NotNull
+                                                     String[] sort);
 
-  @GetMapping("all")
-  @ResponseStatus(OK)
-  @Operation(summary = "Get all products")
-  ResponseEntity<List<ProductResponseDTO>> findAll();
+    @GetMapping("all")
+    @ResponseStatus(OK)
+    @Operation(summary = "Get all products")
+    ResponseEntity<List<ProductResponseDTO>> findAll();
 
-  @PostMapping
-  @ResponseStatus(CREATED)
-  @Operation(summary = "save product")
-  ResponseEntity<ProductResponseDTO> save(@Valid @RequestBody ProductRequestDTO dto);
+    @PostMapping
+    @ResponseStatus(CREATED)
+    @Operation(summary = "save product")
+    ResponseEntity<ProductResponseDTO> save(@Valid @RequestBody ProductRequestDTO dto);
 
-  @PutMapping("/{id}")
-  @ResponseStatus(OK)
-  @Operation(summary = "Get all product")
-  ResponseEntity<ProductResponseDTO> update(@Valid @RequestBody ProductRequestDTO dto,
-                                            @PathVariable String id);
+    @PutMapping("/{id}")
+    @ResponseStatus(OK)
+    @Operation(summary = "Get all product")
+    ResponseEntity<ProductResponseDTO> update(@Valid @RequestBody ProductRequestDTO dto,
+                                              @PathVariable String id);
 
-  @PatchMapping("/{id}")
-  @ResponseStatus(OK)
-  @Operation(summary = "update part of product")
-  ResponseEntity<ProductResponseDTO> patchUpdate(@RequestBody ProductRequestDTO dto,
-                                                 @PathVariable String id);
+    @PatchMapping("/{id}")
+    @ResponseStatus(OK)
+    @Operation(summary = "update part of product")
+    ResponseEntity<ProductResponseDTO> patchUpdate(@RequestBody ProductRequestDTO dto,
+                                                   @PathVariable String id);
 
-  @DeleteMapping("/{id}")
-  @ResponseStatus(NO_CONTENT)
-  @Operation(summary = "delete a product")
-  ResponseEntity<Void> delete(@PathVariable String id);
+    @DeleteMapping("/{id}")
+    @ResponseStatus(NO_CONTENT)
+    @Operation(summary = "delete a product")
+    ResponseEntity<Void> delete(@PathVariable String id);
 
 }

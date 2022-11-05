@@ -26,127 +26,127 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ProductControllerTest {
-  private static final String PATH = "/products";
+    private static final String PATH = "/products";
 
-  @Autowired
-  private WebApplicationContext context;
-  private MockMvc mockMvc;
-  private static ProductResponseDTO product;
+    @Autowired
+    private WebApplicationContext context;
+    private MockMvc mockMvc;
+    private static ProductResponseDTO product;
 
-  @BeforeEach
-  void setUp() {
-    mockMvc = MockMvcBuilders
-        .webAppContextSetup(context)
-        .apply(springSecurity())
-        .build();
-  }
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .apply(springSecurity())
+                .build();
+    }
 
-  @Test
-  @WithMockUser(authorities = {"ADMIN"})
-  @Order(10)
-  void save() throws Exception {
-    String reqBody = convertObjectToString(buildObjectOfAnyType(ProductRequestDTO.class));
-    var response = mockMvc.perform(post(PATH)
-            .contentType(APPLICATION_JSON)
-            .content(reqBody))
-        .andDo(print())
-        .andExpect(status().isCreated())
-        .andReturn().getResponse().getContentAsString();
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    @Order(10)
+    void save() throws Exception {
+        String reqBody = convertObjectToString(buildObjectOfAnyType(ProductRequestDTO.class));
+        var response = mockMvc.perform(post(PATH)
+                        .contentType(APPLICATION_JSON)
+                        .content(reqBody))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
 
-    product = convertJsonToObject(response, ProductResponseDTO.class);
-    assertThat(product).isNotNull();
-    assertThat(product.getId()).isNotNull();
-  }
+        product = convertJsonToObject(response, ProductResponseDTO.class);
+        assertThat(product).isNotNull();
+        assertThat(product.getId()).isNotNull();
+    }
 
-  @Test
-  @WithMockUser(authorities = {"ADMIN"})
-  @Order(11)
-  void save_whenSendAInvalidBody_thenReturnABadRequest() throws Exception {
-    ProductRequestDTO invalidBody = buildObjectOfAnyType(ProductRequestDTO.class);
-    invalidBody.setName("");
-    mockMvc.perform(post(PATH)
-            .contentType(APPLICATION_JSON)
-            .content(convertObjectToString(invalidBody)))
-        .andDo(print())
-        .andExpect(status().is4xxClientError());
-  }
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    @Order(11)
+    void save_whenSendInvalidBody_thenReturnBadRequest() throws Exception {
+        ProductRequestDTO invalidBody = buildObjectOfAnyType(ProductRequestDTO.class);
+        invalidBody.setName("");
+        mockMvc.perform(post(PATH)
+                        .contentType(APPLICATION_JSON)
+                        .content(convertObjectToString(invalidBody)))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
 
-  @Test
-  @WithMockUser(authorities = {"ADMIN"})
-  @Order(20)
-  void findById() throws Exception {
-    mockMvc.perform(get(PATH + "/" + product.getId()))
-        .andExpect(status().isOk());
-  }
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    @Order(20)
+    void findById() throws Exception {
+        mockMvc.perform(get(PATH + "/" + product.getId()))
+                .andExpect(status().isOk());
+    }
 
-  @Test
-  @WithMockUser(authorities = {"ADMIN"})
-  @Order(30)
-  void findAll_dontGivenParamInRequestDontToBeReturnBadRequest() throws Exception {
-    String jsonResponse = mockMvc.perform(get("%s/all".formatted(PATH)))
-        .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-    var responseDTOS = new ObjectMapper().readValue(jsonResponse, ProductResponseDTO[].class);
-    assertThat(stream(responseDTOS).toList()).isNotEmpty();
-  }
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    @Order(30)
+    void findAll_dontGivenParamInRequestDontToBeReturnBadRequest() throws Exception {
+        String jsonResponse = mockMvc.perform(get("%s/all".formatted(PATH)))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        var dtos = new ObjectMapper().readValue(jsonResponse, ProductResponseDTO[].class);
+        assertThat(stream(dtos).toList()).isNotEmpty();
+    }
 
-  @Test
-  @WithMockUser(authorities = {"ADMIN"})
-  @Order(40)
-  void update() throws Exception {
-    String reqBody = convertObjectToString(buildObjectOfAnyType(ProductRequestDTO.class));
-    mockMvc.perform(put(PATH + "/" + product.getId()).contentType(APPLICATION_JSON).content(reqBody))
-        .andDo(print())
-        .andExpect(status().isOk());
-  }
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    @Order(40)
+    void update() throws Exception {
+        String reqBody = convertObjectToString(buildObjectOfAnyType(ProductRequestDTO.class));
+        mockMvc.perform(put(PATH + "/" + product.getId()).contentType(APPLICATION_JSON).content(reqBody))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
 
-  @Test
-  @WithMockUser(authorities = {"ADMIN"})
-  @Order(41)
-  void patchUpdate() throws Exception {
-    ProductRequestDTO body = ProductRequestDTO.builder()
-        .name(randomUUID().toString())
-        .build();
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    @Order(41)
+    void patchUpdate() throws Exception {
+        ProductRequestDTO body = ProductRequestDTO.builder()
+                .name(randomUUID().toString())
+                .build();
 
-    String response = mockMvc.perform(patch(PATH + "/" + product.getId())
-            .contentType(APPLICATION_JSON)
-            .content(convertObjectToString(body)))
-        .andDo(print())
-        .andExpect(status().isOk())
-        .andReturn()
-        .getResponse()
-        .getContentAsString();
+        String response = mockMvc.perform(patch(PATH + "/" + product.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content(convertObjectToString(body)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
 
-    var productResponseDTO = stringToObject(response, ProductResponseDTO.class);
-    assertThat(productResponseDTO).isNotNull();
-    assertThat(productResponseDTO.getName()).isEqualTo(body.getName());
-  }
+        var productResponseDTO = stringToObject(response, ProductResponseDTO.class);
+        assertThat(productResponseDTO).isNotNull();
+        assertThat(productResponseDTO.getName()).isEqualTo(body.getName());
+    }
 
-  @Test
-  @WithMockUser(authorities = {"ADMIN"})
-  @Order(42)
-  void patchUpdate_whenSendInvalidBodyThenReturnBadRequest() throws Exception {
-    ProductRequestDTO body = ProductRequestDTO.builder()
-        .name("")
-        .build();
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    @Order(42)
+    void patchUpdate_whenSendInvalidBodyThenReturnBadRequest() throws Exception {
+        ProductRequestDTO body = ProductRequestDTO.builder()
+                .name("")
+                .build();
 
-    String response = mockMvc.perform(patch(PATH + "/" + product.getId())
-            .contentType(APPLICATION_JSON)
-            .content(convertObjectToString(body)))
-        .andDo(print())
-        .andExpect(status().is4xxClientError())
-        .andReturn()
-        .getResponse()
-        .getContentAsString();
+        String response = mockMvc.perform(patch(PATH + "/" + product.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content(convertObjectToString(body)))
+                .andDo(print())
+                .andExpect(status().is4xxClientError())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
 
-    assertThat(response).isNotNull();
-  }
+        assertThat(response).isNotNull();
+    }
 
-  @Test
-  @WithMockUser(authorities = {"ADMIN"})
-  @Order(50)
-  void delete() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.delete(PATH + "/" + product.getId()))
-        .andDo(print())
-        .andExpect(status().isNoContent());
-  }
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    @Order(50)
+    void delete() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete(PATH + "/" + product.getId()))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+    }
 }

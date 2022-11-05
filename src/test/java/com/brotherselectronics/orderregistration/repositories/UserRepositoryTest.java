@@ -47,6 +47,7 @@ class UserRepositoryTest {
         Optional<SystemUser> user = userRepository.findByUsername(fakeUser.getUsername());
         assertThat(user).isNotNull();
     }
+
     @Test
     void deleteByLogin() {
         try {

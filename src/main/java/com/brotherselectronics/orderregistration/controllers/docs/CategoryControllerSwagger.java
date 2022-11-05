@@ -16,14 +16,14 @@ import static org.springframework.http.HttpStatus.OK;
 @Tag(name = "Category")
 public interface CategoryControllerSwagger {
 
-  @GetMapping("/{key}")
-  @ResponseStatus(OK)
-  @Operation(summary = "Get category by key")
-  ResponseEntity<Category> findByKey(@PathVariable("key") String key);
+    @GetMapping("/{key}")
+    @ResponseStatus(OK)
+    @Operation(summary = "Get category by key")
+    ResponseEntity<Category> findByKey(@PathVariable("key") String key);
 
-  @GetMapping
-  @ResponseStatus(OK)
-  @Operation(summary = "Get all categories")
-  ResponseEntity<List<Category>> findAll();
+    @GetMapping
+    @ResponseStatus(OK)
+    @Operation(summary = "Get all categories")
+    ResponseEntity<List<Category>> findAll();
 
 }

@@ -12,7 +12,7 @@ class SystemUserMapperTest {
     private final SystemUserMapper mapper = Mappers.getMapper(SystemUserMapper.class);
 
     @Test
-    void toEntity_givenAUserToBeUpdated_thenDontThrowException() {
+    void toEntity_givenUserToBeUpdated_thenDontThrowException() {
         try {
             mapper.toEntity(buildObjectOfAnyType(SystemUserUpdateRequestDTO.class));
         } catch (Exception e) {

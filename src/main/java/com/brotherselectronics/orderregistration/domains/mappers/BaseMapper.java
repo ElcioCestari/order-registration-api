@@ -3,12 +3,14 @@ package com.brotherselectronics.orderregistration.domains.mappers;
 import java.util.List;
 
 /**
- * @param <E>  - Entity
- * @param <T>  - DTO Request
- * @param <R>- DTO Response
+ * This interface represent the base operation that will be executed by all mappers.
+ *
+ * @param <E> - Entity
+ * @param <T> - DTO Request
+ * @param <R> - DTO Response
  */
 //@Component
-public interface IBaseMapper<E, T, R> {
+public interface BaseMapper<E, T, R> {
 
     R toDtoResponse(E entity);
 
