@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -47,17 +46,29 @@ class ProductControllerTest {
     @Order(10)
     void save() throws Exception {
         String reqBody = convertObjectToString(buildObjectOfAnyType(ProductRequestDTO.class));
-        MvcResult response = mockMvc.perform(post(PATH)
+        var response = mockMvc.perform(post(PATH)
                         .contentType(APPLICATION_JSON)
                         .content(reqBody))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andReturn();
+                .andReturn().getResponse().getContentAsString();
 
-        String resBody = response.getResponse().getContentAsString();
-        product = convertJsonToObject(resBody, ProductResponseDTO.class);
+        product = convertJsonToObject(response, ProductResponseDTO.class);
         assertThat(product).isNotNull();
         assertThat(product.getId()).isNotNull();
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    @Order(11)
+    void save_whenSendInvalidBody_thenReturnBadRequest() throws Exception {
+        ProductRequestDTO invalidBody = buildObjectOfAnyType(ProductRequestDTO.class);
+        invalidBody.setName("");
+        mockMvc.perform(post(PATH)
+                        .contentType(APPLICATION_JSON)
+                        .content(convertObjectToString(invalidBody)))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -74,8 +85,8 @@ class ProductControllerTest {
     void findAll_dontGivenParamInRequestDontToBeReturnBadRequest() throws Exception {
         String jsonResponse = mockMvc.perform(get("%s/all".formatted(PATH)))
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-        var responseDTOS = new ObjectMapper().readValue(jsonResponse, ProductResponseDTO[].class);
-        assertThat(stream(responseDTOS).toList()).isNotEmpty();
+        var dtos = new ObjectMapper().readValue(jsonResponse, ProductResponseDTO[].class);
+        assertThat(stream(dtos).toList()).isNotEmpty();
     }
 
     @Test
@@ -109,6 +120,7 @@ class ProductControllerTest {
         assertThat(productResponseDTO).isNotNull();
         assertThat(productResponseDTO.getName()).isEqualTo(body.getName());
     }
+
     @Test
     @WithMockUser(authorities = {"ADMIN"})
     @Order(42)

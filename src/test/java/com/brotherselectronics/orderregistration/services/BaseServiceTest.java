@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
-class IBaseServiceTest {
+class BaseServiceTest {
     @InjectMocks
     private SystemUserService userService;
     @InjectMocks
@@ -97,7 +97,7 @@ class IBaseServiceTest {
     }
 
     @Test
-    void testMerge_givenASourceWithCollections_thenAssertThatTargetWillBeSameCollections() {
+    void testMerge_givenSourceWithCollections_thenAssertThatTargetWillBeSameCollections() {
         var target = simpleUser("elcio", "elcio");
         var source = buildAdmin("elcio", "elcio_admin");
 

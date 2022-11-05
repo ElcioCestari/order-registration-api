@@ -1,7 +1,6 @@
 package com.brotherselectronics.orderregistration.domains.constraints;
 
 import com.brotherselectronics.orderregistration.domains.entities.BaseEntity;
-import com.brotherselectronics.orderregistration.domains.entities.BaseEntityImp;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -13,7 +12,7 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.PARAMETER;
 
-@Target( { FIELD, PARAMETER })
+@Target({FIELD, PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Constraint(validatedBy = ExistsValidator.class)

@@ -41,12 +41,12 @@ class ProductRepositoryTest {
     }
 
     @Test
-    void findAll_whenSuccessful_thenReturnAList() {
+    void findAll_whenSuccessful_thenReturnList() {
         assertThat(repository.findAll()).isNotEmpty();
     }
 
     @Test
-    void findAllPageable_whenSuccessful_thenReturnAList() {
+    void findAllPageable_whenSuccessful_thenReturnList() {
         var pageable = PageRequest.of(3, 2, by("name"));
         Page<Product> all = repository.findAll(pageable);
         assertThat(all).isNotEmpty();
@@ -54,7 +54,7 @@ class ProductRepositoryTest {
     }
 
     @Test
-    void findAllCustom_whenSuccessful_thenReturnAList() {
+    void findAllCustom_whenSuccessful_thenReturnList() {
         var allPriceProduct = repository.findPriceProduct();
         assertThat(allPriceProduct.get(0).getCategoryName()).isNotNull();
     }

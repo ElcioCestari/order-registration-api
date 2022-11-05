@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ProductService implements IBaseService<ProductRequestDTO, ProductResponseDTO, Product> {
+public class ProductService implements BaseService<ProductRequestDTO, ProductResponseDTO, Product> {
 
     private final ProductMapper mapper;
     private final ProductRepository productRepository;

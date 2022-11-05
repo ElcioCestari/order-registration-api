@@ -1,5 +1,6 @@
 package com.brotherselectronics.orderregistration.controllers;
 
+import com.brotherselectronics.orderregistration.controllers.docs.UserControllerSwagger;
 import com.brotherselectronics.orderregistration.domains.dtos.SystemUserCreateRequestDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.SystemUserResponseDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.SystemUserUpdateRequestDTO;
@@ -19,7 +20,7 @@ import static org.springframework.http.ResponseEntity.status;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
-public class UserController {
+public class UserController implements UserControllerSwagger {
     private final SystemUserService systemUserService;
 
     @GetMapping

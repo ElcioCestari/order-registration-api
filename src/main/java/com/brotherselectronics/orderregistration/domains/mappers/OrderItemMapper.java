@@ -6,5 +6,5 @@ import com.brotherselectronics.orderregistration.domains.entities.OrderItem;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface OrderItemMapper extends IBaseMapper<OrderItem, OrderItemRequestDTO, OrderItemResponseDTO> {
+public interface OrderItemMapper extends BaseMapper<OrderItem, OrderItemRequestDTO, OrderItemResponseDTO> {
 }

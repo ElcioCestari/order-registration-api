@@ -4,28 +4,20 @@ import com.brotherselectronics.orderregistration.domains.dtos.SystemUserRequestD
 import com.brotherselectronics.orderregistration.domains.dtos.SystemUserResponseDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.SystemUserUpdateRequestDTO;
 import com.brotherselectronics.orderregistration.domains.entities.SystemUser;
-import com.brotherselectronics.orderregistration.domains.enums.GrantedAuthority;
 import com.brotherselectronics.orderregistration.domains.mappers.SystemUserMapper;
 import com.brotherselectronics.orderregistration.repositories.UserRepository;
-import com.brotherselectronics.orderregistration.testsutils.GenericFactory;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static com.brotherselectronics.orderregistration.testsutils.GenericFactory.buildObjectOfAnyType;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -44,12 +36,13 @@ class SystemUserServiceTest {
     private MyUserDetailService userDetailService;
 
     @Autowired
-    private  PasswordEncoder encoder;
+    private PasswordEncoder encoder;
 
     @BeforeEach
     void setup() {
         service = new SystemUserService(repository, mapper, userDetailService, encoder);
     }
+
     @Test
     void wasDefined() {
         assertThat(service).isNotNull();

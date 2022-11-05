@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.Set;
 
 import static com.brotherselectronics.orderregistration.testsutils.JsonUtils.convertJsonToObject;
-import static java.lang.Integer.parseInt;
 import static java.util.Arrays.stream;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -64,11 +63,12 @@ class UserControllerTest {
         assertThat(responseDTO.getUsername()).isNotNull();
         assertThat(responseDTO.getId()).isNotNull();
     }
+
     @Test
     @WithMockUser(roles = {"ADMIN"})
     @Order(10)
     void save_whenSendInValidAuthority_thenReturnBadRequest() throws Exception {
-        var response = mockMvc.perform(post(PATH)
+        mockMvc.perform(post(PATH)
                         .contentType(APPLICATION_JSON)
                         .content("""
                                         {
@@ -78,8 +78,7 @@ class UserControllerTest {
                                         }
                                 """.formatted(randomUUID().toString())))
                 .andDo(print())
-                .andExpect(status().is4xxClientError())
-                .andReturn().getResponse().getContentAsString();
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -96,8 +95,8 @@ class UserControllerTest {
     void findAll() throws Exception {
         String jsonResponse = mockMvc.perform(get("%s?size=%s&page=1&sort=name".formatted(PATH, "10")))
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-        var responseDTOS = new ObjectMapper().readValue(jsonResponse, SystemUserResponseDTO[].class);
-        assertThat(stream(responseDTOS).toList()).isNotEmpty();
+        var dtos = new ObjectMapper().readValue(jsonResponse, SystemUserResponseDTO[].class);
+        assertThat(stream(dtos).toList()).isNotEmpty();
     }
 
     @Test
@@ -106,8 +105,8 @@ class UserControllerTest {
     void findAll_dontGivenParamInRequestDontToBeReturnBadRequest() throws Exception {
         String jsonResponse = mockMvc.perform(get("%s".formatted(PATH)))
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-        var responseDTOS = new ObjectMapper().readValue(jsonResponse, SystemUserResponseDTO[].class);
-        assertThat(stream(responseDTOS).toList()).isNotEmpty();
+        var dtos = new ObjectMapper().readValue(jsonResponse, SystemUserResponseDTO[].class);
+        assertThat(stream(dtos).toList()).isNotEmpty();
     }
 
     @Test
@@ -125,11 +124,10 @@ class UserControllerTest {
         final var userBeforeUpdate = new ObjectMapper()
                 .readValue(response, SystemUserResponseDTO.class);
 
-        Set<String> authoritiesBeforeUpdate = Collections.unmodifiableSet(userBeforeUpdate.getAuthorities());
+        final Set<String> authoritiesBeforeUpdate = Collections.unmodifiableSet(userBeforeUpdate.getAuthorities());
 
-        response = mockMvc
-                .perform(put(PATH + "/" + responseDTO.getId()).
-                        contentType(APPLICATION_JSON)
+        response = mockMvc.perform(put(PATH + "/" + responseDTO.getId())
+                        .contentType(APPLICATION_JSON)
                         .content("""
                                         {
                                             "username": "elcio",
@@ -154,8 +152,6 @@ class UserControllerTest {
         assertThat(userAfterUpdate.getId()).isEqualTo(userBeforeUpdate.getId());
         assertThat(userAfterUpdate.getUsername()).isEqualTo(userBeforeUpdate.getUsername());
         assertThat(userAfterUpdate.getAuthorities()).isNotEqualTo(authoritiesBeforeUpdate);
-
-
     }
 
     @Test

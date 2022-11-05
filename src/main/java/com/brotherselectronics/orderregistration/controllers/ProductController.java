@@ -1,6 +1,7 @@
 package com.brotherselectronics.orderregistration.controllers;
 
 
+import com.brotherselectronics.orderregistration.controllers.docs.ProductControllerSwagger;
 import com.brotherselectronics.orderregistration.domains.dtos.ProductRequestDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.ProductResponseDTO;
 import com.brotherselectronics.orderregistration.services.ProductService;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -25,7 +25,7 @@ import static org.springframework.http.ResponseEntity.status;
 @RequestMapping("/products")
 @RequiredArgsConstructor
 @Validated
-public class ProductController {
+public class ProductController implements ProductControllerSwagger {
     private final ProductService service;
 
     @GetMapping("/{id}")
@@ -64,7 +64,7 @@ public class ProductController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<ProductResponseDTO> patchUpdate(@RequestBody ProductRequestDTO dto,
-                                                     @PathVariable String id) {
+                                                          @PathVariable String id) {
         return ok(service.patch(dto, id));
     }
 

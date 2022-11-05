@@ -95,7 +95,7 @@ class OrderControllerTest {
 
     @Test
     @WithMockUser(authorities = {"ADMIN"})
-    void save_whenReceiveAValidRequestDTOThenReturnAResponseDTO() throws Exception {
+    void save_whenReceiveValidRequestDTOThenReturnResponseDTO() throws Exception {
         when(orderService.save(any(OrderRequestDTO.class))).thenReturn(responseDTOStub);
         when(instancesUtils.getRepository(any())).thenReturn(this.orderRepository);
         when(orderRepository.findById(anyString())).thenReturn(Optional.ofNullable(orderFaker));
@@ -108,7 +108,7 @@ class OrderControllerTest {
 
     @Test
     @WithMockUser(authorities = {"ADMIN"})
-    void update_whenReceiveAValidRequestDTOThenReturnAResponseDTO() throws Exception {
+    void update_whenReceiveValidRequestDTOThenReturnResponseDTO() throws Exception {
         String fakeId = "any id";
         when(orderService.update(any(OrderRequestDTO.class), anyString())).thenReturn(responseDTOStub);
         when(instancesUtils.getRepository(any())).thenReturn(this.orderRepository);
@@ -122,7 +122,7 @@ class OrderControllerTest {
 
     @Test
     @WithMockUser(authorities = {"ADMIN"})
-    void update_whenReceiveAnInvalidRequestThenReturnANotFound() throws Exception {
+    void update_whenReceiveAnInvalidRequestThenReturnNotFound() throws Exception {
         String fakeId = "any id";
         String msg = "Resource not found with id: " + fakeId;
         when(orderService.update(any(OrderRequestDTO.class), anyString())).thenThrow(new NotFoundException((msg)));

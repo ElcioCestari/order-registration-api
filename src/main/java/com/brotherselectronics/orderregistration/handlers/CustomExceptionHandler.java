@@ -7,9 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.ConstraintDeclarationException;
 import javax.validation.ConstraintViolationException;
 
 import static java.time.LocalDateTime.now;
@@ -19,6 +21,7 @@ import static org.springframework.http.HttpStatus.*;
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
+    @ResponseStatus(INTERNAL_SERVER_ERROR)
     protected ResponseEntity<ErrorModel> genericException(Exception ex, WebRequest request) {
         var errorModel = ErrorModel.builder()
                 .httpStatus(INTERNAL_SERVER_ERROR)
@@ -29,6 +32,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = NotFoundException.class)
+    @ResponseStatus(NOT_FOUND)
     protected ResponseEntity<ErrorModel> handleConflict(NotFoundException ex, WebRequest request) {
         var errorModel = ErrorModel.builder()
                 .httpStatus(NOT_FOUND)
@@ -39,6 +43,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = ConstraintViolationException.class)
+    @ResponseStatus(UNPROCESSABLE_ENTITY)
     protected ResponseEntity<ErrorModel> handleBeanValidation(ConstraintViolationException ex, WebRequest request) {
         var errorModel = ErrorModel.builder()
                 .httpStatus(UNPROCESSABLE_ENTITY)
@@ -48,7 +53,19 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorModel, UNPROCESSABLE_ENTITY);
     }
 
-    @Override
+    @ExceptionHandler(value = ConstraintDeclarationException.class)
+    @ResponseStatus(UNPROCESSABLE_ENTITY)
+    protected ResponseEntity<ErrorModel> handleConstraintDeclarationException(ConstraintDeclarationException ex,
+                                                                              WebRequest request) {
+        var errorModel = ErrorModel.builder()
+                .httpStatus(UNPROCESSABLE_ENTITY)
+                .timestamp(now())
+                .message(ex.getMessage())
+                .build();
+        return new ResponseEntity<>(errorModel, UNPROCESSABLE_ENTITY);
+    }
+
+    @Override //TODO -check exception return
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,
                                                                   HttpStatus status, WebRequest request) {

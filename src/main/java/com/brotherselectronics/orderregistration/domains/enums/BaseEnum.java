@@ -1,6 +1,6 @@
 package com.brotherselectronics.orderregistration.domains.enums;
 
-public abstract class BaseENum {
+public abstract class BaseEnum {
     private String description;
 
 }

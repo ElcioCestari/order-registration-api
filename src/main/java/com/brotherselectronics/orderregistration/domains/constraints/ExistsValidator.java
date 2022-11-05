@@ -14,10 +14,12 @@ public class ExistsValidator implements ConstraintValidator<ConstraintExists, St
     /**
      * TODO existe uma falha nos testes, principalmente nos de controllers pois não esta sendo possível mockar
      * o comportamento do ExistsValidator, mesmo utilizando o mockito when(), ele esta chamando o metodo real
-     * e lançando exceção. Portanto deve ser verificado ou uma melhoria no projeto ou remover a funcionalidade do ExistsValidator
+     * e lançando exceção. Portanto deve ser verificado ou uma melhoria no projeto
+     * ou remover a funcionalidade do ExistsValidator
      */
     private BaseRepository repository;
-    @Autowired private InstancesUtils instancesUtils;
+    @Autowired
+    private InstancesUtils instancesUtils;
 
     @Override
     public void initialize(ConstraintExists constraintAnnotation) {
@@ -27,6 +29,6 @@ public class ExistsValidator implements ConstraintValidator<ConstraintExists, St
 
     @Override
     public boolean isValid(String id, ConstraintValidatorContext context) {
-        return  repository.findById(id).isPresent();
+        return repository.findById(id).isPresent();
     }
 }

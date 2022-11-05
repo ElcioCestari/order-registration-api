@@ -7,7 +7,8 @@ import com.brotherselectronics.orderregistration.domains.entities.OrderItem;
 
 import static java.util.UUID.randomUUID;
 
-public class OrderItemFaker extends BaseEntityImp implements EntityFake<OrderItem, OrderItemRequestDTO, OrderItemResponseDTO> {
+public class OrderItemFaker extends BaseEntityImp implements
+        EntityFake<OrderItem, OrderItemRequestDTO, OrderItemResponseDTO> {
 
     public static final int QUANTITY = 10;
     private static final String FAKE_PRODUCT_ID = randomUUID().toString();

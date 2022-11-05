@@ -43,19 +43,19 @@ class ProductServiceTest {
     }
 
     @Test
-    void findAll_whenHasDataThenReturnANotEmptyList() {
+    void findAll_whenHasDataThenReturnNotEmptyList() {
         when(repository.findAll()).thenReturn((List<Product>) fake.getEntityCollection());
         assertThat(service.findAll()).isNotEmpty();
     }
 
     @Test
-    void findAll_whenHasNotDataThenReturnAEmptyList() {
+    void findAll_whenHasNotDataThenReturnEmptyList() {
         when(repository.findAll()).thenReturn((List<Product>) fake.getEmptyEntityCollection());
         assertThat(service.findAll()).isEmpty();
     }
 
     @Test
-    void findAllPageable_whenHasNotDataThenReturnAEmptyList() {
+    void findAllPageable_whenHasNotDataThenReturnEmptyList() {
         var pageable = PageRequest.of(1, 2, Sort.by("name"));
 
         when(repository.findAll(pageable))
@@ -65,7 +65,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void findAllPageable_whenHasDataThenReturnANotEmptyList() {
+    void findAllPageable_whenHasDataThenReturnNotEmptyList() {
         var pageable = PageRequest.of(1, 2, Sort.by("name"));
         when(repository.findAll(any(Pageable.class)))
                 .thenReturn(new PageImpl<>((List<Product>) fake.getEntityCollection(20)));

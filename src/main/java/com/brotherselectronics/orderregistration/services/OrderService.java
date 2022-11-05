@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class OrderService implements IBaseService<OrderRequestDTO, OrderResponseDTO, Order> {
+public class OrderService implements BaseService<OrderRequestDTO, OrderResponseDTO, Order> {
     private final OrderMapper mapper;
     private final OrderRepository orderRepository;
 

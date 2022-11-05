@@ -20,7 +20,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class SystemUserService implements IBaseService<SystemUserRequestDTO, SystemUserResponseDTO, SystemUser> {
+public class SystemUserService implements BaseService<SystemUserRequestDTO, SystemUserResponseDTO, SystemUser> {
 
     private final UserRepository userRepository;
     private final SystemUserMapper mapper;

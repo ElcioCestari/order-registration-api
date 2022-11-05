@@ -66,7 +66,11 @@ public class SystemUser extends BaseEntityImp implements BaseEntity, UserDetails
         return this.username;
     }
 
-    public void setAuthorities(@NonNull Collection<SimpleGrantedAuthority> authorities) throws IllegalAccessException {
+
+    public void setAuthorities(@NonNull
+                               @SuppressWarnings("java:S4968")
+                               // ? extends SimpleGrantedAuthority is necessary because of Service.merge operation.
+                               Collection<? extends SimpleGrantedAuthority> authorities) throws IllegalAccessException {
         if (authorities.isEmpty()) {
             throw new IllegalAccessException("invalid authorities");
         }

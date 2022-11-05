@@ -8,6 +8,8 @@ import static java.util.List.of;
 import static java.util.stream.IntStream.range;
 
 /**
+ * This interface represent all entities of the system which are mocked.
+ *
  * @param <T> - Entity
  * @param <E> - RequestDTO
  * @param <R> - ResponseDTO

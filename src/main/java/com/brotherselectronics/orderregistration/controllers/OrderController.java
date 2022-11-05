@@ -1,6 +1,7 @@
 package com.brotherselectronics.orderregistration.controllers;
 
 
+import com.brotherselectronics.orderregistration.controllers.docs.OrderControllerSwagger;
 import com.brotherselectronics.orderregistration.domains.dtos.OrderRequestDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.OrderResponseDTO;
 import com.brotherselectronics.orderregistration.services.OrderService;
@@ -19,7 +20,7 @@ import static org.springframework.http.ResponseEntity.status;
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
-public class OrderController {
+public class OrderController implements OrderControllerSwagger {
 
     private final OrderService service;
 
@@ -44,7 +45,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable String id) {
+    public ResponseEntity<Void> delete(@PathVariable String id) {
         service.delete(id);
         return status(NO_CONTENT).build();
     }
