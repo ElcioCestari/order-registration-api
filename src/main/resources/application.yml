@@ -22,7 +22,7 @@ spring:
   profiles: staging
   web:
     cors:
-      allowed-origins: 'https://main.d1rk1k1ql4p1hk.amplifyapp.com/'
+      allowed-origins: https://main.d36xo5b97vgot1.amplifyapp.com/
       allowed-methods: '*'
       allowed-headers: '*'
   data:
@@ -33,7 +33,7 @@ spring:
   profiles: production
   web:
     cors:
-      allowed-origins: 'http://localhost:4200'
+      allowed-origins: 'https://0zb9c3kzue.execute-api.us-east-1.amazonaws.com'
       allowed-methods: '*'
       allowed-headers: '*'
   data:
