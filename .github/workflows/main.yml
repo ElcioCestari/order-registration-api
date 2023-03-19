@@ -37,4 +37,4 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /home/ubuntu
-            sudo systemctl restart order-registration.service
+            java -jar order-registration-0.0.1-SNAPSHOT.jar
