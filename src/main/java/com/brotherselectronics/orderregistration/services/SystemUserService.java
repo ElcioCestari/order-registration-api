@@ -76,6 +76,8 @@ public class SystemUserService implements BaseService<SystemUserRequestDTO, Syst
             userRepository.save(systemUser);
             return mapper.toDtoResponse(systemUser);
         } catch (NotFoundException e) {
+            throw e;
+        } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new InternalApiException();
         }

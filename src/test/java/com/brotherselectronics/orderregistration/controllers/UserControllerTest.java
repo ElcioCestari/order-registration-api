@@ -91,6 +91,14 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(authorities = {"ADMIN"})
+    @Order(21)
+    void findById_whenNotFound_thenAssertThatStatusCodeIs404() throws Exception {
+        mockMvc.perform(get(PATH + "/" + "undefined"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
     @Order(30)
     void findAll() throws Exception {
         String jsonResponse = mockMvc.perform(get("%s?size=%s&page=1&sort=name".formatted(PATH, "10")))
@@ -152,6 +160,29 @@ class UserControllerTest {
         assertThat(userAfterUpdate.getId()).isEqualTo(userBeforeUpdate.getId());
         assertThat(userAfterUpdate.getUsername()).isEqualTo(userBeforeUpdate.getUsername());
         assertThat(userAfterUpdate.getAuthorities()).isNotEqualTo(authoritiesBeforeUpdate);
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    @Order(42)
+    void update_whenNotFound_thenAssertThatStatusCodeIsNotFound() throws Exception {
+        mockMvc.perform(put(PATH + "/undefined" )
+                        .contentType(APPLICATION_JSON)
+                        .content("""
+                                        {
+                                            "username": "elcio",
+                                            "password": "elcio",
+                                            "authorities": [
+                                                "ADMIN"
+                                            ],
+                                            "accountNonExpired": true,
+                                            "accountNonLocked": true,
+                                            "credentialsNonExpired": true,
+                                            "enabled": true
+                                        }
+                                """))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 
     @Test
