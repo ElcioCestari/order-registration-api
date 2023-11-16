@@ -47,7 +47,7 @@ class ProductRepositoryTest {
 
     @Test
     void findAllPageable_whenSuccessful_thenReturnList() {
-        var pageable = PageRequest.of(3, 2, by("name"));
+        var pageable = PageRequest.of(1, 2, by("name"));
         Page<Product> all = repository.findAll(pageable);
         assertThat(all).isNotEmpty();
         assertThat(all.getContent()).hasSizeLessThanOrEqualTo(2);
