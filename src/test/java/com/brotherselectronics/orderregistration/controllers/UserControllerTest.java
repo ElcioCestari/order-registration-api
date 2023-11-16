@@ -166,7 +166,7 @@ class UserControllerTest {
     @WithMockUser(authorities = {"ADMIN"})
     @Order(42)
     void update_whenNotFound_thenAssertThatStatusCodeIsNotFound() throws Exception {
-        mockMvc.perform(put(PATH + "/undefined" )
+        mockMvc.perform(put(PATH + "/undefined")
                         .contentType(APPLICATION_JSON)
                         .content("""
                                         {
