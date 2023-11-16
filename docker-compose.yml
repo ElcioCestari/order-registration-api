@@ -5,3 +5,20 @@ services:
     ports:
       - "8080:8080"
     container_name: order-registration-api
+    networks:
+      order-registration-network:
+  mongodb:
+    image: mongo:latest
+    container_name: order-registration-api-mongodb
+    ports:
+      - 27017:27017
+    volumes:
+      - ./database-data:/data/db
+    networks:
+      order-registration-network:
+
+networks:
+  order-registration-network:
+    driver: bridge
+    name: order-registration-network
+
