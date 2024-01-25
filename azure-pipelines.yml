@@ -10,6 +10,11 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
+  - script: | 
+            echo "JAVA VERSION "
+            java -version
+    displayName: JAVA VERSION
+    
   - task: Maven@4
     inputs:
       mavenPomFile: 'pom.xml'
