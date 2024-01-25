@@ -13,6 +13,6 @@ steps:
   - task: CopyFilesOverSSH@0
     inputs:
       sshEndpoint: 'vm2-ssh'
-      sourceFolder: './docker-compose.yml'
-      contents: '**'
+      sourceFolder: '.'
+      contents: 'docker-compose.yml'
       readyTimeout: '20000'
