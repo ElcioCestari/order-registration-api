@@ -16,8 +16,9 @@ steps:
     displayName: JAVA VERSION
   - task: JavaToolInstaller@0
     inputs:
-      versionSpec: '17'
+      versionSpec: '11'
       jdkArchitectureOption: 'x86'
+      jdkSourceOption: 'PreInstalled'
   - task: Maven@4
     inputs:
       mavenPomFile: 'pom.xml'
