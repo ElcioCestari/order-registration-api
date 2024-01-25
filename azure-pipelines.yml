@@ -18,7 +18,6 @@ steps:
     inputs:
       versionSpec: '17'
       jdkArchitectureOption: 'x86'
-      jdkSourceOption: 'PreInstalled'
   - task: Maven@4
     inputs:
       mavenPomFile: 'pom.xml'
