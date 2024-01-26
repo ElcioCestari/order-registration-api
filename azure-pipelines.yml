@@ -15,8 +15,8 @@ steps:
             sudo apt update
             curl -s "https://get.sdkman.io" | bash
             source "$HOME/.sdkman/bin/sdkman-init.sh"
-            sdk install java 
-  
+            sdk install java 21.0.2-oracle
+            sdk use java 21.0.2-oracle  
   - script: | 
             echo "JAVA VERSION "
             java -version
