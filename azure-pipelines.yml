@@ -12,7 +12,6 @@ steps:
             java -version
     displayName: JAVA VERSION
   - script: |
-            sudo apt update
             sudo apt install default-jdk 
   
   - script: | 
