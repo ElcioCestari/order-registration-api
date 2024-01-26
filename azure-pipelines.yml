@@ -16,22 +16,8 @@ steps:
             curl -s "https://get.sdkman.io" | bash
             source "$HOME/.sdkman/bin/sdkman-init.sh"
             sdk install java 21.0.2-oracle
-            sdk use java 21.0.2-oracle  
-  - script: | 
-            echo "JAVA VERSION "
-            java -version
-    displayName: JAVA NEW VERSION
-
-  - task: Maven@4
-    inputs:
-      mavenPomFile: 'pom.xml'
-      publishJUnitResults: true
-      testResultsFiles: '**/surefire-reports/TEST-*.xml'
-      javaHomeOption: 'JDKVersion'
-      mavenVersionOption: 'Default'
-      mavenAuthenticateFeed: false
-      effectivePomSkip: false
-      sonarQubeRunAnalysis: false
+            sdk use java 21.0.2-oracle 
+            mvn clean package
   - task: CopyFilesOverSSH@0
     inputs:
       sshEndpoint: 'vm2-ssh'
