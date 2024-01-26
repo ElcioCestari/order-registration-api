@@ -1,7 +1,4 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+
 
 trigger:
 - main
@@ -14,11 +11,15 @@ steps:
             echo "JAVA VERSION "
             java -version
     displayName: JAVA VERSION
-  - task: JavaToolInstaller@0
-    inputs:
-      versionSpec: '11'
-      jdkArchitectureOption: 'x86'
-      jdkSourceOption: 'PreInstalled'
+  - script: |
+            sudo apt update
+            sudo apt install default-jdk 
+  
+  - script: | 
+            echo "JAVA VERSION "
+            java -version
+    displayName: JAVA NEW VERSION
+
   - task: Maven@4
     inputs:
       mavenPomFile: 'pom.xml'
