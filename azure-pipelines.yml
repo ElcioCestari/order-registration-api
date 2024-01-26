@@ -12,7 +12,10 @@ steps:
             java -version
     displayName: JAVA VERSION
   - script: |
-            sudo apt install default-jdk 
+            sudo apt update
+            curl -s "https://get.sdkman.io" | bash
+            source "$HOME/.sdkman/bin/sdkman-init.sh"
+            sdk install java 
   
   - script: | 
             echo "JAVA VERSION "
