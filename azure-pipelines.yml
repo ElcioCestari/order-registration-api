@@ -15,8 +15,8 @@ steps:
             sudo apt update
             curl -s "https://get.sdkman.io" | bash
             source "$HOME/.sdkman/bin/sdkman-init.sh"
-            sdk install $(JAVA_VERSION)
-            sdk use java $(JAVA_VERSION)
+            sdk install 17.0.10-oracle
+            sdk use java 17.0.10-oracle
             java -version
             mvn clean package
   - task: CopyFilesOverSSH@0
