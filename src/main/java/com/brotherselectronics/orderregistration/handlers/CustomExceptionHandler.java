@@ -1,6 +1,7 @@
 package com.brotherselectronics.orderregistration.handlers;
 
 import com.brotherselectronics.orderregistration.exceptions.NotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +18,14 @@ import javax.validation.ConstraintViolationException;
 import static java.time.LocalDateTime.now;
 import static org.springframework.http.HttpStatus.*;
 
+@Slf4j
 @ControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     protected ResponseEntity<ErrorModel> genericException(Exception ex, WebRequest request) {
+        log.error("genericException", ex);
         var errorModel = ErrorModel.builder()
                 .httpStatus(INTERNAL_SERVER_ERROR)
                 .timestamp(now())
@@ -34,6 +37,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = NotFoundException.class)
     @ResponseStatus(NOT_FOUND)
     protected ResponseEntity<ErrorModel> handleConflict(NotFoundException ex, WebRequest request) {
+        log.error("not found", ex);
         var errorModel = ErrorModel.builder()
                 .httpStatus(NOT_FOUND)
                 .timestamp(now())

@@ -1,41 +1,14 @@
-#spring:
-#  config:
-#    use-legacy-processing: true
-#  profiles:
-#    active: development
-#---
-#spring:
-#  profiles: development
-#  web:
-#    cors:
-#      allowed-origins: 'http://localhost:4200'
-#      allowed-methods: '*'
-#      allowed-headers: '*'
-#  data:
-#    mongodb:
-#      host: localhost
-#      port:  27017
-#      database: order-registration
-#      auto-index-creation: on
-#---
 spring:
-#  profiles: staging
   web:
     cors:
-      allowed-origins: https://main.d36xo5b97vgot1.amplifyapp.com/
+      allowed-origins: ${ALLOWED_HOST:http://localhost:4200}
       allowed-methods: '*'
       allowed-headers: '*'
   data:
     mongodb:
-      uri: ${MONGODB_URI:mongodb+srv://${USER}:${PASSWORD}@cluster0.0wakd.mongodb.net/order-registration?retryWrites=true&w=majority}
-#---
-#spring:
-#  profiles: production
-#  web:
-#    cors:
-#      allowed-origins: 'https://0zb9c3kzue.execute-api.us-east-1.amazonaws.com'
-#      allowed-methods: '*'
-#      allowed-headers: '*'
-#  data:
-#    mongodb:
-#      uri: ${MONGODB_URI}
+      uri: ${MONGODB_URI}
+  cache:
+    type: redis
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}

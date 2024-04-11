@@ -7,12 +7,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductResponseDTO {
+public class ProductResponseDTO implements Serializable {
 
     private String id;
     private String name;
