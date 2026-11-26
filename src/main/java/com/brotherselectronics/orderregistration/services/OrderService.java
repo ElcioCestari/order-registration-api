@@ -41,8 +41,8 @@ public class OrderService implements BaseService<OrderRequestDTO, OrderResponseD
         Order orderSaved = this.getOrderFromRepositoryOrThrowNotFoundException(id);
         Order orderToSave = mapperToOrder(dto);
         merge(orderToSave, orderSaved);
-        orderRepository.save(orderToSave);
-        return mapperToResponseDTO(orderToSave);
+        orderRepository.save(orderSaved);
+        return mapperToResponseDTO(orderSaved);
     }
 
     @Override

@@ -15,6 +15,7 @@ import java.util.List;
 @Builder
 public class OrderResponseDTO {
 
+    private String id;
     private LocalDateTime saleDate;
     private List<OrderItemResponseDTO> orderItens;
     private boolean payment;

@@ -1,7 +1,7 @@
 package com.brotherselectronics.orderregistration.domains.dtos;
 
 import com.brotherselectronics.orderregistration.domains.constraints.ConstraintExists;
-import com.brotherselectronics.orderregistration.domains.entities.Order;
+import com.brotherselectronics.orderregistration.domains.entities.SystemUser;
 import com.brotherselectronics.orderregistration.domains.enums.PaymentType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,6 +37,6 @@ public class OrderRequestDTO {
     @DecimalMin(value = "0")
     private BigDecimal totalValueOrder;
 
-    @ConstraintExists(entityRepository = Order.class) //TODO its wrong must to be USER
+    @ConstraintExists(entityRepository = SystemUser.class)
     private String userId;
 }

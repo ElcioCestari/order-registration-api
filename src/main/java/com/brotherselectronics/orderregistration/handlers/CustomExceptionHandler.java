@@ -1,6 +1,7 @@
 package com.brotherselectronics.orderregistration.handlers;
 
 import com.brotherselectronics.orderregistration.exceptions.NotFoundException;
+import com.brotherselectronics.orderregistration.services.KeyAlreadyExistsException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,17 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
                 .message(ex.getMessage())
                 .build();
         return new ResponseEntity<>(errorModel, NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = KeyAlreadyExistsException.class)
+    @ResponseStatus(CONFLICT)
+    protected ResponseEntity<ErrorModel> handleKeyAlreadyExists(KeyAlreadyExistsException ex, WebRequest request) {
+        var errorModel = ErrorModel.builder()
+                .httpStatus(CONFLICT)
+                .timestamp(now())
+                .message(ex.getMessage())
+                .build();
+        return new ResponseEntity<>(errorModel, CONFLICT);
     }
 
     @ExceptionHandler(value = ConstraintViolationException.class)

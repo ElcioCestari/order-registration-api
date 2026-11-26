@@ -13,4 +13,10 @@ public class SystemUserCreateRequestDTO extends SystemUserRequestDTO {
     @NotBlank
     private String username;
 
+    @Override
+    @NotBlank
+    public String getPassword() {
+        return super.getPassword();
+    }
+
 }

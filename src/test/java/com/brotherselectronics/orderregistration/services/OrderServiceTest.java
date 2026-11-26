@@ -11,6 +11,7 @@ import com.brotherselectronics.orderregistration.repositories.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -26,6 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -109,6 +111,21 @@ class OrderServiceTest {
         when(mapper.toDtoResponse(any(Order.class))).thenReturn(orderResponseDTO);
         OrderResponseDTO responseActual = orderService.update(orderRequestDTO, FAKE_ID);
         assertNotNull(responseActual);
+    }
+
+    @Test
+    void update_whenSuccessfulThenSavesTheExistingOrderKeepingItsId() {
+        Order incoming = fake.getEntity();
+        incoming.setId("another-random-id");
+        when(orderRepository.findById(FAKE_ID)).thenReturn(ofNullable(order));
+        when(mapper.toEntity(any(OrderRequestDTO.class))).thenReturn(incoming);
+
+        orderService.update(orderRequestDTO, FAKE_ID);
+
+        ArgumentCaptor<Order> saved = ArgumentCaptor.forClass(Order.class);
+        verify(orderRepository).save(saved.capture());
+        assertThat(saved.getValue().getId()).isEqualTo(FAKE_ID);
+        assertThat(saved.getValue().getSaleDate()).isEqualTo(incoming.getSaleDate());
     }
 
     @Test

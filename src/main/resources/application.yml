@@ -7,6 +7,7 @@ spring:
   data:
     mongodb:
       uri: ${MONGODB_URI:mongodb://localhost:27017/order-registration}
+      auto-index-creation: true
   cache:
     type: redis
   redis:

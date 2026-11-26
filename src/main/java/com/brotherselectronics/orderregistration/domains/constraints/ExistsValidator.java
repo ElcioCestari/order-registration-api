@@ -29,6 +29,7 @@ public class ExistsValidator implements ConstraintValidator<ConstraintExists, St
 
     @Override
     public boolean isValid(String id, ConstraintValidatorContext context) {
-        return repository.findById(id).isPresent();
+        // null is left to @NotNull/@NotEmpty, as Bean Validation recommends
+        return id == null || repository.findById(id).isPresent();
     }
 }

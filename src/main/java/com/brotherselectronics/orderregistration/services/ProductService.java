@@ -27,19 +27,13 @@ public class ProductService implements BaseService<ProductRequestDTO, ProductRes
 
     @Cacheable("productFindAll")
     public Page<ProductResponseDTO> findAll(final Integer page, final Integer size, final String... sort) {
-        try {
-            Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
-            Page<Product> productPage = productRepository.findAll(pageable);
-            return new PageImpl<>(mapper.toDtoResponseList(
-                    productPage.toList()),
-                    pageable,
-                    productPage.getTotalElements()
-            );
-        } catch (Exception e) {
-            log.error("Error while fetching products", e);
-            throw new NotFoundException();
-        }
-
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
+        Page<Product> productPage = productRepository.findAll(pageable);
+        return new PageImpl<>(mapper.toDtoResponseList(
+                productPage.toList()),
+                pageable,
+                productPage.getTotalElements()
+        );
     }
 
     @Override
