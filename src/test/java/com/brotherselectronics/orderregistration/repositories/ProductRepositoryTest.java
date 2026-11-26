@@ -3,6 +3,7 @@ package com.brotherselectronics.orderregistration.repositories;
 import com.brotherselectronics.fakers.ProductFaker;
 import com.brotherselectronics.orderregistration.configs.MongoConfig;
 import com.brotherselectronics.orderregistration.domains.entities.Product;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.validation.ConstraintViolationException;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -25,6 +27,15 @@ class ProductRepositoryTest {
 
     @Autowired
     private ProductRepository repository;
+
+    @BeforeEach
+    void setUp() {
+        repository.deleteAll();
+        repository.saveAll(List.of(
+                new ProductFaker().getEntity(),
+                new ProductFaker().getEntity(),
+                new ProductFaker().getEntity()));
+    }
 
     @Test
     void save() {
@@ -49,8 +60,8 @@ class ProductRepositoryTest {
     void findAllPageable_whenSuccessful_thenReturnList() {
         var pageable = PageRequest.of(1, 2, by("name"));
         Page<Product> all = repository.findAll(pageable);
-        assertThat(all).isNotEmpty();
-        assertThat(all.getContent()).hasSizeLessThanOrEqualTo(2);
+        assertThat(all.getContent()).hasSize(1);
+        assertThat(all.getTotalElements()).isEqualTo(3);
     }
 
     @Test

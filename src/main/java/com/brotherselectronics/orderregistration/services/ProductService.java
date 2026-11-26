@@ -71,8 +71,8 @@ public class ProductService implements BaseService<ProductRequestDTO, ProductRes
 
     @Override
     @Caching(evict = {
-            @CacheEvict(allEntries = true, cacheNames = "productFindAll"),
-            @CacheEvict(cacheNames = "products", key = "#id")
+        @CacheEvict(allEntries = true, cacheNames = "productFindAll"),
+        @CacheEvict(cacheNames = "products", key = "#id")
     })
     public void delete(String id) {
         this.getProductFromRepositoryOrThrowNotFoundException(id);
