@@ -6,7 +6,7 @@ spring:
       allowed-headers: '*'
   data:
     mongodb:
-      uri: ${MONGODB_URI}
+      uri: ${MONGODB_URI:mongodb://localhost:27017/order-registration}
   cache:
     type: redis
   redis:

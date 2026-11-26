@@ -1,24 +1,57 @@
-version: '3.9'
 services:
   api:
     build: .
+    container_name: order-registration-api
     ports:
       - "8080:8080"
-    container_name: order-registration-api
+    environment:
+      MONGODB_URI: mongodb://mongodb:27017/order-registration
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      ALLOWED_HOST: ${ALLOWED_HOST:-http://localhost:4200}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     networks:
-      order-registration-network:
+      - order-registration-network
+
   mongodb:
-    image: mongo:latest
+    # Pinned to 6.0: the Mongo driver shipped with Spring Boot 2.7 officially supports up to MongoDB 6.0
+    image: mongo:6.0
     container_name: order-registration-api-mongodb
+    environment:
+      MONGO_INITDB_DATABASE: order-registration
     ports:
-      - 27017:27017
+      - "27017:27017"
     volumes:
-      - ./database-data:/data/db
+      - mongodb-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
-      order-registration-network:
+      - order-registration-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: order-registration-api-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - order-registration-network
+
+volumes:
+  mongodb-data:
 
 networks:
   order-registration-network:
     driver: bridge
     name: order-registration-network
-
