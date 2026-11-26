@@ -3,8 +3,8 @@ package com.brotherselectronics.orderregistration.domains.entities;
 import com.brotherselectronics.orderregistration.domains.enums.Category;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.validation.constraints.*;
 
-import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
 @Data

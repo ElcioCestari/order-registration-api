@@ -21,6 +21,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -69,6 +70,31 @@ class ProductControllerTest {
                         .content(convertObjectToString(invalidBody)))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    @Order(12)
+    void save_whenOptionalPrimitiveFieldsAreOmitted_thenReturnCreated() throws Exception {
+        String reqBody = """
+                {"name":"mouse","description":"usb mouse","unitPurchasePrice":10,
+                 "category":"ELETRONIC","stock":{"quantity":5}}""";
+        mockMvc.perform(post(PATH)
+                        .contentType(APPLICATION_JSON)
+                        .content(reqBody))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.haveInStock").value(false));
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    @Order(13)
+    void save_whenBodyIsInvalid_thenErrorReportsStatusName() throws Exception {
+        mockMvc.perform(post(PATH)
+                        .contentType(APPLICATION_JSON)
+                        .content("{}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"));
     }
 
     @Test

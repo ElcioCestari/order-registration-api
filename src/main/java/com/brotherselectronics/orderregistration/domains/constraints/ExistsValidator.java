@@ -4,9 +4,8 @@ import com.brotherselectronics.orderregistration.repositories.BaseRepository;
 import com.brotherselectronics.orderregistration.utils.RepositoryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 @Component
 public class ExistsValidator implements ConstraintValidator<ConstraintExists, String> {

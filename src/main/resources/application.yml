@@ -1,15 +1,20 @@
 spring:
+  jackson:
+    # Jackson 3 changed defaults that are part of the API contract: omitted primitive fields
+    # (e.g. haveInStock) would be rejected and enums like HttpStatus written as "400 BAD_REQUEST"
+    use-jackson2-defaults: true
   web:
     cors:
       allowed-origins: ${ALLOWED_HOST:http://localhost:4200}
       allowed-methods: '*'
       allowed-headers: '*'
+  mongodb:
+    uri: ${MONGODB_URI:mongodb://localhost:27017/order-registration}
   data:
     mongodb:
-      uri: ${MONGODB_URI:mongodb://localhost:27017/order-registration}
       auto-index-creation: true
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
   cache:
     type: redis
-  redis:
-    host: ${REDIS_HOST:localhost}
-    port: ${REDIS_PORT:6379}

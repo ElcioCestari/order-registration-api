@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.4</version>
+        <version>4.1.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.brothers-electronics</groupId>
@@ -14,25 +14,12 @@
     <name>order-registration</name>
     <description>Order Rgistration API</description>
     <properties>
-        <java.version>17</java.version>
+        <java.version>21</java.version>
         <org.mapstruct.version>1.6.3</org.mapstruct.version>
         <!-- lombok.version also overrides the version managed by spring-boot-starter-parent -->
         <lombok.version>1.18.48</lombok.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
-        <!-- 1.21.4+ is required for Docker Engine 29 (it raised the minimum API version) -->
-        <testcontainers.version>1.21.4</testcontainers.version>
     </properties>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.testcontainers</groupId>
-                <artifactId>testcontainers-bom</artifactId>
-                <version>${testcontainers.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -40,7 +27,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -66,13 +53,18 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-test</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security-test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>mongodb</artifactId>
+            <artifactId>testcontainers-mongodb</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -82,18 +74,17 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.hibernate.ogm</groupId>
-            <artifactId>hibernate-ogm-mongodb</artifactId>
-            <version>5.4.1.Final</version>
-        </dependency>
-        <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.11</version>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>3.1.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
     </dependencies>
     <reporting>

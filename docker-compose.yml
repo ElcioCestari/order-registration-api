@@ -18,7 +18,7 @@ services:
       - order-registration-network
 
   mongodb:
-    # Pinned to 6.0: the Mongo driver shipped with Spring Boot 2.7 officially supports up to MongoDB 6.0
+    # Kept on 6.0 to reuse the existing data volume; the driver in Spring Boot 4.1 also supports 7.0 and 8.0
     image: mongo:6.0
     container_name: order-registration-api-mongodb
     environment:

@@ -5,8 +5,8 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import jakarta.validation.constraints.NotBlank;
 
-import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.Collection;
 

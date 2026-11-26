@@ -4,7 +4,7 @@ import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.mongodb.MongoDBContainer;
 import org.testcontainers.lifecycle.Startables;
 import org.testcontainers.utility.DockerImageName;
 
@@ -31,9 +31,9 @@ public class TestcontainersInitializer implements ApplicationContextInitializer<
     @Override
     public void initialize(ConfigurableApplicationContext context) {
         TestPropertyValues.of(
-                "spring.data.mongodb.uri=" + MONGO.getReplicaSetUrl("order-registration-test"),
-                "spring.redis.host=" + REDIS.getHost(),
-                "spring.redis.port=" + REDIS.getMappedPort(6379)
+                "spring.mongodb.uri=" + MONGO.getReplicaSetUrl("order-registration-test"),
+                "spring.data.redis.host=" + REDIS.getHost(),
+                "spring.data.redis.port=" + REDIS.getMappedPort(6379)
         ).applyTo(context.getEnvironment());
     }
 }

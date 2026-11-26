@@ -16,6 +16,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.util.List;
 
@@ -31,6 +34,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
+// Boot 4 no longer initializes @Mock/@InjectMocks in Spring tests; MockitoExtension does.
+// LENIENT keeps the previous behavior, where unused stubs did not fail the test.
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class OrderServiceTest {
     private static final String FAIL_MSG = "Must to be throw an exception and don't was threw.";
     private static final EntityFake<Order, OrderRequestDTO, OrderResponseDTO> fake = new OrderFaker();
