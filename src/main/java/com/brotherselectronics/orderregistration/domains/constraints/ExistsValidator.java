@@ -1,7 +1,7 @@
 package com.brotherselectronics.orderregistration.domains.constraints;
 
 import com.brotherselectronics.orderregistration.repositories.BaseRepository;
-import com.brotherselectronics.orderregistration.utils.InstancesUtils;
+import com.brotherselectronics.orderregistration.utils.RepositoryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,12 +19,12 @@ public class ExistsValidator implements ConstraintValidator<ConstraintExists, St
      */
     private BaseRepository repository;
     @Autowired
-    private InstancesUtils instancesUtils;
+    private RepositoryFactory repositoryFactory;
 
     @Override
     public void initialize(ConstraintExists constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
-        repository = instancesUtils.getRepository(constraintAnnotation.entityRepository());
+        repository = repositoryFactory.getRepository(constraintAnnotation.entityRepository());
     }
 
     @Override

@@ -6,4 +6,10 @@ import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
 public interface BaseRepository<T extends BaseEntity, U> extends MongoRepository<T, U> {
+
+    default boolean supports(Class<?> clazz) {
+        return getEntityClass().equals(clazz);
+    }
+
+    Class<T> getEntityClass();
 }
