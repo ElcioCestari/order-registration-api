@@ -9,6 +9,9 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       ALLOWED_HOST: ${ALLOWED_HOST:-http://localhost:4200}
+      # Initial admin, read from .env (see .env.example)
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
     depends_on:
       mongodb:
         condition: service_healthy

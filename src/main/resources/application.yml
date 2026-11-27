@@ -18,3 +18,9 @@ spring:
       port: ${REDIS_PORT:6379}
   cache:
     type: redis
+
+app:
+  admin:
+    # Initial ADMIN user, created on startup only if it does not exist yet (see AdminSeeder)
+    username: ${ADMIN_USERNAME:}
+    password: ${ADMIN_PASSWORD:}
