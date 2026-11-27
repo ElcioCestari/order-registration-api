@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import static com.brotherselectronics.orderregistration.domains.enums.Role.ADMIN;
-import static com.brotherselectronics.orderregistration.domains.enums.Role.USER;
+import static com.brotherselectronics.orderregistration.domains.enums.Role.CUSTOMER;
 import static java.util.Collections.unmodifiableCollection;
 import static java.util.Objects.isNull;
 import static java.util.Set.of;
@@ -45,7 +45,7 @@ public class SystemUser extends BaseEntityImp implements BaseEntity, UserDetails
         this.password = password;
         if (isNull(authorities) || authorities.isEmpty()) {
             this.authorities = new ArrayList<>();
-            this.authorities.add(new SimpleGrantedAuthority(USER.getAuthority()));
+            this.authorities.add(new SimpleGrantedAuthority(CUSTOMER.getAuthority()));
         } else {
             this.authorities = new ArrayList<>(authorities);
         }
@@ -103,12 +103,12 @@ public class SystemUser extends BaseEntityImp implements BaseEntity, UserDetails
             throw new IllegalAccessException();
         }
 
-        public static SystemUser simpleUser(@NonNull final String username, @NonNull final String password) {
+        public static SystemUser customer(@NonNull final String username, @NonNull final String password) {
             return new SystemUser(
                     randomUUID().toString(),
                     username,
                     password,
-                    of(new SimpleGrantedAuthority(USER.getAuthority())));
+                    of(new SimpleGrantedAuthority(CUSTOMER.getAuthority())));
         }
 
         public static SystemUser buildAdmin(@NonNull final String username, @NonNull final String password) {

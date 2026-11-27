@@ -16,7 +16,7 @@ import jakarta.validation.ConstraintViolationException;
 
 import java.util.Optional;
 
-import static com.brotherselectronics.orderregistration.domains.entities.SystemUser.Factory.simpleUser;
+import static com.brotherselectronics.orderregistration.domains.entities.SystemUser.Factory.customer;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -61,13 +61,13 @@ class UserRepositoryTest {
 
     @Test
     void save() {
-        var user = simpleUser(randomUUID().toString(), randomUUID().toString());
+        var user = customer(randomUUID().toString(), randomUUID().toString());
         assertThat(userRepository.save(user)).isNotNull();
     }
 
     @Test
     void save_whenUserPasswordEmptyThenShouldNotBeSaved() {
-        var user = simpleUser(randomUUID().toString(), randomUUID().toString());
+        var user = customer(randomUUID().toString(), randomUUID().toString());
         user.setPassword("");
         assertThatThrownBy(() -> userRepository.save(user)).isInstanceOf(ConstraintViolationException.class);
     }
@@ -75,7 +75,7 @@ class UserRepositoryTest {
     @Test
     void save_whenAlreadyExistsAnUserWithTheSameUserName() {
         userRepository.insert(fakeUser);
-        var invalidUser = simpleUser(fakeUser.getUsername(), randomUUID().toString());
+        var invalidUser = customer(fakeUser.getUsername(), randomUUID().toString());
         assertThrows(DuplicateKeyException.class, () -> userRepository.insert(invalidUser));
 
     }

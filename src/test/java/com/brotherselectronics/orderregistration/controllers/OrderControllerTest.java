@@ -78,7 +78,7 @@ class OrderControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = {"USER", "ADMIN"})
+    @WithMockUser(authorities = {"CUSTOMER", "ADMIN"})
     void findAll_whenHasItemsThenReturnAnJsonList() throws Exception {
         when(orderService.findAll()).thenReturn(orderResponseDTOListNotEmpty);
         mockMvc.perform(MockMvcRequestBuilders.get(END_POINT))
@@ -86,7 +86,7 @@ class OrderControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = {"USER", "ADMIN"})
+    @WithMockUser(authorities = {"CUSTOMER", "ADMIN"})
     void findAll_whenHasNoItemsThenReturnAnEmptyJson() throws Exception {
         when(orderService.findAll()).thenReturn(emptyList());
         mockMvc.perform(MockMvcRequestBuilders.get(END_POINT))

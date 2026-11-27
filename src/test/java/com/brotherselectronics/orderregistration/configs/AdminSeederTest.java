@@ -46,7 +46,7 @@ class AdminSeederTest {
 
     @Test
     void run_whenUsernameAlreadyExists_thenDoesNotTouchIt() {
-        var existing = SystemUser.Factory.simpleUser("admin", "{bcrypt}current");
+        var existing = SystemUser.Factory.customer("admin", "{bcrypt}current");
         when(userRepository.findByUsername("admin")).thenReturn(Optional.of(existing));
 
         new AdminSeeder(userRepository, encoder, "admin", "s3cret").run(null);
