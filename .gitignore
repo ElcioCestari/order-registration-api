@@ -34,3 +34,6 @@ build/
 
 ### Env vars ###
 *.env
+
+### Windows (files copied from Windows into WSL) ###
+*:Zone.Identifier

@@ -4,6 +4,10 @@ This  project is the backend to [order-registration-front](https://github.com/El
 The intention is put in practice my studies, it's not for to be commercial.
 <br>
 
+## Documentation
+
+Domain specification, requirements and architecture decisions (ADRs) are in [`docs/`](docs/README.md).
+
 ## Technologies
 
 * Java 17 / Spring Boot 2.7
