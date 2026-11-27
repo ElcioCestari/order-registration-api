@@ -12,11 +12,8 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import static com.brotherselectronics.orderregistration.domains.enums.Role.ADMIN;
 import static com.brotherselectronics.orderregistration.domains.enums.Role.CUSTOMER;
-import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.PATCH;
 import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder;
 
 /**
@@ -28,21 +25,34 @@ import static org.springframework.security.crypto.factory.PasswordEncoderFactori
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    private static final String[] ANY_PROFILE = {CUSTOMER.getAuthority(), ADMIN.getAuthority()};
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
+                // Rules are listed per endpoint and the first match wins; anything not listed is denied.
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/home", "/").permitAll()
-                        .requestMatchers(POST, "/users/login")
-                        .hasAnyAuthority(CUSTOMER.getAuthority(), ADMIN.getAuthority())
-                        .requestMatchers(GET, "/**").hasAnyAuthority(CUSTOMER.getAuthority(), ADMIN.getAuthority())
-                        .requestMatchers(POST, "/**").hasAnyAuthority(ADMIN.getAuthority())
-                        .requestMatchers(PUT, "/**").hasAnyAuthority(ADMIN.getAuthority())
-                        .requestMatchers(PATCH, "/**").hasAnyAuthority(ADMIN.getAuthority())
-                        .requestMatchers(DELETE, "/**").hasAnyAuthority(ADMIN.getAuthority())
-                        .anyRequest().authenticated())
+                        // Spring Boot forwards unhandled errors here; denying it would turn a 500 into a 403
+                        .requestMatchers("/error").permitAll()
+                        .requestMatchers(GET, "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**")
+                        .hasAnyAuthority(ANY_PROFILE)
+
+                        // Identity
+                        .requestMatchers(POST, "/users/login").hasAnyAuthority(ANY_PROFILE)
+                        .requestMatchers("/users", "/users/**").hasAuthority(ADMIN.getAuthority())
+
+                        // Catalog
+                        .requestMatchers(GET, "/products", "/products/**").hasAnyAuthority(ANY_PROFILE)
+                        .requestMatchers("/products", "/products/**").hasAuthority(ADMIN.getAuthority())
+                        .requestMatchers(GET, "/categories", "/categories/**").hasAnyAuthority(ANY_PROFILE)
+
+                        // Ordering: ADMIN only until orders belong to their customer (own orders, server-side
+                        // prices); then CUSTOMER gets POST /orders and read access to its own orders.
+                        .requestMatchers("/orders", "/orders/**").hasAuthority(ADMIN.getAuthority())
+
+                        .anyRequest().denyAll())
                 .httpBasic(Customizer.withDefaults())
                 .redirectToHttps(https -> https
                         .requestMatchers(request -> request.getHeader("X-Forwarded-Proto") != null))
