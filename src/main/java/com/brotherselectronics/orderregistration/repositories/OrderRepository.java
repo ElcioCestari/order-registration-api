@@ -9,4 +9,9 @@ import java.util.List;
 public interface OrderRepository extends BaseRepository<Order, String> {
 
     List<Order> findByUserId(String userId);
+
+    @Override
+    default Class<Order> getEntityClass() {
+        return Order.class;
+    }
 }

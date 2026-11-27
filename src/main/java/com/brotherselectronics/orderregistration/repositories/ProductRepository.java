@@ -10,6 +10,11 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends BaseRepository<Product, String> {
 
+    @Override
+    default Class<Product> getEntityClass() {
+        return Product.class;
+    }
+
     @Query("{}")
     List<PriceProductProjection> findPriceProduct();
 }

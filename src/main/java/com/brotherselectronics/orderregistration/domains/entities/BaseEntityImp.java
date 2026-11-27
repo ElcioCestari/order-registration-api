@@ -1,8 +1,7 @@
 package com.brotherselectronics.orderregistration.domains.entities;
 
 import lombok.Data;
-
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 import static java.util.Objects.isNull;
 import static java.util.UUID.randomUUID;

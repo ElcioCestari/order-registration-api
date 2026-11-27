@@ -11,6 +11,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.util.Optional;
 
@@ -18,6 +21,10 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
+// Boot 4 no longer initializes @Mock/@InjectMocks in Spring tests; MockitoExtension does.
+// LENIENT keeps the previous behavior, where unused stubs did not fail the test.
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class MyUserDetailServiceTest {
     @InjectMocks
     private MyUserDetailService myUserDetailService;

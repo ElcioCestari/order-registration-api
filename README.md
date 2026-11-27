@@ -6,14 +6,41 @@ The intention is put in practice my studies, it's not for to be commercial.
 
 ## Technologies
 
-Some of the main technologies are:
-
+* Java 17 / Spring Boot 2.7
 * database: **MongoDB**
-* cache: **Redis**
+* cache: **Redis** (the application refuses to start if Redis is not reachable)
 
 ## How to Run
 
-I'm still working in this but in summary you will need run containers to **MongoDB** and **Redis**
-see the application-properties.yml file to know which data you will need to add.
+### Everything with Docker Compose
+
+```bash
+docker compose up --build
+```
+
+This starts MongoDB, Redis and the API on `http://localhost:8080`.
+Swagger UI: `http://localhost:8080/swagger-ui.html`
+
+### API locally, infrastructure in Docker
+
+```bash
+docker compose up -d mongodb redis
+./mvnw spring-boot:run
+```
+
+### Environment variables
+
+| Variable       | Default                                         | Description                  |
+|----------------|-------------------------------------------------|------------------------------|
+| `MONGODB_URI`  | `mongodb://localhost:27017/order-registration`  | MongoDB connection string    |
+| `REDIS_HOST`   | `localhost`                                     | Redis host                   |
+| `REDIS_PORT`   | `6379`                                          | Redis port                   |
+| `ALLOWED_HOST` | `http://localhost:4200`                         | CORS allowed origin(s)       |
+
+### Build
+
+```bash
+./mvnw clean package
+```
 
 If you wanna talk about something send me a email **elciotaira@gmail.com** with the subject **ORDER-REGISTRATION-API**

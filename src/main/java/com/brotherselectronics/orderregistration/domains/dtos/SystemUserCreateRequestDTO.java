@@ -3,8 +3,7 @@ package com.brotherselectronics.orderregistration.domains.dtos;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -12,5 +11,11 @@ import javax.validation.constraints.NotBlank;
 public class SystemUserCreateRequestDTO extends SystemUserRequestDTO {
     @NotBlank
     private String username;
+
+    @Override
+    @NotBlank
+    public String getPassword() {
+        return super.getPassword();
+    }
 
 }

@@ -2,15 +2,14 @@ package com.brotherselectronics.orderregistration.domains.dtos;
 
 
 import com.brotherselectronics.orderregistration.domains.constraints.ConstraintExists;
-import com.brotherselectronics.orderregistration.domains.entities.Order;
+import com.brotherselectronics.orderregistration.domains.entities.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
@@ -19,7 +18,7 @@ import javax.validation.constraints.NotNull;
 public class OrderItemRequestDTO {
 
     @NotEmpty
-    @ConstraintExists(entityRepository = Order.class)//TODO must to fix and change to ORDER_ITEM
+    @ConstraintExists(entityRepository = Product.class)
     private String productId;
 
     @NotNull

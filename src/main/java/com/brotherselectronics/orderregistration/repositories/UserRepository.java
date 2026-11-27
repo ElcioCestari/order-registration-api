@@ -7,6 +7,10 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends BaseRepository<SystemUser, String> {
+    @Override
+    default Class<SystemUser> getEntityClass() {
+        return SystemUser.class;
+    }
 
     Optional<SystemUser> findByUsername(String login);
 }

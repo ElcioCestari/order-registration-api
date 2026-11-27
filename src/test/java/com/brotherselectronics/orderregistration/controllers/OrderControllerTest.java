@@ -6,14 +6,14 @@ import com.brotherselectronics.orderregistration.domains.dtos.OrderRequestDTO;
 import com.brotherselectronics.orderregistration.domains.dtos.OrderResponseDTO;
 import com.brotherselectronics.orderregistration.domains.entities.Order;
 import com.brotherselectronics.orderregistration.exceptions.NotFoundException;
-import com.brotherselectronics.orderregistration.repositories.BaseRepository;
+import com.brotherselectronics.orderregistration.repositories.OrderRepository;
 import com.brotherselectronics.orderregistration.services.OrderService;
-import com.brotherselectronics.orderregistration.utils.InstancesUtils;
+import com.brotherselectronics.orderregistration.utils.RepositoryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -28,6 +28,7 @@ import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -44,14 +45,14 @@ class OrderControllerTest {
     private WebApplicationContext context;
 
     private MockMvc mockMvc;
-    @MockBean
+    @MockitoBean
     private OrderService orderService;
-    @MockBean
+    @MockitoBean
     private ExistsValidator existsValidator;
-    @MockBean
-    private InstancesUtils instancesUtils;
-    @MockBean
-    private BaseRepository orderRepository;
+    @MockitoBean
+    private RepositoryFactory repositoryFactory;
+    @MockitoBean
+    private OrderRepository orderRepository;
 
     private List<OrderResponseDTO> orderResponseDTOListNotEmpty;
     private OrderResponseDTO responseDTOStub;
@@ -97,8 +98,8 @@ class OrderControllerTest {
     @WithMockUser(authorities = {"ADMIN"})
     void save_whenReceiveValidRequestDTOThenReturnResponseDTO() throws Exception {
         when(orderService.save(any(OrderRequestDTO.class))).thenReturn(responseDTOStub);
-        when(instancesUtils.getRepository(any())).thenReturn(this.orderRepository);
-        when(orderRepository.findById(anyString())).thenReturn(Optional.ofNullable(orderFaker));
+        doReturn(this.orderRepository).when(repositoryFactory).getRepository(any());
+        when(orderRepository.findById(anyString())).thenReturn(Optional.of(orderFaker.getEntity()));
         mockMvc.perform(post(END_POINT)
                         .contentType(APPLICATION_JSON)
                         .content(jsonRequestDTOStub))
@@ -111,8 +112,8 @@ class OrderControllerTest {
     void update_whenReceiveValidRequestDTOThenReturnResponseDTO() throws Exception {
         String fakeId = "any id";
         when(orderService.update(any(OrderRequestDTO.class), anyString())).thenReturn(responseDTOStub);
-        when(instancesUtils.getRepository(any())).thenReturn(this.orderRepository);
-        when(orderRepository.findById(anyString())).thenReturn(Optional.ofNullable(orderFaker));
+        doReturn(this.orderRepository).when(repositoryFactory).getRepository(any());
+        when(orderRepository.findById(anyString())).thenReturn(Optional.of(orderFaker.getEntity()));
 
         mockMvc.perform(put(END_POINT + "/" + fakeId)
                         .contentType(APPLICATION_JSON)
@@ -126,8 +127,8 @@ class OrderControllerTest {
         String fakeId = "any id";
         String msg = "Resource not found with id: " + fakeId;
         when(orderService.update(any(OrderRequestDTO.class), anyString())).thenThrow(new NotFoundException((msg)));
-        when(instancesUtils.getRepository(any())).thenReturn(this.orderRepository);
-        when(orderRepository.findById(anyString())).thenReturn(Optional.ofNullable(orderFaker));
+        doReturn(this.orderRepository).when(repositoryFactory).getRepository(any());
+        when(orderRepository.findById(anyString())).thenReturn(Optional.of(orderFaker.getEntity()));
 
         mockMvc.perform(put(END_POINT + "/" + fakeId)
                         .contentType(APPLICATION_JSON)

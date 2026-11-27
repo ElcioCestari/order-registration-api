@@ -6,8 +6,8 @@ import com.brotherselectronics.orderregistration.domains.entities.Product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
+import jakarta.annotation.PostConstruct;
 
-import javax.annotation.PostConstruct;
 import java.util.EnumSet;
 
 /**

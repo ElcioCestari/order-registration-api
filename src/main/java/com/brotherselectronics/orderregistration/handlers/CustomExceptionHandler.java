@@ -1,9 +1,11 @@
 package com.brotherselectronics.orderregistration.handlers;
 
 import com.brotherselectronics.orderregistration.exceptions.NotFoundException;
+import com.brotherselectronics.orderregistration.services.KeyAlreadyExistsException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,9 +13,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import javax.validation.ConstraintDeclarationException;
-import javax.validation.ConstraintViolationException;
+import jakarta.validation.ConstraintDeclarationException;
+import jakarta.validation.ConstraintViolationException;
 
 import static java.time.LocalDateTime.now;
 import static org.springframework.http.HttpStatus.*;
@@ -46,6 +47,17 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorModel, NOT_FOUND);
     }
 
+    @ExceptionHandler(value = KeyAlreadyExistsException.class)
+    @ResponseStatus(CONFLICT)
+    protected ResponseEntity<ErrorModel> handleKeyAlreadyExists(KeyAlreadyExistsException ex, WebRequest request) {
+        var errorModel = ErrorModel.builder()
+                .httpStatus(CONFLICT)
+                .timestamp(now())
+                .message(ex.getMessage())
+                .build();
+        return new ResponseEntity<>(errorModel, CONFLICT);
+    }
+
     @ExceptionHandler(value = ConstraintViolationException.class)
     @ResponseStatus(UNPROCESSABLE_ENTITY)
     protected ResponseEntity<ErrorModel> handleBeanValidation(ConstraintViolationException ex, WebRequest request) {
@@ -72,10 +84,10 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @Override //TODO -check exception return
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,
-                                                                  HttpStatus status, WebRequest request) {
+                                                                  HttpStatusCode status, WebRequest request) {
         var errorModel = ErrorModel
                 .builder()
-                .httpStatus(status)
+                .httpStatus(HttpStatus.valueOf(status.value()))
                 .timestamp(now())
                 .build();
         errorModel.setErrorList(ex.getFieldErrors());

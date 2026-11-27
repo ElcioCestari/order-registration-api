@@ -21,6 +21,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -69,6 +70,31 @@ class ProductControllerTest {
                         .content(convertObjectToString(invalidBody)))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    @Order(12)
+    void save_whenOptionalPrimitiveFieldsAreOmitted_thenReturnCreated() throws Exception {
+        String reqBody = """
+                {"name":"mouse","description":"usb mouse","unitPurchasePrice":10,
+                 "category":"ELETRONIC","stock":{"quantity":5}}""";
+        mockMvc.perform(post(PATH)
+                        .contentType(APPLICATION_JSON)
+                        .content(reqBody))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.haveInStock").value(false));
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    @Order(13)
+    void save_whenBodyIsInvalid_thenErrorReportsStatusName() throws Exception {
+        mockMvc.perform(post(PATH)
+                        .contentType(APPLICATION_JSON)
+                        .content("{}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.httpStatus").value("BAD_REQUEST"));
     }
 
     @Test
@@ -139,6 +165,29 @@ class ProductControllerTest {
                 .getContentAsString();
 
         assertThat(response).isNotNull();
+    }
+
+    @Test
+    @WithMockUser(authorities = {"USER"})
+    @Order(43)
+    void patchUpdate_whenUserIsNotAdmin_thenReturnForbidden() throws Exception {
+        mockMvc.perform(patch(PATH + "/" + product.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content("{\"name\":\"changed by a regular user\"}"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(authorities = {"USER"})
+    @Order(44)
+    void writeOperations_whenUserIsNotAdmin_thenReturnForbidden() throws Exception {
+        String body = convertObjectToString(buildObjectOfAnyType(ProductRequestDTO.class));
+        mockMvc.perform(post(PATH).contentType(APPLICATION_JSON).content(body))
+                .andExpect(status().isForbidden());
+        mockMvc.perform(put(PATH + "/" + product.getId()).contentType(APPLICATION_JSON).content(body))
+                .andExpect(status().isForbidden());
+        mockMvc.perform(MockMvcRequestBuilders.delete(PATH + "/" + product.getId()))
+                .andExpect(status().isForbidden());
     }
 
     @Test
