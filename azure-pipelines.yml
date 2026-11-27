@@ -3,6 +3,9 @@
 trigger:
 - main
 
+# Without this, Azure validates every GitHub PR by running this pipeline, which deploys over SSH
+pr: none
+
 pool:
   vmImage: ubuntu-latest
 
