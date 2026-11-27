@@ -168,6 +168,29 @@ class ProductControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = {"USER"})
+    @Order(43)
+    void patchUpdate_whenUserIsNotAdmin_thenReturnForbidden() throws Exception {
+        mockMvc.perform(patch(PATH + "/" + product.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content("{\"name\":\"changed by a regular user\"}"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(authorities = {"USER"})
+    @Order(44)
+    void writeOperations_whenUserIsNotAdmin_thenReturnForbidden() throws Exception {
+        String body = convertObjectToString(buildObjectOfAnyType(ProductRequestDTO.class));
+        mockMvc.perform(post(PATH).contentType(APPLICATION_JSON).content(body))
+                .andExpect(status().isForbidden());
+        mockMvc.perform(put(PATH + "/" + product.getId()).contentType(APPLICATION_JSON).content(body))
+                .andExpect(status().isForbidden());
+        mockMvc.perform(MockMvcRequestBuilders.delete(PATH + "/" + product.getId()))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     @WithMockUser(authorities = {"ADMIN"})
     @Order(50)
     void delete() throws Exception {

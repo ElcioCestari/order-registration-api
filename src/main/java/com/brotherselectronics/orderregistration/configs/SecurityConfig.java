@@ -14,6 +14,7 @@ import static com.brotherselectronics.orderregistration.domains.enums.Role.ADMIN
 import static com.brotherselectronics.orderregistration.domains.enums.Role.USER;
 import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.PATCH;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder;
@@ -39,6 +40,7 @@ public class SecurityConfig {
                         .requestMatchers(GET, "/**").hasAnyAuthority(USER.getAuthority(), ADMIN.getAuthority())
                         .requestMatchers(POST, "/**").hasAnyAuthority(ADMIN.getAuthority())
                         .requestMatchers(PUT, "/**").hasAnyAuthority(ADMIN.getAuthority())
+                        .requestMatchers(PATCH, "/**").hasAnyAuthority(ADMIN.getAuthority())
                         .requestMatchers(DELETE, "/**").hasAnyAuthority(ADMIN.getAuthority())
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
