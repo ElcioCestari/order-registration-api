@@ -168,7 +168,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = {"USER"})
+    @WithMockUser(authorities = {"CUSTOMER"})
     @Order(43)
     void patchUpdate_whenUserIsNotAdmin_thenReturnForbidden() throws Exception {
         mockMvc.perform(patch(PATH + "/" + product.getId())
@@ -178,7 +178,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = {"USER"})
+    @WithMockUser(authorities = {"CUSTOMER"})
     @Order(44)
     void writeOperations_whenUserIsNotAdmin_thenReturnForbidden() throws Exception {
         String body = convertObjectToString(buildObjectOfAnyType(ProductRequestDTO.class));

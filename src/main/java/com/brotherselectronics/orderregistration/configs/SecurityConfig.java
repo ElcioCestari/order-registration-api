@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import static com.brotherselectronics.orderregistration.domains.enums.Role.ADMIN;
-import static com.brotherselectronics.orderregistration.domains.enums.Role.USER;
+import static com.brotherselectronics.orderregistration.domains.enums.Role.CUSTOMER;
 import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.PATCH;
@@ -36,8 +36,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/home", "/").permitAll()
                         .requestMatchers(POST, "/users/login")
-                        .hasAnyAuthority(USER.getAuthority(), ADMIN.getAuthority())
-                        .requestMatchers(GET, "/**").hasAnyAuthority(USER.getAuthority(), ADMIN.getAuthority())
+                        .hasAnyAuthority(CUSTOMER.getAuthority(), ADMIN.getAuthority())
+                        .requestMatchers(GET, "/**").hasAnyAuthority(CUSTOMER.getAuthority(), ADMIN.getAuthority())
                         .requestMatchers(POST, "/**").hasAnyAuthority(ADMIN.getAuthority())
                         .requestMatchers(PUT, "/**").hasAnyAuthority(ADMIN.getAuthority())
                         .requestMatchers(PATCH, "/**").hasAnyAuthority(ADMIN.getAuthority())

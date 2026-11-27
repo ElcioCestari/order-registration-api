@@ -84,7 +84,7 @@ class SystemUserServiceTest {
     @Test
     @SneakyThrows
     void save() {
-        var user = SystemUser.Factory.simpleUser("elcio", "elcio");
+        var user = SystemUser.Factory.customer("elcio", "elcio");
         when(repository.findById(anyString())).thenReturn(Optional.of(user));
 
         var dto = buildObjectOfAnyType(SystemUserUpdateRequestDTO.class);
@@ -95,7 +95,7 @@ class SystemUserServiceTest {
     @Test
     @SneakyThrows
     void update_whenPasswordIsBlank_thenKeepsCurrentPassword() {
-        var user = SystemUser.Factory.simpleUser("elcio", "current-hash");
+        var user = SystemUser.Factory.customer("elcio", "current-hash");
         when(repository.findById(user.getId())).thenReturn(Optional.of(user));
 
         var dto = new SystemUserUpdateRequestDTO();
@@ -109,7 +109,7 @@ class SystemUserServiceTest {
     @Test
     @SneakyThrows
     void update_whenPasswordIsInformed_thenEncodesItAndKeepsAuthoritiesWhenAbsent() {
-        var user = SystemUser.Factory.simpleUser("elcio", "current-hash");
+        var user = SystemUser.Factory.customer("elcio", "current-hash");
         when(repository.findById(user.getId())).thenReturn(Optional.of(user));
 
         var dto = new SystemUserUpdateRequestDTO();
@@ -117,7 +117,7 @@ class SystemUserServiceTest {
         service.update(dto, user.getId());
 
         assertThat(encoder.matches("new-password", user.getPassword())).isTrue();
-        assertThat(user.getAuthorities()).extracting("authority").containsExactly(Role.USER.getAuthority());
+        assertThat(user.getAuthorities()).extracting("authority").containsExactly(Role.CUSTOMER.getAuthority());
     }
 
     @Test
@@ -129,7 +129,7 @@ class SystemUserServiceTest {
 
     @Test
     void delete_whenUserExists_thenDeletesIt() {
-        var user = SystemUser.Factory.simpleUser("elcio", "elcio");
+        var user = SystemUser.Factory.customer("elcio", "elcio");
         when(repository.findById(user.getId())).thenReturn(Optional.of(user));
         service.delete(user.getId());
         verify(repository).delete(user);

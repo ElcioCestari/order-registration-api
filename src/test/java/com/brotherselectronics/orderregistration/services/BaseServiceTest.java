@@ -16,9 +16,9 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static com.brotherselectronics.orderregistration.domains.entities.SystemUser.Factory.buildAdmin;
-import static com.brotherselectronics.orderregistration.domains.entities.SystemUser.Factory.simpleUser;
+import static com.brotherselectronics.orderregistration.domains.entities.SystemUser.Factory.customer;
 import static com.brotherselectronics.orderregistration.domains.enums.Role.ADMIN;
-import static com.brotherselectronics.orderregistration.domains.enums.Role.USER;
+import static com.brotherselectronics.orderregistration.domains.enums.Role.CUSTOMER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -105,11 +105,11 @@ class BaseServiceTest {
 
     @Test
     void testMerge_givenSourceWithCollections_thenAssertThatTargetWillBeSameCollections() {
-        var target = simpleUser("elcio", "elcio");
+        var target = customer("elcio", "elcio");
         var source = buildAdmin("elcio", "elcio_admin");
 
         assertThat(target.getAuthorities().stream().findFirst().orElseThrow(RuntimeException::new).toString())
-                .hasToString(USER.getAuthority());
+                .hasToString(CUSTOMER.getAuthority());
         assertThat(source.getAuthorities().stream().findFirst().orElseThrow(RuntimeException::new).toString())
                 .hasToString(ADMIN.getAuthority());
 

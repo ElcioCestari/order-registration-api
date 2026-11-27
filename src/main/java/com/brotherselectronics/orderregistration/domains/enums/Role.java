@@ -10,7 +10,7 @@ public enum Role implements GrantedAuthority {
 
     ADMIN("ADMIN"),
     STAFF("STAFF"),
-    USER("USER"),
+    CUSTOMER("CUSTOMER"),
     GUEST("GUEST");
 
     private final String authority;

@@ -3,7 +3,7 @@ package com.brotherselectronics.orderregistration.domains.enums;
 import org.junit.jupiter.api.Test;
 
 import static com.brotherselectronics.orderregistration.domains.enums.GrantedAuthority.ADMIN;
-import static com.brotherselectronics.orderregistration.domains.enums.GrantedAuthority.USER;
+import static com.brotherselectronics.orderregistration.domains.enums.GrantedAuthority.CUSTOMER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -12,10 +12,10 @@ class GrantedAuthorityTest {
     @Test
     void getRole() {
         String adminRole = ADMIN.getAuthority().getAuthority();
-        String userRole = USER.getAuthority().getAuthority();
+        String userRole = CUSTOMER.getAuthority().getAuthority();
 
         assertEquals(adminRole, Role.ADMIN.getAuthority());
-        assertEquals(userRole, Role.USER.getAuthority());
+        assertEquals(userRole, Role.CUSTOMER.getAuthority());
     }
 
     @Test
@@ -28,7 +28,7 @@ class GrantedAuthorityTest {
     void valueOf() {
         GrantedAuthority admin = GrantedAuthority.valueOf("ADMIN");
         assertNotNull(admin);
-        GrantedAuthority user = GrantedAuthority.valueOf("USER");
+        GrantedAuthority user = GrantedAuthority.valueOf("CUSTOMER");
         assertNotNull(user);
     }
 }
